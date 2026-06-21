@@ -70,6 +70,10 @@ function setupPropsFade(root: THREE.Object3D) {
 // stretch and reads as a soft fade instead of a visible edge.
 const BODY_FADE_START_Y = 0.86  // at/above this, fully opaque even at progress 0
 const BODY_FADE_END_Y = 0.573   // at/below this, fully transparent at progress 0
+// Fraction of the overall scroll range at which the body's own fade-in should
+// be complete — kept well ahead of the props' fade (which runs the full 0→1
+// range) so the chair fading in doesn't visually overlap the torso mid-scroll.
+const BODY_FADE_COMPLETE_AT = 0.5
 const bodyShaders: { uniforms: { uProgress: { value: number } } }[] = []
 
 function setupBodyFade(root: THREE.Object3D) {
@@ -203,8 +207,15 @@ onBeforeRender(({ delta }) => {
   for (const mat of fadeMaterials) {
     ;(mat as THREE.Material & { opacity: number }).opacity = t
   }
+  // Body finishes fading in well before the props (chair, desk, etc.) reach
+  // full opacity — otherwise the chair fading in behind/through the torso at
+  // the same rate as the body's own gradient reveal caused visible overlap
+  // between the two meshes mid-scroll. Remapping so the body hits full
+  // opacity at BODY_FADE_COMPLETE_AT of the scroll range front-loads its fade,
+  // decoupling it from the props' fade timing.
+  const bodyT = Math.min(1, t / BODY_FADE_COMPLETE_AT)
   for (const shader of bodyShaders) {
-    shader.uniforms.uProgress.value = t
+    shader.uniforms.uProgress.value = bodyT
   }
 })
 </script>
