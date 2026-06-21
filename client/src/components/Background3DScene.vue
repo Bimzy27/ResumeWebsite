@@ -23,7 +23,10 @@ void DeskScene
 // ScrollyStage.vue for how progress is computed from scroll).
 const CLOSEUP = {
   pos: [0.0, 1.35, 2.28] as [number, number, number],
-  lookAt: [0.65, 1.45, -0.75] as [number, number, number],
+  // Panned the aim point down-and-left from [0.65, 1.45, -0.75] so the head
+  // (fixed in world space, unaffected by this) sits higher and further
+  // right in the rendered frame, closer to the text column.
+  lookAt: [0.4, 1.15, -0.75] as [number, number, number],
   fov: 26,
 }
 const WIDE = {

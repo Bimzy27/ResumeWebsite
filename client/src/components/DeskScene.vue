@@ -125,7 +125,7 @@ onBeforeRender(({ delta }) => {
   // Head tracking — smooth lerp toward cursor-derived target
   if (headPivot.value) {
     headTarget.y =  cursor.x *  0.30   // yaw  ± ~17°
-    headTarget.x = -cursor.y *  0.18   // pitch ± ~10°  (invert Y: up = look up)
+    headTarget.x =  cursor.y *  0.18   // pitch ± ~10°  (cursor up = head looks up)
 
     const s = 1 - Math.pow(0.05, delta)
     headCurrent.x += (headTarget.x - headCurrent.x) * s

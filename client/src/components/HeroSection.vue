@@ -53,13 +53,16 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
 
 .hero__glow {
   position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 480px;
+  /* Overscan beyond the section bounds so the blur radius doesn't leave a
+     faded/uncovered strip at the edges; .hero has overflow:hidden so this
+     clips back to the section exactly. Previously this was a fixed 480px
+     ellipse anchored near the top, which left plain background showing
+     once you scrolled past it or on taller viewports. */
+  inset: -100px;
   background: var(--gradient-hero);
   opacity: 0.18;
   filter: blur(80px);
   z-index: -1;
-  border-radius: 50%;
 }
 
 .hero__inner {
