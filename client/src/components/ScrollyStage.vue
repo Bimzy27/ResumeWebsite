@@ -90,9 +90,20 @@ onUnmounted(() => {
   /* Overscan past the blur radius so it doesn't fade out at the edges;
      .scrolly__bg's overflow:hidden clips this back to its 100vh box. */
   inset: -100px;
-  background: var(--gradient-hero);
-  opacity: 0.18;
+  /* Radial blob (purple core easing through indigo into a cyan/blue accent)
+     instead of a flat linear wash across the whole box — the alpha stops
+     taper it to fully transparent on their own, and the mask below adds an
+     extra fade toward the bottom so it reads as a glow, not a painted panel. */
+  background: radial-gradient(
+    ellipse 75% 65% at 65% 10%,
+    rgba(124, 58, 237, 0.55) 0%,
+    rgba(79, 70, 229, 0.38) 35%,
+    rgba(6, 182, 212, 0.22) 60%,
+    rgba(6, 182, 212, 0) 85%
+  );
   filter: blur(80px);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 40%, transparent 80%);
+  mask-image: linear-gradient(to bottom, black 0%, black 40%, transparent 80%);
 }
 
 .scrolly__fg {
