@@ -46,6 +46,16 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
     max-width: 1600px;
     margin-left: auto;
     margin-right: auto;
+    /* Keep this section at least one viewport tall so the pinned 3D avatar
+       (sticky behind Hero+Skills, see ScrollyStage.vue) doesn't run out of
+       sticky room before the user has scrolled through all of Skills. If
+       Skills' natural content height is shorter than 100vh, the sticky
+       background unpins early, clipping the avatar and revealing Tech
+       Stack underneath as soon as scroll progress reaches 1 (e.g. via the
+       header's "Skills" nav link, which jumps straight to this point). */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
   }
 
   .container {
