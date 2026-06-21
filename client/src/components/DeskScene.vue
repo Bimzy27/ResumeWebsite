@@ -63,10 +63,12 @@ function setupPropsFade(root: THREE.Object3D) {
 // head/shoulders need to stay solid in the close-up while everything below
 // softly fades away. Boundaries pinpointed by raycasting the actual CLOSEUP
 // camera (from Background3DScene.vue) against the rigged Body mesh in
-// Blender, at the exact screen rows the user marked: fully opaque at/above
-// the collar line (y=0.743), fully transparent at/below the line just under
-// it on the chest (y=0.573).
-const BODY_FADE_START_Y = 0.743 // at/above this, fully opaque even at progress 0
+// Blender, at the exact screen rows the user marked: fully transparent
+// at/below the line on the chest (y=0.573). The opaque boundary was
+// originally the collar line itself (y=0.743), but that made the transition
+// too narrow/abrupt — raised it to y=0.86 so the gradient runs over a longer
+// stretch and reads as a soft fade instead of a visible edge.
+const BODY_FADE_START_Y = 0.86  // at/above this, fully opaque even at progress 0
 const BODY_FADE_END_Y = 0.573   // at/below this, fully transparent at progress 0
 const bodyShaders: { uniforms: { uProgress: { value: number } } }[] = []
 
