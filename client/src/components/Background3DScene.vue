@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { TresCanvas } from '@tresjs/core'
+import { NoToneMapping } from 'three'
 import DeskScene from './DeskScene.vue'
 
 const props = defineProps<{ progress?: number }>()
@@ -68,7 +69,7 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
       v-if="webglSupported"
       alpha
       :clear-alpha="0"
-      :tone-mapping-exposure="1"
+      :tone-mapping="NoToneMapping"
     >
       <TresPerspectiveCamera
         :position="cameraPos"
@@ -76,14 +77,19 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
         :look-at="cameraLookAt"
       />
 
-      <!-- Total light intensity here was previously ~3.8 (1.4 ambient + 1.5
-           key + 0.55/0.35 purple fills). Under ACES Filmic tonemapping
-           (TresJS's default), that overexposure pushed dark, saturated
-           surfaces — the beard/mustache texture — toward a warm/orange
-           highlight. Lowered to a sane total exposure and dialed back the
-           colored fills so they tint rim light only, not the whole face. -->
-      <TresAmbientLight :intensity="0.6" />
-      <TresDirectionalLight :position="[-3, 5, 4]"  :intensity="1.0" />
+      <!-- TresCanvas defaults to ACESFilmicToneMapping. That filmic curve is
+           what produced the orange tint on the beard/mustache: confirmed by
+           reproducing it in Blender under the equivalent AgX view transform,
+           then showing it vanishes under a plain Standard (linear-to-sRGB,
+           no filmic curve) transform — same texture, same lights, only the
+           tonemapping differed. The anti-aliased blend pixels between the
+           dark beard color and skin tone sit at a hue/luminance combo that
+           filmic curves push toward orange. Explicitly disabling tone
+           mapping above removes the curve at the source. Light intensities
+           kept modest since NoToneMapping won't compress highlights the way
+           ACES did — tune to taste if anything looks blown out. -->
+      <TresAmbientLight :intensity="0.8" />
+      <TresDirectionalLight :position="[-3, 5, 4]"  :intensity="1.1" />
       <TresDirectionalLight :position="[3, 2, -1]" :intensity="0.3" color="#7c3aed" />
       <TresDirectionalLight :position="[0, 3, -4]"  :intensity="0.2" color="#a78bfa" />
 
