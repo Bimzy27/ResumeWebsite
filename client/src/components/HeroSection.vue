@@ -8,7 +8,6 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
 
 <template>
   <section id="top" class="hero">
-    <div class="hero__glow"></div>
     <div class="container hero__inner">
       <p class="section-eyebrow">Full-Stack Software Engineer</p>
       <h1 class="hero__name">
@@ -49,20 +48,6 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
     margin-left: auto;
     margin-right: auto;
   }
-}
-
-.hero__glow {
-  position: absolute;
-  /* Overscan beyond the section bounds so the blur radius doesn't leave a
-     faded/uncovered strip at the edges; .hero has overflow:hidden so this
-     clips back to the section exactly. Previously this was a fixed 480px
-     ellipse anchored near the top, which left plain background showing
-     once you scrolled past it or on taller viewports. */
-  inset: -100px;
-  background: var(--gradient-hero);
-  opacity: 0.18;
-  filter: blur(80px);
-  z-index: -1;
 }
 
 .hero__inner {

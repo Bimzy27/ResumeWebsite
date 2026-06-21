@@ -20,12 +20,14 @@ const propsScene    = shallowRef<THREE.Group | null>(null)
 const headPivot     = shallowRef<THREE.Group | null>(null)  // wraps the head, pivoting at the neck
 
 // ── props fade (desk/chair/monitor/etc hidden at close-up, revealed on scroll) ──
-// Everything in `propsScene` EXCEPT the avatar's own body/armature should be
-// invisible at progress 0 (hero close-up — only torso/head should show) and
-// fade up to fully opaque by progress 1 (skills wide shot). Walk the loaded
-// scene graph once, clone materials for anything outside the excluded names
-// so they can be made transparent without affecting shared materials, and
-// collect them for per-frame opacity updates.
+// Everything in `propsScene` EXCEPT the avatar's own body/armature/head should
+// be invisible at progress 0 (hero close-up — only torso/head should show)
+// and fade up to fully opaque by progress 1 (skills wide shot). Walk the
+// loaded scene graph once, clone materials for anything outside the excluded
+// names so they can be made transparent without affecting shared materials,
+// and collect them for per-frame opacity updates.
+// 'Body' gets its own gradient treatment below (setupBodyFade) instead of
+// this uniform on/off fade, so it's excluded here too.
 const FADE_EXCLUDE = new Set(['Armature', 'Body', 'Head', 'Sun', 'InspectCam'])
 
 function isExcludedFromFade(obj: THREE.Object3D): boolean {
@@ -52,6 +54,60 @@ function setupPropsFade(root: THREE.Object3D) {
     })
     mesh.material = cloned.length === 1 ? cloned[0] : cloned
     fadeMaterials.push(...cloned)
+  })
+}
+
+// ── body gradient fade (torso fades out just below the shoulders at close-up,
+//    fully visible by the wide shot) ──────────────────────────────────────────
+// Unlike the props above, the torso shouldn't blink fully transparent — the
+// head/shoulders need to stay solid in the close-up while everything below
+// softly fades away, like the camera is just close enough that the lower body
+// trails off. Measured from the rigged Blender mesh (Z-up there = Y here):
+// the shoulders are the widest point around y=0.50, narrowing into the neck
+// from y=0.85 up. The fade starts just under that, at y=0.45.
+const BODY_FADE_START_Y = 0.45  // at/above this, fully opaque even at progress 0
+const BODY_FADE_END_Y = -0.15   // at/below this, fully transparent at progress 0
+const bodyShaders: { uniforms: { uProgress: { value: number } } }[] = []
+
+function setupBodyFade(root: THREE.Object3D) {
+  root.traverse((obj) => {
+    const mesh = obj as THREE.Mesh
+    if (!mesh.isMesh || mesh.name !== 'Body') return
+
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+    for (const m of mats) {
+      const mat = m as THREE.MeshStandardMaterial
+      mat.transparent = true
+      mat.onBeforeCompile = (shader) => {
+        shader.uniforms.uProgress = { value: 0 }
+        shader.uniforms.uFadeStartY = { value: BODY_FADE_START_Y }
+        shader.uniforms.uFadeEndY = { value: BODY_FADE_END_Y }
+
+        shader.vertexShader = shader.vertexShader
+          .replace('#include <common>', '#include <common>\nvarying float vWorldY;')
+          .replace(
+            '#include <skinning_vertex>',
+            '#include <skinning_vertex>\n  vWorldY = (modelMatrix * vec4(transformed, 1.0)).y;',
+          )
+
+        shader.fragmentShader = shader.fragmentShader
+          .replace(
+            '#include <common>',
+            '#include <common>\nvarying float vWorldY;\nuniform float uProgress;\nuniform float uFadeStartY;\nuniform float uFadeEndY;',
+          )
+          .replace(
+            '#include <dithering_fragment>',
+            `#include <dithering_fragment>
+  float gradAlpha = smoothstep(uFadeEndY, uFadeStartY, vWorldY);
+  gl_FragColor.a *= mix(gradAlpha, 1.0, uProgress);`,
+          )
+
+        bodyShaders.push(shader as unknown as { uniforms: { uProgress: { value: number } } })
+      }
+      // onBeforeCompile only re-runs if the program cache key changes; this
+      // material is unique to the Body mesh so a stable custom key is fine.
+      mat.customProgramCacheKey = () => 'body-gradient-fade'
+    }
   })
 }
 
@@ -110,6 +166,7 @@ onMounted(async () => {
   pivot.add(hd.scene)
 
   setupPropsFade(sc.scene)
+  setupBodyFade(sc.scene)
 
   // Assign to reactive refs so the template renders them
   propsScene.value = sc.scene
@@ -142,6 +199,9 @@ onBeforeRender(({ delta }) => {
   const t = Math.min(1, Math.max(0, props.progress ?? 0))
   for (const mat of fadeMaterials) {
     ;(mat as THREE.Material & { opacity: number }).opacity = t
+  }
+  for (const shader of bodyShaders) {
+    shader.uniforms.uProgress.value = t
   }
 })
 </script>

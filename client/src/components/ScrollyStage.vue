@@ -49,6 +49,15 @@ onUnmounted(() => {
 <template>
   <div class="scrolly">
     <div class="scrolly__bg">
+      <!-- Hero's purple glow, rendered behind the 3D canvas. It used to live
+           inside HeroSection with z-index:-1, but that only ordered it
+           relative to siblings within .scrolly__fg (z-index 1) — it could
+           never appear behind .scrolly__bg (z-index 0) from there, since a
+           child can't escape its ancestor's stacking context. The canvas
+           above is alpha-transparent except where the avatar actually draws,
+           so this shows through everywhere except where it's occluded by
+           the avatar. -->
+      <div class="scrolly__glow"></div>
       <Background3D :progress="progress" />
     </div>
     <div class="scrolly__fg">
@@ -73,6 +82,17 @@ onUnmounted(() => {
   align-self: start;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.scrolly__glow {
+  position: absolute;
+  /* Overscan past the blur radius so it doesn't fade out at the edges;
+     .scrolly__bg's overflow:hidden clips this back to its 100vh box. */
+  inset: -100px;
+  background: var(--gradient-hero);
+  opacity: 0.18;
+  filter: blur(80px);
 }
 
 .scrolly__fg {
