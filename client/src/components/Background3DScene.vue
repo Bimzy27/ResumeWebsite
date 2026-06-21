@@ -64,17 +64,28 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
 
 <template>
   <div class="bg3d" aria-hidden="true">
-    <TresCanvas v-if="webglSupported" alpha :clear-alpha="0">
+    <TresCanvas
+      v-if="webglSupported"
+      alpha
+      :clear-alpha="0"
+      :tone-mapping-exposure="1"
+    >
       <TresPerspectiveCamera
         :position="cameraPos"
         :fov="cameraFov"
         :look-at="cameraLookAt"
       />
 
-      <TresAmbientLight :intensity="1.4" />
-      <TresDirectionalLight :position="[-3, 5, 4]"  :intensity="1.5" />
-      <TresDirectionalLight :position="[3, 2, -1]" :intensity="0.55" color="#7c3aed" />
-      <TresDirectionalLight :position="[0, 3, -4]"  :intensity="0.35" color="#a78bfa" />
+      <!-- Total light intensity here was previously ~3.8 (1.4 ambient + 1.5
+           key + 0.55/0.35 purple fills). Under ACES Filmic tonemapping
+           (TresJS's default), that overexposure pushed dark, saturated
+           surfaces — the beard/mustache texture — toward a warm/orange
+           highlight. Lowered to a sane total exposure and dialed back the
+           colored fills so they tint rim light only, not the whole face. -->
+      <TresAmbientLight :intensity="0.6" />
+      <TresDirectionalLight :position="[-3, 5, 4]"  :intensity="1.0" />
+      <TresDirectionalLight :position="[3, 2, -1]" :intensity="0.3" color="#7c3aed" />
+      <TresDirectionalLight :position="[0, 3, -4]"  :intensity="0.2" color="#a78bfa" />
 
       <DeskScene :progress="eased" />
     </TresCanvas>
