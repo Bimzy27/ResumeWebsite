@@ -73,7 +73,7 @@ const BODY_FADE_END_Y = 0.573   // at/below this, fully transparent at progress 
 // Fraction of the overall scroll range at which the body's own fade-in should
 // be complete — kept well ahead of the props' fade (which runs the full 0→1
 // range) so the chair fading in doesn't visually overlap the torso mid-scroll.
-const BODY_FADE_COMPLETE_AT = 0.5
+const BODY_FADE_COMPLETE_AT = 0.35
 const bodyShaders: { uniforms: { uProgress: { value: number } } }[] = []
 
 function setupBodyFade(root: THREE.Object3D) {
