@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppHeader from './components/AppHeader.vue'
-import HeroSection from './components/HeroSection.vue'
-import SkillsSection from './components/SkillsSection.vue'
+import ScrollyStage from './components/ScrollyStage.vue'
 import TechStackSection from './components/TechStackSection.vue'
 import TimelineSection from './components/TimelineSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
@@ -12,8 +11,7 @@ import AppFooter from './components/AppFooter.vue'
 <template>
   <AppHeader />
   <main>
-    <HeroSection />
-    <SkillsSection />
+    <ScrollyStage />
     <TechStackSection />
     <TimelineSection />
     <ProjectsSection />

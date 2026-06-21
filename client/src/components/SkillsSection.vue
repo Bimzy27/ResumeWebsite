@@ -38,6 +38,24 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
 </template>
 
 <style scoped>
+@media (min-width: 901px) {
+  /* Cap the section's own width on ultra-wide monitors, same as Hero, so the
+     right-anchored column below sits flush against a sensible boundary
+     instead of the literal browser edge. */
+  #skills {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .container {
+    margin-left: auto;
+    margin-right: 0;
+    max-width: 560px;
+    text-align: left;
+  }
+}
+
 .skills__tags {
   display: flex;
   flex-wrap: wrap;

@@ -33,7 +33,22 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
   position: relative;
   padding-top: 120px;
   padding-bottom: 100px;
+  min-height: 640px;
   overflow: hidden;
+}
+
+@media (min-width: 901px) {
+  .hero {
+    /* Full-viewport height so nothing from the next (sticky-pinned) section
+       can peek into view before the user actually starts scrolling. */
+    min-height: 100vh;
+    /* Cap the usable width on ultra-wide monitors so the right-anchored text
+       column stays a sensible distance from the literal browser edge instead
+       of being flush against it. */
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .hero__glow {
@@ -48,10 +63,21 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
 }
 
 .hero__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
+}
+
+@media (min-width: 901px) {
+  .hero__inner {
+    margin-left: auto;
+    margin-right: 0;
+    max-width: 560px;
+    text-align: left;
+  }
 }
 
 .hero__name {

@@ -10,3 +10,7 @@ obj/
 # Editor
 .vs/
 .vscode/
+
+# Blender source files (large, not needed for deployed site)
+*.blend
+*.blend1
