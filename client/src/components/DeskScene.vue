@@ -61,12 +61,13 @@ function setupPropsFade(root: THREE.Object3D) {
 //    fully visible by the wide shot) ──────────────────────────────────────────
 // Unlike the props above, the torso shouldn't blink fully transparent — the
 // head/shoulders need to stay solid in the close-up while everything below
-// softly fades away, like the camera is just close enough that the lower body
-// trails off. Measured from the rigged Blender mesh (Z-up there = Y here):
-// the shoulders are the widest point around y=0.50, narrowing into the neck
-// from y=0.85 up. The fade starts just under that, at y=0.45.
-const BODY_FADE_START_Y = 0.45  // at/above this, fully opaque even at progress 0
-const BODY_FADE_END_Y = -0.15   // at/below this, fully transparent at progress 0
+// softly fades away. Boundaries pinpointed by raycasting the actual CLOSEUP
+// camera (from Background3DScene.vue) against the rigged Body mesh in
+// Blender, at the exact screen rows the user marked: fully opaque at/above
+// the collar line (y=0.743), fully transparent at/below the line just under
+// it on the chest (y=0.573).
+const BODY_FADE_START_Y = 0.743 // at/above this, fully opaque even at progress 0
+const BODY_FADE_END_Y = 0.573   // at/below this, fully transparent at progress 0
 const bodyShaders: { uniforms: { uProgress: { value: number } } }[] = []
 
 function setupBodyFade(root: THREE.Object3D) {
