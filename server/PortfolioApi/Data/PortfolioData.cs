@@ -7,12 +7,12 @@ public static class PortfolioData
     public static readonly Profile Profile = new(
         Name: "Branden Immerzeel",
         Title: "Senior Software Engineer",
-        Summary: "Experienced Full-Stack Software Engineer with over 7 years of experience across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.",
+        Summary: "Experienced Full-Stack Software Engineer with over 8 years of experience across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.",
         Contact: new ContactInfo(
             Email: "branden.immerzeel@gmail.com",
             Phone: "0423 889 259",
-            Location: "Huntfield Heights, SA 5163",
-            LinkedIn: "https://linkedin.com"),
+            Location: "Adelaide, SA 5163",
+            LinkedIn: "https://www.linkedin.com/in/branden-immerzeel/"),
         Skills: new List<string>
         {
             "C#",
@@ -99,6 +99,73 @@ public static class PortfolioData
                 "Engaged as a full-time educator and extracurricular instructor, imparting foundational programming concepts to classroom environments comprising approximately thirty eager young learners.",
                 "Enhanced leadership, presentation, teamwork, and public speaking skills during tenure at both Code Camp and Junior Engineers.",
             }),
+    };
+
+    public static readonly List<Recommendation> Recommendations = new()
+    {
+        new Recommendation(
+            Id: "alexander-eagles",
+            Name: "Alexander Eagles",
+            Title: "Product Manager, PAVE and Productivity Tools at WiseTech Global",
+            Relationship: "Senior to Branden, did not manage him directly",
+            Quote: "As a product manager you want teams that can execute and do so effectively. Branden always came to work with the attitude to help me solve the teams problems. Branden would come with multiple solutions and help explore trade-offs in a way few engineers do effectively. Any team would benefit from having Branden, not just because of his technical ability - but because of his ability to take the problems and pragmatically explore solutions. If I was to assemble my dream team, Branden would be on it.",
+            LinkedIn: "https://www.linkedin.com/in/alexander-eaglessydney/"),
+        new Recommendation(
+            Id: "ryan-smallwood-simpson",
+            Name: "Ryan Smallwood-Simpson",
+            Title: "Software Engineer",
+            Relationship: "Reported to Branden directly",
+            Quote: "Branden was my mentor when I first joined WiseTech Global. He always went the extra mile to help me find my feet at the company. He is the ideal combination of very easy to get on with and highly competent at all aspects of the software development life cycle. Finally, he was always striving to improve even further and would be a great fit to any team.",
+            LinkedIn: "https://www.linkedin.com/in/ryan-smallwood-simpson-b4a076138/"),
+        new Recommendation(
+            Id: "juan-diego-merino-roldan",
+            Name: "Juan Diego Merino Roldán",
+            Title: "Software Architect at WiseTech Global",
+            Relationship: "Senior to Branden, did not manage him directly",
+            Quote: "I had the pleasure of working closely with Branden at Wisetech, where he consistently stood out as an exceptional Senior Software Engineer. Branden doesn't just write clean, high-quality code; he possess a rare ability to look at complex, ambiguous problems and architect and deliver elegant, scalable solutions that align perfectly with business goals. Not only a great developer but also a great person to work with. I can't recommend him enough.",
+            LinkedIn: "https://www.linkedin.com/in/jdmerinor/en/"),
+        new Recommendation(
+            Id: "benjamin-wang",
+            Name: "Benjamin Wang",
+            Title: "Software Engineer at WiseTech Global",
+            Relationship: "Worked with Branden on different teams",
+            Quote: "I have worked with Branden in the same office for over 1 year and a half. Branden consistently brings a great attitude to work. Whether facing a tough deadline or a tricky technical problem, he approaches challenges with genuine enthusiasm to make solid contributions and deliver the results. Branden always tries to kick up a notch and strech himself. As a software engineer, Branden has always been seeking challenges beyond the scope, including proactively taking the lead in a squad, mentoring people and providing support for his team. It was a pleasure for me to have been working with Branden and with his skills I genuinely believe any team would be lucky to have Branden. I wish Branden all the best with his career.",
+            LinkedIn: "https://www.linkedin.com/in/benjamin-wang-579676259/"),
+        new Recommendation(
+            Id: "chen-ling",
+            Name: "Chen Ling",
+            Title: "Software Engineer at WiseTech Global",
+            Relationship: "Worked with Branden on the same team",
+            Quote: "I had the pleasure of working closely with Branden during his time at WiseTech. He is a highly responsible, reliable, and intelligent professional who consistently delivers thorough, high-quality work. Branden also brings great energy to the team with his sense of humor and positive attitude. He is approachable, friendly, and always enjoyable to work with, which makes collaboration smooth and enjoyable for everyone around him. I truly enjoyed working with Branden and am confident that he will be a valuable asset and succeed in any team he joins.",
+            LinkedIn: "https://www.linkedin.com/in/chen-ling-rrr/"),
+        new Recommendation(
+            Id: "guan-du",
+            Name: "Guan Du",
+            Title: "Software Engineering Team Lead",
+            Relationship: "Managed Branden directly",
+            Quote: "Branden is a very passionate and hard working engineer. He volunteered for many challenging projects in WiseTech and displayed great teamwork during these, onboarding and mentoring new colleagues. Branden also has great communication skills, reaching out and following up with people when necessary. I definitely saw leadership potential in Branden. I enjoyed working with Branden greatly and I think he would be a great addition to any company.",
+            LinkedIn: "https://www.linkedin.com/in/guan-d-222746157/"),
+        new Recommendation(
+            Id: "simon-vogler",
+            Name: "Simon Vogler",
+            Title: "Senior Developer at Mighty Kingdom",
+            Relationship: "Managed Branden directly",
+            Quote: "I have worked with Branden at Mighty Kingdom for just over a year and he has implemented and maintained major features that are useful for a wide range of projects. He has great programming skills and attention to detail which has improved code quality and tools required for design and QA. He shows great problem solving skills, a desire to learn and grow, and promotes knowledge sharing with other programmers. Branden has great leadership skills, managing a squad to focus on critical build updates. He always looks for opportunities to support and encourage team members, improve project strategies, and focus on build stability.",
+            LinkedIn: "https://www.linkedin.com/in/simon-vogler-81874411/"),
+        new Recommendation(
+            Id: "scott-cabot",
+            Name: "Scott Cabot",
+            Title: "Senior Software Engineer at Discovery Parks",
+            Relationship: "Worked with Branden on the same team",
+            Quote: "It was excellent being able to work along side Branden on our product together. He has a strong focus on systems design and consistently plans pragmatic and well designed solutions for given problems. His care for our code base, consistently looking for room for improvement made him a staple in our team. He was great at communicating feedback amongst engineers as well as to wider stakeholders. He's definitely missed!",
+            LinkedIn: "https://www.linkedin.com/in/scott-cabot/"),
+        new Recommendation(
+            Id: "ben-calder",
+            Name: "Ben Calder",
+            Title: "Leader of Software Engineers in pursuit of excellence",
+            Relationship: "Managed Branden directly",
+            Quote: "Branden is a talented software engineer with a keen eye for detail and a solution-oriented mindset. His passion for delivering quality at speed with consistency is exemplary, and he sets himself apart with his willingness to assist those around him and share his learnings with teammates. He has an ability to think outside the box to find innovative solutions to complex problems. I believe any team would be lucky to land Branden's services, and can see him being successful in a solutions engineer or architect role moving forward.",
+            LinkedIn: "https://www.linkedin.com/in/bencalder/"),
     };
 
     public static readonly List<Project> Projects = new()

@@ -47,6 +47,15 @@ export interface Project {
   links: ProjectLinks
 }
 
+export interface RecommendationEntry {
+  id: string
+  name: string
+  title: string
+  relationship: string
+  quote: string
+  linkedIn: string
+}
+
 export interface ContactSubmission {
   name: string
   email: string

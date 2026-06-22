@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import { useApiResource } from '../composables/useApi'
-import { fallbackProfile } from '../data/fallback'
-import type { Profile } from '../types'
+import { fallbackProfile, fallbackRecommendations } from '../data/fallback'
+import type { Profile, RecommendationEntry } from '../types'
+import RecommendationsCarousel from './RecommendationsCarousel.vue'
 
 const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
+const { data: recommendations } = useApiResource<RecommendationEntry[]>(
+  '/recommendations',
+  fallbackRecommendations,
+)
 </script>
 
 <template>
@@ -23,6 +28,7 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
         <li><a :href="`mailto:${profile.contact.email}`">{{ profile.contact.email }}</a></li>
         <li><a :href="profile.contact.linkedIn" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
+      <RecommendationsCarousel :recommendations="recommendations" />
     </div>
   </section>
 </template>

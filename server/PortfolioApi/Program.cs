@@ -28,6 +28,8 @@ api.MapGet("/experience", () => PortfolioData.Experience);
 
 api.MapGet("/projects", () => PortfolioData.Projects);
 
+api.MapGet("/recommendations", () => PortfolioData.Recommendations);
+
 api.MapPost("/contact", (ContactRequest request, ILogger<Program> logger) =>
 {
     if (string.IsNullOrWhiteSpace(request.Name)
