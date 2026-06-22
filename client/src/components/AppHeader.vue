@@ -1,19 +1,35 @@
 <script setup lang="ts">
 const links = [
-  { id: 'about', label: 'About' },
+  { id: 'top', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'contact', label: 'Contact' },
 ]
+
+// The "About" link/logo both target #top, which sits below the sticky
+// header in the document — a plain anchor jump lands at the hero's
+// offsetTop (i.e. just past the header), not the literal top of the page.
+// Scrolling the window itself to 0 bypasses that and reaches the true top.
+function scrollToTop(event: MouseEvent) {
+  event.preventDefault()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  history.replaceState(null, '', '#top')
+}
 </script>
 
 <template>
   <header class="header">
     <div class="container header__inner">
-      <a href="#top" class="header__logo">Branden Immerzeel</a>
+      <a href="#top" class="header__logo" @click="scrollToTop">Branden Immerzeel</a>
       <nav class="header__nav">
-        <a v-for="link in links" :key="link.id" :href="`#${link.id}`">{{ link.label }}</a>
+        <a
+          v-for="link in links"
+          :key="link.id"
+          :href="`#${link.id}`"
+          @click="link.id === 'top' ? scrollToTop($event) : undefined"
+          >{{ link.label }}</a
+        >
       </nav>
     </div>
   </header>
