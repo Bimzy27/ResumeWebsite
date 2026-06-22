@@ -130,18 +130,19 @@ onUnmounted(stopAutoplay)
 
 .recs__row {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 12px;
 }
 
 .recs__nav {
   /* Prev button, page dots, and next button stacked vertically along the
-     left edge, stretched to the card's own height so this column stays
-     pinned to its top/bottom regardless of how tall the active quote is. */
+     left edge. This column keeps its own compact, natural height instead
+     of stretching to match the card — only the card grows or shrinks
+     with the active quote's length. */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -225,7 +226,7 @@ onUnmounted(stopAutoplay)
 }
 
 .recs__arrow--next {
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
 }
 
 .recs__dots {
@@ -234,10 +235,7 @@ onUnmounted(stopAutoplay)
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 7px;
-  flex: 1;
-  padding: 10px 0;
 }
 
 .recs__dot {
