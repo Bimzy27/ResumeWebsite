@@ -63,16 +63,22 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
   .hero__inner {
     margin-left: auto;
     margin-right: 0;
-    /* Wide enough that "Hi, I'm Branden Immerzeel" stays on one line at the
-       heading's clamped font size (up to 4rem bold) — 820px still wrapped,
-       so this leaves real headroom rather than guessing again. */
-    max-width: 1080px;
+    /* Scales with viewport width instead of a fixed px value: a fixed
+       max-width either wraps the name (too narrow) or, once widened enough
+       to fit, pushes its left edge into the avatar on narrower desktop
+       viewports (too wide, since the avatar's screen position doesn't
+       move). Tying it to vw keeps it proportional to however much room is
+       actually free next to the avatar at any given width. */
+    max-width: clamp(560px, 42vw, 860px);
     text-align: left;
   }
 }
 
 .hero__name {
-  font-size: clamp(2.4rem, 6vw, 4rem);
+  /* Capped lower than before (was up to 4rem) so "Hi, I'm Branden
+     Immerzeel" actually fits within the narrower column above without
+     wrapping or colliding with the avatar. */
+  font-size: clamp(2.2rem, 4.2vw, 3.2rem);
   font-weight: 700;
 }
 
