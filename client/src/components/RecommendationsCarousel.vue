@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import type { RecommendationEntry } from '../types'
 
 const props = defineProps<{ recommendations: RecommendationEntry[] }>()
 
 const index = ref(0)
+const current = computed(() => props.recommendations[index.value])
 
 // Slow enough to actually read a full quote before it advances.
 const AUTOPLAY_MS = 14000
@@ -67,49 +68,43 @@ onUnmounted(stopAutoplay)
   >
     <p class="recs__eyebrow">What colleagues say</p>
 
-    <div class="recs__viewport">
-      <!-- All cards are stacked in the same grid cell (rather than swapping
-           a single card via v-if/Transition). This means the viewport's
-           height is sized to the tallest quote up front and never reflows
-           as the active card changes, so the controls below stay put
-           instead of jumping when a shorter or longer quote comes in. -->
-      <blockquote
-        v-for="(r, i) in recommendations"
-        :key="r.id"
-        class="recs__card"
-        :class="{ 'is-active': i === index }"
-        :aria-hidden="i !== index"
-      >
-        <p class="recs__quote">&ldquo;{{ r.quote }}&rdquo;</p>
-        <footer class="recs__author">
-          <span class="recs__name">{{ r.name }}</span>
-          <span class="recs__sep" aria-hidden="true">·</span>
-          <span class="recs__title">{{ r.title }}</span>
-          <span class="recs__relationship">{{ r.relationship }}</span>
-        </footer>
-      </blockquote>
+    <div class="recs__row">
+      <div class="recs__nav">
+        <button type="button" class="recs__arrow recs__arrow--prev" aria-label="Previous recommendation" @click="manualPrev">
+          ‹
+        </button>
+        <button type="button" class="recs__arrow recs__arrow--next" aria-label="Next recommendation" @click="manualNext">
+          ›
+        </button>
+      </div>
+
+      <div class="recs__viewport">
+        <Transition name="recs-fade" mode="out-in">
+          <blockquote :key="current.id" class="recs__card">
+            <p class="recs__quote">&ldquo;{{ current.quote }}&rdquo;</p>
+            <footer class="recs__author">
+              <span class="recs__name">{{ current.name }}</span>
+              <span class="recs__sep" aria-hidden="true">·</span>
+              <span class="recs__title">{{ current.title }}</span>
+              <span class="recs__relationship">{{ current.relationship }}</span>
+            </footer>
+          </blockquote>
+        </Transition>
+      </div>
     </div>
 
-    <div class="recs__controls">
-      <button type="button" class="recs__arrow" aria-label="Previous recommendation" @click="manualPrev">
-        ‹
-      </button>
-      <div class="recs__dots" role="tablist" aria-label="Choose a recommendation">
-        <button
-          v-for="(r, i) in recommendations"
-          :key="r.id"
-          type="button"
-          class="recs__dot"
-          :class="{ 'is-active': i === index }"
-          role="tab"
-          :aria-selected="i === index"
-          :aria-label="`Recommendation from ${r.name}`"
-          @click="manualGoTo(i)"
-        />
-      </div>
-      <button type="button" class="recs__arrow" aria-label="Next recommendation" @click="manualNext">
-        ›
-      </button>
+    <div class="recs__dots" role="tablist" aria-label="Choose a recommendation">
+      <button
+        v-for="(r, i) in recommendations"
+        :key="r.id"
+        type="button"
+        class="recs__dot"
+        :class="{ 'is-active': i === index }"
+        role="tab"
+        :aria-selected="i === index"
+        :aria-label="`Recommendation from ${r.name}`"
+        @click="manualGoTo(i)"
+      />
     </div>
   </div>
 </template>
@@ -134,32 +129,36 @@ onUnmounted(stopAutoplay)
   margin: 0 0 10px;
 }
 
+.recs__row {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.recs__nav {
+  /* Stacked vertically along the left edge instead of flanking the card,
+     and stretched to the card's own height so the two buttons stay
+     pinned to its top/bottom regardless of how tall the active quote is. */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
 .recs__viewport {
-  display: grid;
+  flex: 1;
+  min-width: 0;
 }
 
 .recs__card {
-  /* Every card occupies the exact same grid cell, so the grid track's
-     height is the max of all of them at once — including the hidden
-     ones — instead of whichever one happens to be active. */
-  grid-row: 1;
-  grid-column: 1;
+  /* No fixed/grid sizing here — the card is free to grow or shrink with
+     its own quote's length. */
   margin: 0;
   padding: 18px 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.recs__card.is-active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
 }
 
 .recs__quote {
@@ -198,13 +197,6 @@ onUnmounted(stopAutoplay)
   opacity: 0.85;
 }
 
-.recs__controls {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-top: 14px;
-}
-
 .recs__arrow {
   display: inline-flex;
   align-items: center;
@@ -218,7 +210,7 @@ onUnmounted(stopAutoplay)
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .recs__arrow:hover {
@@ -226,9 +218,21 @@ onUnmounted(stopAutoplay)
   color: var(--color-primary);
 }
 
+/* Rotated so "previous"/"next" read as up/down, matching their vertical
+   arrangement along the left edge instead of the usual left/right pair. */
+.recs__arrow--prev {
+  transform: rotate(90deg);
+}
+
+.recs__arrow--next {
+  transform: rotate(-90deg);
+}
+
 .recs__dots {
   display: flex;
+  justify-content: center;
   gap: 7px;
+  margin-top: 14px;
 }
 
 .recs__dot {
@@ -245,5 +249,15 @@ onUnmounted(stopAutoplay)
 .recs__dot.is-active {
   background: var(--color-primary);
   transform: scale(1.3);
+}
+
+.recs-fade-enter-active,
+.recs-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.recs-fade-enter-from,
+.recs-fade-leave-to {
+  opacity: 0;
 }
 </style>
