@@ -130,7 +130,11 @@ onUnmounted(stopAutoplay)
 
 .recs__row {
   display: flex;
-  align-items: center;
+  /* Anchored to the top instead of centered, so the nav column's position
+     stays fixed as the card grows/shrinks with each quote, rather than
+     re-centering (and visually shifting) every time the active slide
+     changes. */
+  align-items: flex-start;
   gap: 12px;
 }
 
