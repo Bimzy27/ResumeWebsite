@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rolldown/binding-win32-x64-msvc": "^1.0.3",
     "@tresjs/cientos": "^5.7.2",
     "@tresjs/core": "^5.8.1",
     "three": "^0.184.0",
