@@ -64,8 +64,9 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
     margin-left: auto;
     margin-right: 0;
     /* Wide enough that "Hi, I'm Branden Immerzeel" stays on one line at the
-       heading's clamped font size, instead of wrapping "Immerzeel" down. */
-    max-width: 820px;
+       heading's clamped font size (up to 4rem bold) — 820px still wrapped,
+       so this leaves real headroom rather than guessing again. */
+    max-width: 1080px;
     text-align: left;
   }
 }
