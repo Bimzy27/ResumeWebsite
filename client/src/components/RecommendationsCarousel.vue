@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import type { RecommendationEntry } from '../types'
 
 const props = defineProps<{ recommendations: RecommendationEntry[] }>()
 
 const index = ref(0)
-const current = computed(() => props.recommendations[index.value])
 
-const AUTOPLAY_MS = 7000
+// Slow enough to actually read a full quote before it advances.
+const AUTOPLAY_MS = 14000
 let timer = 0
 
 function next() {
@@ -68,17 +68,26 @@ onUnmounted(stopAutoplay)
     <p class="recs__eyebrow">What colleagues say</p>
 
     <div class="recs__viewport">
-      <Transition name="recs-fade" mode="out-in">
-        <blockquote :key="current.id" class="recs__card">
-          <p class="recs__quote">&ldquo;{{ current.quote }}&rdquo;</p>
-          <footer class="recs__author">
-            <span class="recs__name">{{ current.name }}</span>
-            <span class="recs__sep" aria-hidden="true">·</span>
-            <span class="recs__title">{{ current.title }}</span>
-            <span class="recs__relationship">{{ current.relationship }}</span>
-          </footer>
-        </blockquote>
-      </Transition>
+      <!-- All cards are stacked in the same grid cell (rather than swapping
+           a single card via v-if/Transition). This means the viewport's
+           height is sized to the tallest quote up front and never reflows
+           as the active card changes, so the controls below stay put
+           instead of jumping when a shorter or longer quote comes in. -->
+      <blockquote
+        v-for="(r, i) in recommendations"
+        :key="r.id"
+        class="recs__card"
+        :class="{ 'is-active': i === index }"
+        :aria-hidden="i !== index"
+      >
+        <p class="recs__quote">&ldquo;{{ r.quote }}&rdquo;</p>
+        <footer class="recs__author">
+          <span class="recs__name">{{ r.name }}</span>
+          <span class="recs__sep" aria-hidden="true">·</span>
+          <span class="recs__title">{{ r.title }}</span>
+          <span class="recs__relationship">{{ r.relationship }}</span>
+        </footer>
+      </blockquote>
     </div>
 
     <div class="recs__controls">
@@ -107,9 +116,10 @@ onUnmounted(stopAutoplay)
 
 <style scoped>
 .recs {
-  /* No margin-top here — the parent .hero__inner already applies a flex
-     `gap` between its children, so this just needs to behave like any
-     other item in that column. */
+  /* The parent .hero__inner already applies a flex `gap` between its
+     children; this adds a little extra breathing room on top of that so
+     the carousel doesn't feel glued to the contact-info row above it. */
+  margin-top: 12px;
   width: 100%;
   max-width: 600px;
 }
@@ -125,20 +135,31 @@ onUnmounted(stopAutoplay)
 }
 
 .recs__viewport {
-  position: relative;
-  /* Keeps the card from visibly resizing the layout as quote lengths vary
-     between slides — short quotes don't collapse the box, long ones can
-     still grow past this without being clipped. */
-  min-height: 168px;
+  display: grid;
 }
 
 .recs__card {
+  /* Every card occupies the exact same grid cell, so the grid track's
+     height is the max of all of them at once — including the hidden
+     ones — instead of whichever one happens to be active. */
+  grid-row: 1;
+  grid-column: 1;
   margin: 0;
   padding: 18px 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 24px rgba(124, 58, 237, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.recs__card.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .recs__quote {
@@ -224,15 +245,5 @@ onUnmounted(stopAutoplay)
 .recs__dot.is-active {
   background: var(--color-primary);
   transform: scale(1.3);
-}
-
-.recs-fade-enter-active,
-.recs-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-
-.recs-fade-enter-from,
-.recs-fade-leave-to {
-  opacity: 0;
 }
 </style>
