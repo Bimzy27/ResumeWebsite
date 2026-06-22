@@ -73,6 +73,13 @@ onUnmounted(stopAutoplay)
         <button type="button" class="recs__arrow recs__arrow--prev" aria-label="Previous recommendation" @click="manualPrev">
           ‹
         </button>
+        <Transition name="recs-fade" mode="out-in">
+          <footer :key="current.id" class="recs__author">
+            <span class="recs__name">{{ current.name }}</span>
+            <span class="recs__title">{{ current.title }}</span>
+            <span class="recs__relationship">{{ current.relationship }}</span>
+          </footer>
+        </Transition>
         <button type="button" class="recs__arrow recs__arrow--next" aria-label="Next recommendation" @click="manualNext">
           ›
         </button>
@@ -82,12 +89,6 @@ onUnmounted(stopAutoplay)
         <Transition name="recs-fade" mode="out-in">
           <blockquote :key="current.id" class="recs__card">
             <p class="recs__quote">&ldquo;{{ current.quote }}&rdquo;</p>
-            <footer class="recs__author">
-              <span class="recs__name">{{ current.name }}</span>
-              <span class="recs__sep" aria-hidden="true">·</span>
-              <span class="recs__title">{{ current.title }}</span>
-              <span class="recs__relationship">{{ current.relationship }}</span>
-            </footer>
           </blockquote>
         </Transition>
       </div>
@@ -136,13 +137,17 @@ onUnmounted(stopAutoplay)
 }
 
 .recs__nav {
-  /* Stacked vertically along the left edge instead of flanking the card,
-     and stretched to the card's own height so the two buttons stay
-     pinned to its top/bottom regardless of how tall the active quote is. */
+  /* Prev button, reviewer info, and next button stacked vertically along
+     the left edge, stretched to the card's own height so this column
+     stays pinned to its top/bottom regardless of how tall the active
+     quote is. */
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  width: 150px;
+  text-align: center;
 }
 
 .recs__viewport {
@@ -170,31 +175,30 @@ onUnmounted(stopAutoplay)
 
 .recs__author {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 6px;
-  font-size: 0.8rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 10px 2px;
+  font-size: 0.78rem;
   color: var(--color-text-muted);
 }
 
 .recs__name {
   font-family: var(--font-display);
   font-weight: 600;
+  font-size: 0.85rem;
   color: var(--color-text);
 }
 
-.recs__sep {
-  opacity: 0.5;
-}
-
 .recs__title {
-  flex-basis: 100%;
+  line-height: 1.3;
 }
 
 .recs__relationship {
-  flex-basis: 100%;
   font-style: italic;
   opacity: 0.85;
+  line-height: 1.3;
 }
 
 .recs__arrow {
