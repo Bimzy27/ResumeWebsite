@@ -9,7 +9,7 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
 <template>
   <section id="top" class="hero">
     <div class="container hero__inner">
-      <p class="section-eyebrow">Full-Stack Software Engineer</p>
+      <p class="section-eyebrow">Senior Full-Stack Software Engineer</p>
       <h1 class="hero__name">
         Hi, I'm <span class="hero__highlight">{{ profile.name }}</span>
       </h1>
@@ -63,7 +63,9 @@ const { data: profile } = useApiResource<Profile>('/profile', fallbackProfile)
   .hero__inner {
     margin-left: auto;
     margin-right: 0;
-    max-width: 560px;
+    /* Wide enough that "Hi, I'm Branden Immerzeel" stays on one line at the
+       heading's clamped font size, instead of wrapping "Immerzeel" down. */
+    max-width: 820px;
     text-align: left;
   }
 }
