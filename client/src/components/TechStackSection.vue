@@ -3,8 +3,10 @@ interface TechItem {
   name: string
   slug: string
   // Optional hex (no #) to force a specific render color instead of the
-  // brand's CDN default — used for Unity below, whose default icon color
-  // is too light to read against this section's white cards.
+  // brand's CDN default. Used for Unity (default color too light to read
+  // on white cards) and VS Code (the CDN's default-variant render for this
+  // slug was coming back wrong — an unrelated orange icon — so we force
+  // VS Code's actual brand blue, which also routes around the bad variant).
   color?: string
 }
 
@@ -21,7 +23,7 @@ const techStack: TechItem[] = [
   { name: 'GitHub', slug: 'github' },
   { name: 'GitHub Actions', slug: 'githubactions' },
   { name: 'Docker', slug: 'docker' },
-  { name: 'VS Code', slug: 'visualstudiocode' },
+  { name: 'VS Code', slug: 'visualstudiocode', color: '007ACC' },
   { name: 'Postman', slug: 'postman' },
   { name: 'Playwright', slug: 'playwright' },
 ]
