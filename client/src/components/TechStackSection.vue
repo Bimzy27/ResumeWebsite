@@ -46,6 +46,10 @@ const techStack: TechItem[] = [
   { name: 'Copilot Chat', slug: 'githubcopilot' },
   { name: 'XNA', monogram: 'XNA' },
   { name: 'MonoGame', slug: 'monogame' },
+  { name: 'Visual Studio', slug: 'visualstudio' },
+  { name: 'Rider', slug: 'rider' },
+  { name: 'PyCharm', slug: 'pycharm' },
+  { name: 'Python', slug: 'python' },
 ]
 </script>
 
