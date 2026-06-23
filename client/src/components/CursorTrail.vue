@@ -2,38 +2,42 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 
 // A small canvas overlay, fixed to the viewport above everything else but
-// never intercepting clicks (pointer-events: none). Each pointer move spawns
-// a couple of tiny particles at the cursor position; they drift slightly,
-// shrink, and fade out over their lifetime, then get pruned from the array.
-// Driven by requestAnimationFrame rather than re-rendering Vue-side DOM nodes
-// per particle, since a few hundred of these need to update every frame
-// without the overhead of the virtual DOM.
+// never intercepting clicks (pointer-events: none). Rather than a cloud of
+// independent particles, this tracks a single trail of recent head
+// positions: a "head" point eases toward the real cursor position each
+// frame (so it glides instead of snapping), and the most recent head
+// positions are kept in a short history. The newest point (closest to the
+// current cursor location) is drawn biggest and brightest; each older point
+// — which is, by construction, farther from wherever the cursor is right
+// now — is drawn smaller and dimmer, tapering the trail off to nothing.
 
-interface Particle {
+interface Point {
   x: number
   y: number
-  vx: number
-  vy: number
-  size: number
-  life: number
-  maxLife: number
-  hue: string
 }
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 
-// Pulled from the site's own palette so the trail reads as part of the
-// design rather than a generic effect.
-const COLORS = ['124, 58, 237', '255, 107, 74', '6, 182, 212']
+const TRAIL_COLOR = '124, 58, 237' // var(--color-primary)
+const MAX_RADIUS = 13
+const DEFAULT_TRAIL_LENGTH = 14
+// How quickly the head catches up to the real cursor position — lower is
+// laggier/floatier, higher snaps closer to the actual pointer.
+const EASE = 0.3
 
 let ctx: CanvasRenderingContext2D | null = null
-let particles: Particle[] = []
 let rafId = 0
 let width = 0
 let height = 0
 let dpr = 1
-let lastSpawn = 0
 let reduceMotion = false
+// Reduced-motion visitors get just the single head dot, no tapering tail.
+let trailLength = DEFAULT_TRAIL_LENGTH
+
+const target: Point = { x: 0, y: 0 }
+const head: Point = { x: 0, y: 0 }
+let trail: Point[] = []
+let hasMoved = false
 
 function resize() {
   const canvas = canvasRef.value
@@ -48,59 +52,45 @@ function resize() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 }
 
-function spawn(x: number, y: number) {
-  // Throttled to ~every 16ms worth of movement so a fast swipe across the
-  // screen doesn't dump dozens of particles in a single frame.
-  const now = performance.now()
-  if (now - lastSpawn < 16) return
-  lastSpawn = now
-
-  const count = reduceMotion ? 1 : 2
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x,
-      y,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6 - 0.15,
-      size: Math.random() * 2.5 + 1.5,
-      life: 0,
-      maxLife: Math.random() * 400 + 400,
-      hue: COLORS[Math.floor(Math.random() * COLORS.length)],
-    })
-  }
-
-  // Hard cap so a long idle drag session can't grow this unbounded.
-  if (particles.length > 200) particles.splice(0, particles.length - 200)
-}
-
 function onPointerMove(event: PointerEvent) {
-  spawn(event.clientX, event.clientY)
+  target.x = event.clientX
+  target.y = event.clientY
+  if (!hasMoved) {
+    // First move: snap immediately instead of easing in from a stale 0,0.
+    head.x = target.x
+    head.y = target.y
+    hasMoved = true
+  }
 }
-
-let prevTime = performance.now()
 
 function tick() {
   if (!ctx) return
-  const now = performance.now()
-  const dt = now - prevTime
-  prevTime = now
-
   ctx.clearRect(0, 0, width, height)
 
-  particles = particles.filter((p) => p.life < p.maxLife)
-  for (const p of particles) {
-    p.life += dt
-    p.x += p.vx * dt * 0.06
-    p.y += p.vy * dt * 0.06
+  if (hasMoved) {
+    head.x += (target.x - head.x) * EASE
+    head.y += (target.y - head.y) * EASE
 
-    const t = p.life / p.maxLife
-    const alpha = 1 - t
-    const radius = p.size * (1 - t * 0.6)
+    trail.push({ x: head.x, y: head.y })
+    if (trail.length > trailLength) trail.shift()
 
-    ctx.beginPath()
-    ctx.arc(p.x, p.y, Math.max(radius, 0), 0, Math.PI * 2)
-    ctx.fillStyle = `rgba(${p.hue}, ${alpha * 0.55})`
-    ctx.fill()
+    const count = trail.length
+    for (let i = 0; i < count; i++) {
+      const point = trail[i]
+      // 0 for the oldest/farthest point, 1 for the newest (at the cursor).
+      const t = (i + 1) / count
+      const radius = MAX_RADIUS * t
+      const alpha = t * t * 0.5
+
+      const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius)
+      gradient.addColorStop(0, `rgba(${TRAIL_COLOR}, ${alpha})`)
+      gradient.addColorStop(1, `rgba(${TRAIL_COLOR}, 0)`)
+
+      ctx.beginPath()
+      ctx.arc(point.x, point.y, radius, 0, Math.PI * 2)
+      ctx.fillStyle = gradient
+      ctx.fill()
+    }
   }
 
   rafId = requestAnimationFrame(tick)
@@ -117,10 +107,12 @@ onMounted(() => {
   const isTouchPrimary = window.matchMedia('(hover: none) and (pointer: coarse)').matches
   if (isTouchPrimary) return
 
+  // Respect reduced-motion by keeping just the head with no tapering tail.
+  if (reduceMotion) trailLength = 1
+
   resize()
   window.addEventListener('resize', resize)
   window.addEventListener('pointermove', onPointerMove, { passive: true })
-  prevTime = performance.now()
   rafId = requestAnimationFrame(tick)
 })
 
