@@ -1,13 +1,18 @@
 <script setup lang="ts">
 interface TechItem {
   name: string
-  slug: string
+  // Simple Icons slug (https://simpleicons.org). Omitted for the handful of
+  // brands below with no icon in that set (OpenCode, OpenSpec, XNA) — those
+  // fall back to a text monogram instead of a broken image.
+  slug?: string
   // Optional hex (no #) to force a specific render color instead of the
   // brand's CDN default. Used for Unity (default color too light to read
   // on white cards) and VS Code (the CDN's default-variant render for this
   // slug was coming back wrong — an unrelated orange icon — so we force
   // VS Code's actual brand blue, which also routes around the bad variant).
   color?: string
+  // Short fallback text shown instead of an icon when there's no slug.
+  monogram?: string
 }
 
 const techStack: TechItem[] = [
@@ -26,6 +31,21 @@ const techStack: TechItem[] = [
   { name: 'VS Code', slug: 'visualstudiocode', color: '007ACC' },
   { name: 'Postman', slug: 'postman' },
   { name: 'Playwright', slug: 'playwright' },
+  { name: 'Solid.js', slug: 'solid' },
+  { name: 'Firebase', slug: 'firebase' },
+  { name: 'Supabase', slug: 'supabase' },
+  { name: 'Vercel', slug: 'vercel' },
+  { name: 'Expo', slug: 'expo' },
+  { name: 'Omarchy', slug: 'omarchy' },
+  { name: 'WezTerm', slug: 'wezterm' },
+  { name: 'MySQL', slug: 'mysql' },
+  { name: 'Claude Code', slug: 'claude' },
+  { name: 'OpenCode', monogram: 'OC' },
+  { name: 'OpenSpec', monogram: 'OS' },
+  { name: 'Microsoft Office', slug: 'microsoftoffice' },
+  { name: 'Copilot Chat', slug: 'githubcopilot' },
+  { name: 'XNA', monogram: 'XNA' },
+  { name: 'MonoGame', slug: 'monogame' },
 ]
 </script>
 
@@ -40,13 +60,15 @@ const techStack: TechItem[] = [
       </p>
 
       <div class="tech-grid">
-        <div v-for="tech in techStack" :key="tech.slug" class="tech-card">
+        <div v-for="tech in techStack" :key="tech.name" class="tech-card">
           <img
+            v-if="tech.slug"
             :src="`https://cdn.simpleicons.org/${tech.slug}${tech.color ? `/${tech.color}` : ''}`"
             :alt="tech.name"
             class="tech-card__icon"
             loading="lazy"
           />
+          <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
           <span class="tech-card__name">{{ tech.name }}</span>
         </div>
       </div>
@@ -88,6 +110,20 @@ const techStack: TechItem[] = [
   width: 36px;
   height: 36px;
   object-fit: contain;
+}
+
+.tech-card__icon--monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted, var(--color-text));
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
 }
 
 .tech-card__name {
