@@ -23,7 +23,7 @@ const MAX_RADIUS = 13
 const DEFAULT_TRAIL_LENGTH = 14
 // How quickly the head catches up to the real cursor position — lower is
 // laggier/floatier, higher snaps closer to the actual pointer.
-const EASE = 0.3
+const EASE = 0.12
 
 let ctx: CanvasRenderingContext2D | null = null
 let rafId = 0
@@ -82,13 +82,9 @@ function tick() {
       const radius = MAX_RADIUS * t
       const alpha = t * t * 0.5
 
-      const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius)
-      gradient.addColorStop(0, `rgba(${TRAIL_COLOR}, ${alpha})`)
-      gradient.addColorStop(1, `rgba(${TRAIL_COLOR}, 0)`)
-
       ctx.beginPath()
       ctx.arc(point.x, point.y, radius, 0, Math.PI * 2)
-      ctx.fillStyle = gradient
+      ctx.fillStyle = `rgba(${TRAIL_COLOR}, ${alpha})`
       ctx.fill()
     }
   }
