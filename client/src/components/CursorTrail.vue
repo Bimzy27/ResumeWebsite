@@ -24,6 +24,11 @@ const DEFAULT_TRAIL_LENGTH = 14
 // How quickly the head catches up to the real cursor position — lower is
 // laggier/floatier, higher snaps closer to the actual pointer.
 const EASE = 0.12
+// Once the lagging head gets within this many pixels of the real cursor,
+// it shrinks toward 0 over that remaining distance, so it visibly closes
+// down to nothing right as it catches up rather than just snapping there
+// at full size.
+const SHRINK_DISTANCE = 36
 
 let ctx: CanvasRenderingContext2D | null = null
 let rafId = 0
@@ -74,13 +79,23 @@ function tick() {
     trail.push({ x: head.x, y: head.y })
     if (trail.length > trailLength) trail.shift()
 
+    // How close the head currently is to the real cursor — 0 right on top
+    // of it, ramping up to 1 once it's SHRINK_DISTANCE px or farther away.
+    const distToTarget = Math.hypot(target.x - head.x, target.y - head.y)
+    const closeFactor = Math.min(distToTarget / SHRINK_DISTANCE, 1)
+
     const count = trail.length
     for (let i = 0; i < count; i++) {
       const point = trail[i]
       // 0 for the oldest/farthest point, 1 for the newest (at the cursor).
       const t = (i + 1) / count
-      const radius = MAX_RADIUS * t
-      const alpha = t * t * 0.5
+      // Only the lead point (the head itself) closes down to nothing as it
+      // arrives — older trail points keep their usual taper untouched.
+      const arrival = i === count - 1 ? closeFactor : 1
+      const radius = MAX_RADIUS * t * arrival
+      const alpha = t * t * 0.5 * arrival
+
+      if (radius <= 0) continue
 
       ctx.beginPath()
       ctx.arc(point.x, point.y, radius, 0, Math.PI * 2)
