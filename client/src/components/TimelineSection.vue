@@ -13,7 +13,7 @@ const { data: experience } = useApiResource<ExperienceEntry[]>('/experience', fa
       <p class="section-eyebrow">Career Timeline</p>
       <h2 class="section-title">Where I've worked</h2>
       <p class="section-intro">
-        Seven years across enterprise web platforms and award-winning game studios.
+        Eight years across enterprise web platforms and award-winning game studios.
       </p>
 
       <div class="timeline">

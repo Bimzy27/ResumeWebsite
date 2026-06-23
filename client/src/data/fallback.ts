@@ -4,7 +4,7 @@ export const fallbackProfile: Profile = {
   name: 'Branden Immerzeel',
   title: 'Senior Software Engineer',
   summary:
-    'Experienced Full-Stack Software Engineer with over 7 years of experience across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.',
+    'Experienced Full-Stack Software Engineer with over 8 years of experience across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.',
   contact: {
     email: 'branden.immerzeel@gmail.com',
     phone: '0423 889 259',
@@ -110,24 +110,6 @@ export const fallbackExperience: ExperienceEntry[] = [
 
 export const fallbackRecommendations: RecommendationEntry[] = [
   {
-    id: 'alexander-eagles',
-    name: 'Alexander Eagles',
-    title: 'Product Manager, PAVE and Productivity Tools at WiseTech Global',
-    relationship: 'Senior to Branden, did not manage him directly',
-    quote:
-      "As a product manager you want teams that can execute and do so effectively. Branden always came to work with the attitude to help me solve the teams problems. Branden would come with multiple solutions and help explore trade-offs in a way few engineers do effectively. Any team would benefit from having Branden, not just because of his technical ability - but because of his ability to take the problems and pragmatically explore solutions. If I was to assemble my dream team, Branden would be on it.",
-    linkedIn: 'https://www.linkedin.com/in/alexander-eaglessydney/',
-  },
-  {
-    id: 'ryan-smallwood-simpson',
-    name: 'Ryan Smallwood-Simpson',
-    title: 'Software Engineer',
-    relationship: 'Reported to Branden directly',
-    quote:
-      'Branden was my mentor when I first joined WiseTech Global. He always went the extra mile to help me find my feet at the company. He is the ideal combination of very easy to get on with and highly competent at all aspects of the software development life cycle. Finally, he was always striving to improve even further and would be a great fit to any team.',
-    linkedIn: 'https://www.linkedin.com/in/ryan-smallwood-simpson-b4a076138/',
-  },
-  {
     id: 'juan-diego-merino-roldan',
     name: 'Juan Diego Merino Roldán',
     title: 'Software Architect at WiseTech Global',
@@ -137,24 +119,6 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     linkedIn: 'https://www.linkedin.com/in/jdmerinor/en/',
   },
   {
-    id: 'benjamin-wang',
-    name: 'Benjamin Wang',
-    title: 'Software Engineer at WiseTech Global',
-    relationship: 'Worked with Branden on different teams',
-    quote:
-      'I have worked with Branden in the same office for over 1 year and a half. Branden consistently brings a great attitude to work. Whether facing a tough deadline or a tricky technical problem, he approaches challenges with genuine enthusiasm to make solid contributions and deliver the results. Branden always tries to kick up a notch and strech himself. As a software engineer, Branden has always been seeking challenges beyond the scope, including proactively taking the lead in a squad, mentoring people and providing support for his team. It was a pleasure for me to have been working with Branden and with his skills I genuinely believe any team would be lucky to have Branden. I wish Branden all the best with his career.',
-    linkedIn: 'https://www.linkedin.com/in/benjamin-wang-579676259/',
-  },
-  {
-    id: 'chen-ling',
-    name: 'Chen Ling',
-    title: 'Software Engineer at WiseTech Global',
-    relationship: 'Worked with Branden on the same team',
-    quote:
-      'I had the pleasure of working closely with Branden during his time at WiseTech. He is a highly responsible, reliable, and intelligent professional who consistently delivers thorough, high-quality work. Branden also brings great energy to the team with his sense of humor and positive attitude. He is approachable, friendly, and always enjoyable to work with, which makes collaboration smooth and enjoyable for everyone around him. I truly enjoyed working with Branden and am confident that he will be a valuable asset and succeed in any team he joins.',
-    linkedIn: 'https://www.linkedin.com/in/chen-ling-rrr/',
-  },
-  {
     id: 'guan-du',
     name: 'Guan Du',
     title: 'Software Engineering Team Lead',
@@ -162,6 +126,24 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     quote:
       'Branden is a very passionate and hard working engineer. He volunteered for many challenging projects in WiseTech and displayed great teamwork during these, onboarding and mentoring new colleagues. Branden also has great communication skills, reaching out and following up with people when necessary. I definitely saw leadership potential in Branden. I enjoyed working with Branden greatly and I think he would be a great addition to any company.',
     linkedIn: 'https://www.linkedin.com/in/guan-d-222746157/',
+  },
+  {
+    id: 'ben-calder',
+    name: 'Ben Calder',
+    title: 'Leader of Software Engineers in pursuit of excellence',
+    relationship: 'Managed Branden directly',
+    quote:
+      'Branden is a talented software engineer with a keen eye for detail and a solution-oriented mindset. His passion for delivering quality at speed with consistency is exemplary, and he sets himself apart with his willingness to assist those around him and share his learnings with teammates. He has an ability to think outside the box to find innovative solutions to complex problems. I believe any team would be lucky to land Branden\'s services, and can see him being successful in a solutions engineer or architect role moving forward.',
+    linkedIn: 'https://www.linkedin.com/in/bencalder/',
+  },
+  {
+    id: 'alexander-eagles',
+    name: 'Alexander Eagles',
+    title: 'Product Manager, PAVE and Productivity Tools at WiseTech Global',
+    relationship: 'Senior to Branden, did not manage him directly',
+    quote:
+      "As a product manager you want teams that can execute and do so effectively. Branden always came to work with the attitude to help me solve the teams problems. Branden would come with multiple solutions and help explore trade-offs in a way few engineers do effectively. Any team would benefit from having Branden, not just because of his technical ability - but because of his ability to take the problems and pragmatically explore solutions. If I was to assemble my dream team, Branden would be on it.",
+    linkedIn: 'https://www.linkedin.com/in/alexander-eaglessydney/',
   },
   {
     id: 'simon-vogler',
@@ -182,13 +164,31 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     linkedIn: 'https://www.linkedin.com/in/scott-cabot/',
   },
   {
-    id: 'ben-calder',
-    name: 'Ben Calder',
-    title: 'Leader of Software Engineers in pursuit of excellence',
-    relationship: 'Managed Branden directly',
+    id: 'chen-ling',
+    name: 'Chen Ling',
+    title: 'Software Engineer at WiseTech Global',
+    relationship: 'Worked with Branden on the same team',
     quote:
-      'Branden is a talented software engineer with a keen eye for detail and a solution-oriented mindset. His passion for delivering quality at speed with consistency is exemplary, and he sets himself apart with his willingness to assist those around him and share his learnings with teammates. He has an ability to think outside the box to find innovative solutions to complex problems. I believe any team would be lucky to land Branden\'s services, and can see him being successful in a solutions engineer or architect role moving forward.',
-    linkedIn: 'https://www.linkedin.com/in/bencalder/',
+      'I had the pleasure of working closely with Branden during his time at WiseTech. He is a highly responsible, reliable, and intelligent professional who consistently delivers thorough, high-quality work. Branden also brings great energy to the team with his sense of humor and positive attitude. He is approachable, friendly, and always enjoyable to work with, which makes collaboration smooth and enjoyable for everyone around him. I truly enjoyed working with Branden and am confident that he will be a valuable asset and succeed in any team he joins.',
+    linkedIn: 'https://www.linkedin.com/in/chen-ling-rrr/',
+  },
+  {
+    id: 'ryan-smallwood-simpson',
+    name: 'Ryan Smallwood-Simpson',
+    title: 'Software Engineer',
+    relationship: 'Reported to Branden directly',
+    quote:
+      'Branden was my mentor when I first joined WiseTech Global. He always went the extra mile to help me find my feet at the company. He is the ideal combination of very easy to get on with and highly competent at all aspects of the software development life cycle. Finally, he was always striving to improve even further and would be a great fit to any team.',
+    linkedIn: 'https://www.linkedin.com/in/ryan-smallwood-simpson-b4a076138/',
+  },
+  {
+    id: 'benjamin-wang',
+    name: 'Benjamin Wang',
+    title: 'Software Engineer at WiseTech Global',
+    relationship: 'Worked with Branden on different teams',
+    quote:
+      'I have worked with Branden in the same office for over 1 year and a half. Branden consistently brings a great attitude to work. Whether facing a tough deadline or a tricky technical problem, he approaches challenges with genuine enthusiasm to make solid contributions and deliver the results. Branden always tries to kick up a notch and strech himself. As a software engineer, Branden has always been seeking challenges beyond the scope, including proactively taking the lead in a squad, mentoring people and providing support for his team. It was a pleasure for me to have been working with Branden and with his skills I genuinely believe any team would be lucky to have Branden. I wish Branden all the best with his career.',
+    linkedIn: 'https://www.linkedin.com/in/benjamin-wang-579676259/',
   },
 ]
 
