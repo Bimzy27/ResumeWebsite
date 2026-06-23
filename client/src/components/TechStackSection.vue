@@ -2,6 +2,10 @@
 interface TechItem {
   name: string
   slug: string
+  // Optional hex (no #) to force a specific render color instead of the
+  // brand's CDN default — used for Unity below, whose default icon color
+  // is too light to read against this section's white cards.
+  color?: string
 }
 
 const techStack: TechItem[] = [
@@ -12,11 +16,10 @@ const techStack: TechItem[] = [
   { name: 'JavaScript', slug: 'javascript' },
   { name: 'HTML', slug: 'html5' },
   { name: 'CSS', slug: 'css3' },
-  { name: 'Unity', slug: 'unity' },
+  { name: 'Unity', slug: 'unity', color: '000000' },
   { name: 'Git', slug: 'git' },
   { name: 'GitHub', slug: 'github' },
   { name: 'GitHub Actions', slug: 'githubactions' },
-  { name: 'Azure', slug: 'microsoftazure' },
   { name: 'Docker', slug: 'docker' },
   { name: 'VS Code', slug: 'visualstudiocode' },
   { name: 'Postman', slug: 'postman' },
@@ -36,7 +39,12 @@ const techStack: TechItem[] = [
 
       <div class="tech-grid">
         <div v-for="tech in techStack" :key="tech.slug" class="tech-card">
-          <img :src="`https://cdn.simpleicons.org/${tech.slug}`" :alt="tech.name" class="tech-card__icon" loading="lazy" />
+          <img
+            :src="`https://cdn.simpleicons.org/${tech.slug}${tech.color ? `/${tech.color}` : ''}`"
+            :alt="tech.name"
+            class="tech-card__icon"
+            loading="lazy"
+          />
           <span class="tech-card__name">{{ tech.name }}</span>
         </div>
       </div>
