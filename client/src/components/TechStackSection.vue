@@ -333,6 +333,7 @@ function categoryWidthPx(category: string, count: number): string {
   font-size: 0.68rem;
   color: var(--color-text);
   text-align: center;
+  white-space: nowrap;
 }
 
 /* On narrow viewports a full-width single-row category could overflow the
