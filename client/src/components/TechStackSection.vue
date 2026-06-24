@@ -201,6 +201,9 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 
 .tech-category {
   flex: 0 0 auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px 16px;
 }
 
 .tech-category__title {
@@ -213,23 +216,14 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   margin-bottom: 10px;
 }
 
-/* Single row per category: cards never wrap to a second line. If a category
-   has more items than fit on screen, the row scrolls horizontally instead. */
+/* Single row per category: cards never wrap to a second line. The row sizes
+   itself to fit its cards exactly (no overflow, no scrollbar) — the
+   category block's width simply grows to match, and the outer flex-wrap
+   container packs blocks around it. */
 .tech-grid {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-
-.tech-grid::-webkit-scrollbar {
-  height: 4px;
-}
-
-.tech-grid::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 2px;
 }
 
 .tech-card {
@@ -291,5 +285,18 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   font-size: 0.68rem;
   color: var(--color-text);
   text-align: center;
+}
+
+/* On narrow viewports a full-width single-row category could overflow the
+   page horizontally. Let those rows wrap to a second line there instead of
+   forcing a scrollbar or clipping cards. */
+@media (max-width: 480px) {
+  .tech-grid {
+    flex-wrap: wrap;
+  }
+
+  .tech-category {
+    flex: 1 1 100%;
+  }
 }
 </style>
