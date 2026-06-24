@@ -17,6 +17,9 @@ interface TechItem {
   // Simple Icons CDN when set. Preferred for brands where the CDN render is
   // wrong/missing, since it doesn't depend on a third-party service at all.
   localIcon?: string
+  // Link to the tool's official documentation. Each card is rendered as a
+  // link that opens this in a new tab.
+  docsUrl: string
 }
 
 // Resolves the actual <img> src for a tech item: a local asset if one was
@@ -27,44 +30,44 @@ function iconSrc(tech: TechItem): string {
 }
 
 const techStack: TechItem[] = [
-  { name: 'C#', slug: 'csharp', localIcon: '/icons/csharp.svg' },
-  { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg' },
-  { name: '.NET Core', localIcon: '/icons/dotnet-core.svg' },
-  { name: 'Vue.js', slug: 'vuedotjs' },
-  { name: 'TypeScript', slug: 'typescript' },
-  { name: 'JavaScript', slug: 'javascript' },
-  { name: 'HTML', slug: 'html5' },
-  { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg' },
-  { name: 'Unity', slug: 'unity', color: '000000' },
-  { name: 'Git', slug: 'git' },
-  { name: 'GitHub', slug: 'github' },
-  { name: 'GitHub Actions', slug: 'githubactions' },
-  { name: 'Docker', slug: 'docker' },
-  { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg' },
-  { name: 'Postman', slug: 'postman' },
-  { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg' },
-  { name: 'Solid.js', slug: 'solid', localIcon: '/icons/solidjs.svg' },
-  { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg' },
-  { name: 'Supabase', slug: 'supabase' },
-  { name: 'Vercel', slug: 'vercel' },
-  { name: 'Expo', slug: 'expo' },
-  { name: 'Omarchy', slug: 'omarchy' },
-  { name: 'WezTerm', slug: 'wezterm' },
-  { name: 'MySQL', slug: 'mysql' },
-  { name: 'Claude Code', slug: 'claude' },
-  { name: 'OpenCode', monogram: 'OC' },
-  { name: 'OpenSpec', monogram: 'OS' },
-  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg' },
-  { name: 'Copilot Chat', slug: 'githubcopilot' },
-  { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg' },
-  { name: 'MonoGame', slug: 'monogame' },
-  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg' },
-  { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg' },
-  { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg' },
-  { name: 'Python', slug: 'python', localIcon: '/icons/python.svg' },
-  { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg' },
-  { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg' },
-  { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg' },
+  { name: 'C#', slug: 'csharp', localIcon: '/icons/csharp.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/csharp/' },
+  { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/' },
+  { name: '.NET Core', localIcon: '/icons/dotnet-core.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/core/introduction' },
+  { name: 'Vue.js', slug: 'vuedotjs', docsUrl: 'https://vuejs.org/guide/introduction.html' },
+  { name: 'TypeScript', slug: 'typescript', docsUrl: 'https://www.typescriptlang.org/docs/' },
+  { name: 'JavaScript', slug: 'javascript', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+  { name: 'HTML', slug: 'html5', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
+  { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
+  { name: 'Unity', slug: 'unity', color: '000000', docsUrl: 'https://docs.unity3d.com/' },
+  { name: 'Git', slug: 'git', docsUrl: 'https://git-scm.com/doc' },
+  { name: 'GitHub', slug: 'github', docsUrl: 'https://docs.github.com/' },
+  { name: 'GitHub Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions' },
+  { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/' },
+  { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg', docsUrl: 'https://code.visualstudio.com/docs' },
+  { name: 'Postman', slug: 'postman', docsUrl: 'https://learning.postman.com/docs/getting-started/overview/' },
+  { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro' },
+  { name: 'Solid.js', slug: 'solid', localIcon: '/icons/solidjs.svg', docsUrl: 'https://www.solidjs.com/docs/latest' },
+  { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg', docsUrl: 'https://firebase.google.com/docs' },
+  { name: 'Supabase', slug: 'supabase', docsUrl: 'https://supabase.com/docs' },
+  { name: 'Vercel', slug: 'vercel', docsUrl: 'https://vercel.com/docs' },
+  { name: 'Expo', slug: 'expo', docsUrl: 'https://docs.expo.dev/' },
+  { name: 'Omarchy', slug: 'omarchy', docsUrl: 'https://learn.omacom.io/2/the-omarchy-manual' },
+  { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/' },
+  { name: 'MySQL', slug: 'mysql', docsUrl: 'https://dev.mysql.com/doc/' },
+  { name: 'Claude Code', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview' },
+  { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/' },
+  { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec' },
+  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office' },
+  { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot' },
+  { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)' },
+  { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/' },
+  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/' },
+  { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/' },
+  { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/' },
+  { name: 'Python', slug: 'python', localIcon: '/icons/python.svg', docsUrl: 'https://docs.python.org/3/' },
+  { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/' },
+  { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/' },
+  { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg', docsUrl: 'https://ubuntu.com/server/docs' },
 ]
 </script>
 
@@ -79,7 +82,15 @@ const techStack: TechItem[] = [
       </p>
 
       <div class="tech-grid">
-        <div v-for="tech in techStack" :key="tech.name" class="tech-card">
+        <a
+          v-for="tech in techStack"
+          :key="tech.name"
+          :href="tech.docsUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="tech-card"
+          :aria-label="`Open ${tech.name} documentation`"
+        >
           <img
             v-if="tech.slug || tech.localIcon"
             :src="iconSrc(tech)"
@@ -89,7 +100,7 @@ const techStack: TechItem[] = [
           />
           <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
           <span class="tech-card__name">{{ tech.name }}</span>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -113,16 +124,24 @@ const techStack: TechItem[] = [
   border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  text-decoration: none;
+  cursor: pointer;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
     border-color 0.18s ease;
 }
 
-.tech-card:hover {
+.tech-card:hover,
+.tech-card:focus-visible {
   transform: translateY(-4px) scale(1.06);
   border-color: var(--color-primary);
   box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22);
+}
+
+.tech-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .tech-card__icon {
