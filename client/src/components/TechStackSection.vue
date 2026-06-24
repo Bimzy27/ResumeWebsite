@@ -13,10 +13,21 @@ interface TechItem {
   color?: string
   // Short fallback text shown instead of an icon when there's no slug.
   monogram?: string
+  // Path (under client/public) to a locally-hosted icon, used instead of the
+  // Simple Icons CDN when set. Preferred for brands where the CDN render is
+  // wrong/missing, since it doesn't depend on a third-party service at all.
+  localIcon?: string
+}
+
+// Resolves the actual <img> src for a tech item: a local asset if one was
+// supplied, otherwise the Simple Icons CDN (with optional color override).
+function iconSrc(tech: TechItem): string {
+  if (tech.localIcon) return tech.localIcon
+  return `https://cdn.simpleicons.org/${tech.slug}${tech.color ? `/${tech.color}` : ''}`
 }
 
 const techStack: TechItem[] = [
-  { name: 'C#', slug: 'csharp' },
+  { name: 'C#', slug: 'csharp', localIcon: '/icons/csharp.svg' },
   { name: '.NET', slug: 'dotnet' },
   { name: 'Vue.js', slug: 'vuedotjs' },
   { name: 'TypeScript', slug: 'typescript' },
@@ -66,8 +77,8 @@ const techStack: TechItem[] = [
       <div class="tech-grid">
         <div v-for="tech in techStack" :key="tech.name" class="tech-card">
           <img
-            v-if="tech.slug"
-            :src="`https://cdn.simpleicons.org/${tech.slug}${tech.color ? `/${tech.color}` : ''}`"
+            v-if="tech.slug || tech.localIcon"
+            :src="iconSrc(tech)"
             :alt="tech.name"
             class="tech-card__icon"
             loading="lazy"
