@@ -185,30 +185,22 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 </template>
 
 <style scoped>
-/* Multi-column layout packs categories densely (like masonry) instead of
-   stacking every section full-width, which is what was driving the page
-   height up. Column count scales with viewport width. */
+/* Each category is a self-contained block sized to its content (single row
+   of cards, no wrapping inside it). The outer container then flex-wraps
+   those blocks left-to-right, top-to-bottom — the browser's wrapping
+   algorithm packs differently-sized category blocks together "tetris-style"
+   to fill the available width, rather than every category eating a full
+   row regardless of how few items it has. */
 .tech-categories {
-  column-count: 1;
-  column-gap: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px;
   margin-top: 32px;
 }
 
-@media (min-width: 640px) {
-  .tech-categories {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 1100px) {
-  .tech-categories {
-    column-count: 3;
-  }
-}
-
 .tech-category {
-  break-inside: avoid;
-  margin-bottom: 24px;
+  flex: 0 0 auto;
 }
 
 .tech-category__title {
@@ -221,14 +213,28 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   margin-bottom: 10px;
 }
 
+/* Single row per category: cards never wrap to a second line. If a category
+   has more items than fit on screen, the row scrolls horizontally instead. */
 .tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
   gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.tech-grid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tech-grid::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
 }
 
 .tech-card {
   display: flex;
+  flex: 0 0 64px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
