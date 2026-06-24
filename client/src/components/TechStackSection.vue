@@ -102,6 +102,7 @@ const techStack: TechItem[] = [
   { name: 'GitHub Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions', category: 'CI/CD' },
   { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/', category: 'CI/CD' },
   { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/', category: 'CI/CD' },
+  { name: 'NuGet', slug: 'nuget', docsUrl: 'https://learn.microsoft.com/en-us/nuget/', category: 'CI/CD' },
 
   { name: 'Postman', slug: 'postman', docsUrl: 'https://learning.postman.com/docs/getting-started/overview/', category: 'Testing' },
   { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro', category: 'Testing' },
@@ -128,7 +129,7 @@ const techStack: TechItem[] = [
   { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
 
   { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
-  { name: 'Beyond Compare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/support', category: 'Misc' },
+  { name: 'Beyond Compare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/', category: 'Misc' },
   { name: 'dotMemory', monogram: 'dM', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
 ]
 
