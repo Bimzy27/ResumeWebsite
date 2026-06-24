@@ -227,6 +227,11 @@ function rowWidthPx(count: number): string {
   text-transform: uppercase;
   color: var(--color-text-muted, var(--color-text));
   margin-bottom: 10px;
+  /* When a category has few cards, its title can be the wider of the two
+     children, which sets the box's overall width. Centering both the title
+     and the card row (below) keeps left/right padding equal either way,
+     instead of the narrower one hugging the left edge. */
+  text-align: center;
 }
 
 /* Single row per category: cards never wrap to a second line. The row sizes
@@ -237,6 +242,7 @@ function rowWidthPx(count: number): string {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
+  margin: 0 auto;
 }
 
 .tech-card {
