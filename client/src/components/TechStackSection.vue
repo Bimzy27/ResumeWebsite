@@ -90,7 +90,7 @@ const techStack: TechItem[] = [
   { name: 'Neovim', slug: 'neovim', docsUrl: 'https://neovim.io/doc/', category: 'IDE' },
 
   { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/', category: 'Terminal' },
-  { name: 'PowerShell', slug: 'powershell', docsUrl: 'https://learn.microsoft.com/en-us/powershell/', category: 'Terminal' },
+  { name: 'PowerShell', slug: 'powershell', localIcon: '/icons/powershell.svg', docsUrl: 'https://learn.microsoft.com/en-us/powershell/', category: 'Terminal' },
 
   { name: 'Windows', slug: 'windows', docsUrl: 'https://learn.microsoft.com/en-us/windows/', category: 'OS' },
   { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg', docsUrl: 'https://ubuntu.com/server/docs', category: 'OS' },
@@ -123,14 +123,14 @@ const techStack: TechItem[] = [
   { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
-  { name: 'Canva', slug: 'canva', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
+  { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
   { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Productivity & Design' },
   { name: 'Jira', slug: 'jira', docsUrl: 'https://support.atlassian.com/jira-software-cloud/', category: 'Productivity & Design' },
   { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
 
   { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
   { name: 'Beyond Compare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/', category: 'Misc' },
-  { name: 'dotMemory', monogram: 'dM', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
+  { name: 'dotMemory', monogram: 'dM', localIcon: '/icons/dotmemory.svg', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
 ]
 
 // Group techStack into ordered, named sections for rendering.
