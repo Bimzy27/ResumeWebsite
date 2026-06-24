@@ -122,7 +122,7 @@ const techStack: TechItem[] = [
   { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
   { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tools' },
   { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
-  { name: 'MCP', monogram: 'MCP', docsUrl: 'https://modelcontextprotocol.io/', category: 'AI Tools' },
+  { name: 'MCP', localIcon: '/icons/Model_Context_Protocol_logo.svg', docsUrl: 'https://modelcontextprotocol.io/', category: 'AI Tools' },
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
   { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
