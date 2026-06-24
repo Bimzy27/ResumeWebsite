@@ -119,9 +119,10 @@ const techStack: TechItem[] = [
   { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)', category: 'Game Dev' },
 
   { name: 'Claude', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tools' },
+  { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
   { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tools' },
   { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
-  { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
+  { name: 'MCP', monogram: 'MCP', docsUrl: 'https://modelcontextprotocol.io/', category: 'AI Tools' },
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
   { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
