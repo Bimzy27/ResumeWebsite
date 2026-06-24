@@ -201,9 +201,12 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 
 .tech-category {
   flex: 0 0 auto;
+  width: max-content;
+  max-width: 100%;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 14px 16px 16px;
+  box-sizing: content-box;
 }
 
 .tech-category__title {
