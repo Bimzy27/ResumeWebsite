@@ -84,7 +84,7 @@ const techStack: TechItem[] = [
   { name: 'Expo', slug: 'expo', docsUrl: 'https://docs.expo.dev/', category: 'Framework' },
 
   { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg', docsUrl: 'https://code.visualstudio.com/docs', category: 'IDE' },
-  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
+  { name: 'VisualStudio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
   { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/', category: 'IDE' },
   { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/', category: 'IDE' },
   { name: 'Neovim', slug: 'neovim', docsUrl: 'https://neovim.io/doc/', category: 'IDE' },
@@ -99,7 +99,7 @@ const techStack: TechItem[] = [
   { name: 'Git', slug: 'git', docsUrl: 'https://git-scm.com/doc', category: 'Version Control' },
   { name: 'GitHub', slug: 'github', docsUrl: 'https://docs.github.com/', category: 'Version Control' },
 
-  { name: 'GitHub Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions', category: 'CI/CD' },
+  { name: 'GH Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions', category: 'CI/CD' },
   { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/', category: 'CI/CD' },
   { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/', category: 'CI/CD' },
   { name: 'NuGet', slug: 'nuget', docsUrl: 'https://learn.microsoft.com/en-us/nuget/', category: 'CI/CD' },
@@ -117,10 +117,10 @@ const techStack: TechItem[] = [
   { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/', category: 'Game Dev' },
   { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)', category: 'Game Dev' },
 
-  { name: 'Claude Code', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tools' },
+  { name: 'Claude', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tools' },
   { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tools' },
   { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
-  { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
+  { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
   { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
@@ -128,9 +128,9 @@ const techStack: TechItem[] = [
   { name: 'Jira', slug: 'jira', docsUrl: 'https://support.atlassian.com/jira-software-cloud/', category: 'Productivity & Design' },
   { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
 
-  { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
-  { name: 'Beyond Compare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/', category: 'Misc' },
-  { name: 'dotMemory', monogram: 'dM', localIcon: '/icons/dotmemory.svg', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
+  { name: 'NPM', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
+  { name: 'BeyondCompare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/', category: 'Misc' },
+  { name: 'DotMemory', monogram: 'dM', localIcon: '/icons/dotmemory.svg', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
 ]
 
 // Group techStack into ordered, named sections for rendering.
@@ -138,6 +138,19 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   category,
   items: techStack.filter((tech) => tech.category === category),
 })).filter((group) => group.items.length > 0)
+
+// Card width/gap must match the .tech-card / .tech-grid CSS below exactly.
+// Relying on the browser to auto-size a category box around a nested flex
+// row (intrinsic sizing through two layers of flex) was unreliable — boxes
+// kept rendering a card narrower than their content, clipping/overlapping
+// the last card. Computing the row's exact pixel width here and applying it
+// directly removes all ambiguity: the box can only ever be exactly as wide
+// as its cards.
+const CARD_WIDTH = 64
+const CARD_GAP = 8
+function rowWidthPx(count: number): string {
+  return `${count * CARD_WIDTH + (count - 1) * CARD_GAP}px`
+}
 </script>
 
 <template>
@@ -157,7 +170,7 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
           class="tech-category"
         >
           <h3 class="tech-category__title">{{ group.category }}</h3>
-          <div class="tech-grid">
+          <div class="tech-grid" :style="{ width: rowWidthPx(group.items.length) }">
             <a
               v-for="tech in group.items"
               :key="tech.name"
@@ -201,12 +214,9 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 
 .tech-category {
   flex: 0 0 auto;
-  width: max-content;
-  max-width: 100%;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 14px 16px 16px;
-  box-sizing: content-box;
 }
 
 .tech-category__title {
@@ -292,9 +302,12 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 
 /* On narrow viewports a full-width single-row category could overflow the
    page horizontally. Let those rows wrap to a second line there instead of
-   forcing a scrollbar or clipping cards. */
+   forcing a scrollbar or clipping cards. The explicit row width set inline
+   (to make box sizing exact on desktop) has to be overridden here, since an
+   inline style otherwise wins over a stylesheet rule. */
 @media (max-width: 480px) {
   .tech-grid {
+    width: auto !important;
     flex-wrap: wrap;
   }
 
