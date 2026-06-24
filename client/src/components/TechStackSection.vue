@@ -76,6 +76,7 @@ const techStack: TechItem[] = [
   { name: 'HTML', slug: 'html5', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/HTML', category: 'Language' },
   { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS', category: 'Language' },
   { name: 'Python', slug: 'python', localIcon: '/icons/python.svg', docsUrl: 'https://docs.python.org/3/', category: 'Language' },
+  { name: 'SQL', monogram: 'SQL', docsUrl: 'https://learn.microsoft.com/en-us/sql/sql-server/', category: 'Language' },
 
   { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/', category: 'Framework' },
   { name: '.NET Core', localIcon: '/icons/dotnet-core.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/core/introduction', category: 'Framework' },
@@ -102,7 +103,6 @@ const techStack: TechItem[] = [
   { name: 'GH Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions', category: 'CI/CD' },
   { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/', category: 'CI/CD' },
   { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/', category: 'CI/CD' },
-  { name: 'NuGet', slug: 'nuget', docsUrl: 'https://learn.microsoft.com/en-us/nuget/', category: 'CI/CD' },
 
   { name: 'Postman', slug: 'postman', docsUrl: 'https://learning.postman.com/docs/getting-started/overview/', category: 'Testing' },
   { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro', category: 'Testing' },
@@ -130,6 +130,7 @@ const techStack: TechItem[] = [
 
   { name: 'NPM', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
   { name: 'DotMemory', monogram: 'dM', localIcon: '/icons/dotmemory.svg', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
+  { name: 'NuGet', slug: 'nuget', docsUrl: 'https://learn.microsoft.com/en-us/nuget/', category: 'Misc' },
 ]
 
 // Group techStack into ordered, named sections for rendering.
