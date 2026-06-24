@@ -87,6 +87,7 @@ const techStack: TechItem[] = [
   { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
   { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/', category: 'IDE' },
   { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/', category: 'IDE' },
+  { name: 'Neovim', slug: 'neovim', docsUrl: 'https://neovim.io/doc/', category: 'IDE' },
 
   { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/', category: 'Terminal' },
   { name: 'PowerShell', slug: 'powershell', docsUrl: 'https://learn.microsoft.com/en-us/powershell/', category: 'Terminal' },
@@ -127,6 +128,8 @@ const techStack: TechItem[] = [
   { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
 
   { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
+  { name: 'Beyond Compare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/support', category: 'Misc' },
+  { name: 'dotMemory', monogram: 'dM', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
 ]
 
 // Group techStack into ordered, named sections for rendering.
