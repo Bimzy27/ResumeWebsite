@@ -20,7 +20,45 @@ interface TechItem {
   // Link to the tool's official documentation. Each card is rendered as a
   // link that opens this in a new tab.
   docsUrl: string
+  // Grouping used to render the grid as labeled sections. See CATEGORY_ORDER
+  // below for the display order.
+  category: Category
 }
+
+type Category =
+  | 'Language'
+  | 'Framework'
+  | 'IDE'
+  | 'Terminal'
+  | 'OS'
+  | 'Version Control'
+  | 'CI/CD'
+  | 'Testing'
+  | 'Database'
+  | 'Cloud & Hosting'
+  | 'Game Dev'
+  | 'AI Tools'
+  | 'Misc'
+
+// Display order for category sections. Beyond the categories explicitly
+// requested (IDE, Language, CI/CD, OS, Terminal, Misc, Database), a few more
+// were added to avoid dumping unrelated tools into "Misc": Framework,
+// Version Control, Testing, Cloud & Hosting, Game Dev, and AI Tools.
+const CATEGORY_ORDER: Category[] = [
+  'Language',
+  'Framework',
+  'IDE',
+  'Terminal',
+  'OS',
+  'Version Control',
+  'CI/CD',
+  'Testing',
+  'Database',
+  'Cloud & Hosting',
+  'Game Dev',
+  'AI Tools',
+  'Misc',
+]
 
 // Resolves the actual <img> src for a tech item: a local asset if one was
 // supplied, otherwise the Simple Icons CDN (with optional color override).
@@ -30,45 +68,65 @@ function iconSrc(tech: TechItem): string {
 }
 
 const techStack: TechItem[] = [
-  { name: 'C#', slug: 'csharp', localIcon: '/icons/csharp.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/csharp/' },
-  { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/' },
-  { name: '.NET Core', localIcon: '/icons/dotnet-core.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/core/introduction' },
-  { name: 'Vue.js', slug: 'vuedotjs', docsUrl: 'https://vuejs.org/guide/introduction.html' },
-  { name: 'TypeScript', slug: 'typescript', docsUrl: 'https://www.typescriptlang.org/docs/' },
-  { name: 'JavaScript', slug: 'javascript', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
-  { name: 'HTML', slug: 'html5', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
-  { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
-  { name: 'Unity', slug: 'unity', color: '000000', docsUrl: 'https://docs.unity3d.com/' },
-  { name: 'Git', slug: 'git', docsUrl: 'https://git-scm.com/doc' },
-  { name: 'GitHub', slug: 'github', docsUrl: 'https://docs.github.com/' },
-  { name: 'GitHub Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions' },
-  { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/' },
-  { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg', docsUrl: 'https://code.visualstudio.com/docs' },
-  { name: 'Postman', slug: 'postman', docsUrl: 'https://learning.postman.com/docs/getting-started/overview/' },
-  { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro' },
-  { name: 'Solid.js', slug: 'solid', localIcon: '/icons/solidjs.svg', docsUrl: 'https://www.solidjs.com/docs/latest' },
-  { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg', docsUrl: 'https://firebase.google.com/docs' },
-  { name: 'Supabase', slug: 'supabase', docsUrl: 'https://supabase.com/docs' },
-  { name: 'Vercel', slug: 'vercel', docsUrl: 'https://vercel.com/docs' },
-  { name: 'Expo', slug: 'expo', docsUrl: 'https://docs.expo.dev/' },
-  { name: 'Omarchy', slug: 'omarchy', docsUrl: 'https://learn.omacom.io/2/the-omarchy-manual' },
-  { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/' },
-  { name: 'MySQL', slug: 'mysql', docsUrl: 'https://dev.mysql.com/doc/' },
-  { name: 'Claude Code', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview' },
-  { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/' },
-  { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec' },
-  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office' },
-  { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot' },
-  { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)' },
-  { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/' },
-  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/' },
-  { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/' },
-  { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/' },
-  { name: 'Python', slug: 'python', localIcon: '/icons/python.svg', docsUrl: 'https://docs.python.org/3/' },
-  { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/' },
-  { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/' },
-  { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg', docsUrl: 'https://ubuntu.com/server/docs' },
+  { name: 'C#', slug: 'csharp', localIcon: '/icons/csharp.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/csharp/', category: 'Language' },
+  { name: 'TypeScript', slug: 'typescript', docsUrl: 'https://www.typescriptlang.org/docs/', category: 'Language' },
+  { name: 'JavaScript', slug: 'javascript', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript', category: 'Language' },
+  { name: 'HTML', slug: 'html5', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/HTML', category: 'Language' },
+  { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS', category: 'Language' },
+  { name: 'Python', slug: 'python', localIcon: '/icons/python.svg', docsUrl: 'https://docs.python.org/3/', category: 'Language' },
+
+  { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/', category: 'Framework' },
+  { name: '.NET Core', localIcon: '/icons/dotnet-core.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/core/introduction', category: 'Framework' },
+  { name: 'Vue.js', slug: 'vuedotjs', docsUrl: 'https://vuejs.org/guide/introduction.html', category: 'Framework' },
+  { name: 'Solid.js', slug: 'solid', localIcon: '/icons/solidjs.svg', docsUrl: 'https://www.solidjs.com/docs/latest', category: 'Framework' },
+  { name: 'Expo', slug: 'expo', docsUrl: 'https://docs.expo.dev/', category: 'Framework' },
+
+  { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg', docsUrl: 'https://code.visualstudio.com/docs', category: 'IDE' },
+  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
+  { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/', category: 'IDE' },
+  { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/', category: 'IDE' },
+
+  { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/', category: 'Terminal' },
+  { name: 'PowerShell', slug: 'powershell', docsUrl: 'https://learn.microsoft.com/en-us/powershell/', category: 'Terminal' },
+
+  { name: 'Windows', slug: 'windows', docsUrl: 'https://learn.microsoft.com/en-us/windows/', category: 'OS' },
+  { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg', docsUrl: 'https://ubuntu.com/server/docs', category: 'OS' },
+  { name: 'Omarchy', slug: 'omarchy', docsUrl: 'https://learn.omacom.io/2/the-omarchy-manual', category: 'OS' },
+
+  { name: 'Git', slug: 'git', docsUrl: 'https://git-scm.com/doc', category: 'Version Control' },
+  { name: 'GitHub', slug: 'github', docsUrl: 'https://docs.github.com/', category: 'Version Control' },
+
+  { name: 'GitHub Actions', slug: 'githubactions', docsUrl: 'https://docs.github.com/en/actions', category: 'CI/CD' },
+  { name: 'Jenkins', slug: 'jenkins', localIcon: '/icons/jenkins.svg', docsUrl: 'https://www.jenkins.io/doc/', category: 'CI/CD' },
+  { name: 'Docker', slug: 'docker', docsUrl: 'https://docs.docker.com/', category: 'CI/CD' },
+
+  { name: 'Postman', slug: 'postman', docsUrl: 'https://learning.postman.com/docs/getting-started/overview/', category: 'Testing' },
+  { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro', category: 'Testing' },
+
+  { name: 'MySQL', slug: 'mysql', docsUrl: 'https://dev.mysql.com/doc/', category: 'Database' },
+  { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg', docsUrl: 'https://firebase.google.com/docs', category: 'Database' },
+  { name: 'Supabase', slug: 'supabase', docsUrl: 'https://supabase.com/docs', category: 'Database' },
+
+  { name: 'Vercel', slug: 'vercel', docsUrl: 'https://vercel.com/docs', category: 'Cloud & Hosting' },
+
+  { name: 'Unity', slug: 'unity', color: '000000', docsUrl: 'https://docs.unity3d.com/', category: 'Game Dev' },
+  { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/', category: 'Game Dev' },
+  { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)', category: 'Game Dev' },
+
+  { name: 'Claude Code', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tools' },
+  { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tools' },
+  { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
+  { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
+
+  { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
+  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Misc' },
 ]
+
+// Group techStack into ordered, named sections for rendering.
+const techStackByCategory = CATEGORY_ORDER.map((category) => ({
+  category,
+  items: techStack.filter((tech) => tech.category === category),
+})).filter((group) => group.items.length > 0)
 </script>
 
 <template>
@@ -81,37 +139,57 @@ const techStack: TechItem[] = [
         development.
       </p>
 
-      <div class="tech-grid">
-        <a
-          v-for="tech in techStack"
-          :key="tech.name"
-          :href="tech.docsUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="tech-card"
-          :aria-label="`Open ${tech.name} documentation`"
-        >
-          <img
-            v-if="tech.slug || tech.localIcon"
-            :src="iconSrc(tech)"
-            :alt="tech.name"
-            class="tech-card__icon"
-            loading="lazy"
-          />
-          <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
-          <span class="tech-card__name">{{ tech.name }}</span>
-        </a>
+      <div
+        v-for="group in techStackByCategory"
+        :key="group.category"
+        class="tech-category"
+      >
+        <h3 class="tech-category__title">{{ group.category }}</h3>
+        <div class="tech-grid">
+          <a
+            v-for="tech in group.items"
+            :key="tech.name"
+            :href="tech.docsUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="tech-card"
+            :aria-label="`Open ${tech.name} documentation`"
+          >
+            <img
+              v-if="tech.slug || tech.localIcon"
+              :src="iconSrc(tech)"
+              :alt="tech.name"
+              class="tech-card__icon"
+              loading="lazy"
+            />
+            <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
+            <span class="tech-card__name">{{ tech.name }}</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
+.tech-category {
+  margin-top: 40px;
+}
+
+.tech-category__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-text-muted, var(--color-text));
+  margin-bottom: 16px;
+}
+
 .tech-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 16px;
-  margin-top: 40px;
 }
 
 .tech-card {
