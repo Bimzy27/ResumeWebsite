@@ -76,7 +76,7 @@ const techStack: TechItem[] = [
   { name: 'HTML', slug: 'html5', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/HTML', category: 'Language' },
   { name: 'CSS', slug: 'css3', localIcon: '/icons/css3.svg', docsUrl: 'https://developer.mozilla.org/en-US/docs/Web/CSS', category: 'Language' },
   { name: 'Python', slug: 'python', localIcon: '/icons/python.svg', docsUrl: 'https://docs.python.org/3/', category: 'Language' },
-  { name: 'SQL', monogram: 'SQL', docsUrl: 'https://learn.microsoft.com/en-us/sql/sql-server/', category: 'Language' },
+  { name: 'SQL', localIcon: '/icons/sql.svg', docsUrl: 'https://www.w3schools.com/sql/', category: 'Language' },
 
   { name: '.NET', slug: 'dotnet', localIcon: '/icons/dotnet.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/', category: 'Framework' },
   { name: '.NET Core', localIcon: '/icons/dotnet-core.svg', docsUrl: 'https://learn.microsoft.com/en-us/dotnet/core/introduction', category: 'Framework' },
@@ -108,6 +108,7 @@ const techStack: TechItem[] = [
   { name: 'Playwright', slug: 'playwright', localIcon: '/icons/playwright.svg', docsUrl: 'https://playwright.dev/docs/intro', category: 'Testing' },
 
   { name: 'MySQL', slug: 'mysql', docsUrl: 'https://dev.mysql.com/doc/', category: 'Database' },
+  { name: 'SQL Server', localIcon: '/icons/sqlServer.svg', docsUrl: 'https://learn.microsoft.com/en-us/sql/sql-server/', category: 'Database' },
   { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg', docsUrl: 'https://firebase.google.com/docs', category: 'Database' },
   { name: 'Supabase', slug: 'supabase', docsUrl: 'https://supabase.com/docs', category: 'Database' },
 
