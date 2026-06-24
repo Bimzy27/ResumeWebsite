@@ -38,6 +38,7 @@ type Category =
   | 'Cloud & Hosting'
   | 'Game Dev'
   | 'AI Tools'
+  | 'Productivity & Design'
   | 'Misc'
 
 // Display order for category sections. Beyond the categories explicitly
@@ -57,6 +58,7 @@ const CATEGORY_ORDER: Category[] = [
   'Cloud & Hosting',
   'Game Dev',
   'AI Tools',
+  'Productivity & Design',
   'Misc',
 ]
 
@@ -118,8 +120,13 @@ const techStack: TechItem[] = [
   { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
   { name: 'Copilot Chat', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
 
+  { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
+  { name: 'Canva', slug: 'canva', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
+  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Productivity & Design' },
+  { name: 'Jira', slug: 'jira', docsUrl: 'https://support.atlassian.com/jira-software-cloud/', category: 'Productivity & Design' },
+  { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
+
   { name: 'npm', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
-  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Misc' },
 ]
 
 // Group techStack into ordered, named sections for rendering.
@@ -139,32 +146,34 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
         development.
       </p>
 
-      <div
-        v-for="group in techStackByCategory"
-        :key="group.category"
-        class="tech-category"
-      >
-        <h3 class="tech-category__title">{{ group.category }}</h3>
-        <div class="tech-grid">
-          <a
-            v-for="tech in group.items"
-            :key="tech.name"
-            :href="tech.docsUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="tech-card"
-            :aria-label="`Open ${tech.name} documentation`"
-          >
-            <img
-              v-if="tech.slug || tech.localIcon"
-              :src="iconSrc(tech)"
-              :alt="tech.name"
-              class="tech-card__icon"
-              loading="lazy"
-            />
-            <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
-            <span class="tech-card__name">{{ tech.name }}</span>
-          </a>
+      <div class="tech-categories">
+        <div
+          v-for="group in techStackByCategory"
+          :key="group.category"
+          class="tech-category"
+        >
+          <h3 class="tech-category__title">{{ group.category }}</h3>
+          <div class="tech-grid">
+            <a
+              v-for="tech in group.items"
+              :key="tech.name"
+              :href="tech.docsUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="tech-card"
+              :aria-label="`Open ${tech.name} documentation`"
+            >
+              <img
+                v-if="tech.slug || tech.localIcon"
+                :src="iconSrc(tech)"
+                :alt="tech.name"
+                class="tech-card__icon"
+                loading="lazy"
+              />
+              <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
+              <span class="tech-card__name">{{ tech.name }}</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -172,24 +181,46 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 </template>
 
 <style scoped>
+/* Multi-column layout packs categories densely (like masonry) instead of
+   stacking every section full-width, which is what was driving the page
+   height up. Column count scales with viewport width. */
+.tech-categories {
+  column-count: 1;
+  column-gap: 28px;
+  margin-top: 32px;
+}
+
+@media (min-width: 640px) {
+  .tech-categories {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1100px) {
+  .tech-categories {
+    column-count: 3;
+  }
+}
+
 .tech-category {
-  margin-top: 40px;
+  break-inside: avoid;
+  margin-bottom: 24px;
 }
 
 .tech-category__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.78rem;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: var(--color-text-muted, var(--color-text));
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .tech-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px;
 }
 
 .tech-card {
@@ -197,8 +228,8 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 20px 12px;
+  gap: 6px;
+  padding: 12px 6px;
   border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -212,9 +243,9 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 
 .tech-card:hover,
 .tech-card:focus-visible {
-  transform: translateY(-4px) scale(1.06);
+  transform: translateY(-3px) scale(1.05);
   border-color: var(--color-primary);
-  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22);
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
 }
 
 .tech-card:focus-visible {
@@ -223,8 +254,8 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 }
 
 .tech-card__icon {
-  width: 36px;
-  height: 36px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
@@ -234,18 +265,20 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   letter-spacing: 0.02em;
   color: var(--color-text-muted, var(--color-text));
   background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: 50%;
+  width: 26px;
+  height: 26px;
 }
 
 .tech-card__name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.68rem;
   color: var(--color-text);
   text-align: center;
 }
