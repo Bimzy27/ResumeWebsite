@@ -35,7 +35,7 @@ type Category =
   | 'CI/CD'
   | 'Testing'
   | 'Database'
-  | 'Cloud & Hosting'
+  | 'Hosting'
   | 'Game Dev'
   | 'AI Tools'
   | 'Productivity & Design'
@@ -44,7 +44,7 @@ type Category =
 // Display order for category sections. Beyond the categories explicitly
 // requested (IDE, Language, CI/CD, OS, Terminal, Misc, Database), a few more
 // were added to avoid dumping unrelated tools into "Misc": Framework,
-// Version Control, Testing, Cloud & Hosting, Game Dev, and AI Tools.
+// Version Control, Testing, Hosting, Game Dev, and AI Tools.
 const CATEGORY_ORDER: Category[] = [
   'Language',
   'Framework',
@@ -55,7 +55,7 @@ const CATEGORY_ORDER: Category[] = [
   'CI/CD',
   'Testing',
   'Database',
-  'Cloud & Hosting',
+  'Hosting',
   'Game Dev',
   'AI Tools',
   'Productivity & Design',
@@ -111,7 +111,7 @@ const techStack: TechItem[] = [
   { name: 'Firebase', slug: 'firebase', localIcon: '/icons/firebase.svg', docsUrl: 'https://firebase.google.com/docs', category: 'Database' },
   { name: 'Supabase', slug: 'supabase', docsUrl: 'https://supabase.com/docs', category: 'Database' },
 
-  { name: 'Vercel', slug: 'vercel', docsUrl: 'https://vercel.com/docs', category: 'Cloud & Hosting' },
+  { name: 'Vercel', slug: 'vercel', docsUrl: 'https://vercel.com/docs', category: 'Hosting' },
 
   { name: 'Unity', slug: 'unity', color: '000000', docsUrl: 'https://docs.unity3d.com/', category: 'Game Dev' },
   { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/', category: 'Game Dev' },
@@ -124,12 +124,11 @@ const techStack: TechItem[] = [
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
   { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
-  { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Productivity & Design' },
+  { name: 'MS Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg', docsUrl: 'https://support.microsoft.com/en-us/office', category: 'Productivity & Design' },
   { name: 'Jira', slug: 'jira', docsUrl: 'https://support.atlassian.com/jira-software-cloud/', category: 'Productivity & Design' },
   { name: 'Trello', slug: 'trello', docsUrl: 'https://support.atlassian.com/trello/', category: 'Productivity & Design' },
 
   { name: 'NPM', slug: 'npm', localIcon: '/icons/npm.svg', docsUrl: 'https://docs.npmjs.com/', category: 'Misc' },
-  { name: 'BeyondCompare', monogram: 'BC', docsUrl: 'https://www.scootersoftware.com/', category: 'Misc' },
   { name: 'DotMemory', monogram: 'dM', localIcon: '/icons/dotmemory.svg', docsUrl: 'https://www.jetbrains.com/help/dotmemory/', category: 'Misc' },
 ]
 
@@ -142,14 +141,38 @@ const techStackByCategory = CATEGORY_ORDER.map((category) => ({
 // Card width/gap must match the .tech-card / .tech-grid CSS below exactly.
 // Relying on the browser to auto-size a category box around a nested flex
 // row (intrinsic sizing through two layers of flex) was unreliable — boxes
-// kept rendering a card narrower than their content, clipping/overlapping
-// the last card. Computing the row's exact pixel width here and applying it
-// directly removes all ambiguity: the box can only ever be exactly as wide
-// as its cards.
+// kept rendering uneven left/right padding around the cards (and sometimes
+// clipped the last card). Computing every width explicitly in pixels — both
+// the card row and the box that wraps it — removes that ambiguity entirely:
+// nothing is left for the browser to auto-fit.
 const CARD_WIDTH = 64
 const CARD_GAP = 8
+const BOX_PAD_H = 16 // matches the left/right value in .tech-category's padding
+const BOX_BORDER = 1 // matches .tech-category's border-width
+
+function cardRowWidth(count: number): number {
+  return count * CARD_WIDTH + (count - 1) * CARD_GAP
+}
+
 function rowWidthPx(count: number): string {
-  return `${count * CARD_WIDTH + (count - 1) * CARD_GAP}px`
+  return `${cardRowWidth(count)}px`
+}
+
+// Rough, deliberately generous estimate of a category title's rendered
+// width (bold, uppercase, letter-spaced Space Grotesk at 0.78rem) — it only
+// needs to never undershoot the real text, not match it exactly.
+function titleEstimateWidth(title: string): number {
+  return title.length * 9.5 + 24
+}
+
+// The box must be at least as wide as its card row AND at least as wide as
+// its title, whichever is larger — and that exact number, not something the
+// browser approximates. Cards are then centered (.tech-grid's margin: 0
+// auto) inside whatever width results, so left/right padding around them is
+// always equal.
+function categoryWidthPx(category: string, count: number): string {
+  const content = Math.max(cardRowWidth(count), titleEstimateWidth(category))
+  return `${content + BOX_PAD_H * 2 + BOX_BORDER * 2}px`
 }
 </script>
 
@@ -168,6 +191,7 @@ function rowWidthPx(count: number): string {
           v-for="group in techStackByCategory"
           :key="group.category"
           class="tech-category"
+          :style="{ width: categoryWidthPx(group.category, group.items.length) }"
         >
           <h3 class="tech-category__title">{{ group.category }}</h3>
           <div class="tech-grid" :style="{ width: rowWidthPx(group.items.length) }">
@@ -198,12 +222,15 @@ function rowWidthPx(count: number): string {
 </template>
 
 <style scoped>
-/* Each category is a self-contained block sized to its content (single row
-   of cards, no wrapping inside it). The outer container then flex-wraps
-   those blocks left-to-right, top-to-bottom — the browser's wrapping
-   algorithm packs differently-sized category blocks together "tetris-style"
-   to fill the available width, rather than every category eating a full
-   row regardless of how few items it has. */
+/* Each category is a self-contained block. Its width is set explicitly via
+   an inline style (computed by categoryWidthPx) rather than left to the
+   browser to auto-fit around its nested children — that auto-fit approach
+   repeatedly produced uneven left/right padding around the cards. The outer
+   container then flex-wraps those fixed-width blocks left-to-right,
+   top-to-bottom — the browser's wrapping algorithm packs differently-sized
+   category blocks together "tetris-style" to fill the available width,
+   rather than every category eating a full row regardless of how few items
+   it has. */
 .tech-categories {
   display: flex;
   flex-wrap: wrap;
@@ -227,10 +254,11 @@ function rowWidthPx(count: number): string {
   text-transform: uppercase;
   color: var(--color-text-muted, var(--color-text));
   margin-bottom: 10px;
-  /* When a category has few cards, its title can be the wider of the two
-     children, which sets the box's overall width. Centering both the title
-     and the card row (below) keeps left/right padding equal either way,
-     instead of the narrower one hugging the left edge. */
+  /* The box's explicit width (see categoryWidthPx) is whichever is larger
+     of the title or the card row, so the narrower of the two always has
+     slack space on either side. Centering both the title and the card row
+     (below) splits that slack evenly, instead of the narrower one hugging
+     the left edge. */
   text-align: center;
 }
 
@@ -308,8 +336,8 @@ function rowWidthPx(count: number): string {
 
 /* On narrow viewports a full-width single-row category could overflow the
    page horizontally. Let those rows wrap to a second line there instead of
-   forcing a scrollbar or clipping cards. The explicit row width set inline
-   (to make box sizing exact on desktop) has to be overridden here, since an
+   forcing a scrollbar or clipping cards. The explicit widths set inline (to
+   make box sizing exact on desktop) have to be overridden here, since an
    inline style otherwise wins over a stylesheet rule. */
 @media (max-width: 480px) {
   .tech-grid {
@@ -318,6 +346,7 @@ function rowWidthPx(count: number): string {
   }
 
   .tech-category {
+    width: auto !important;
     flex: 1 1 100%;
   }
 }
