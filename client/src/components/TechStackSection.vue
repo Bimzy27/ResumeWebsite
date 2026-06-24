@@ -56,7 +56,7 @@ const techStack: TechItem[] = [
   { name: 'OpenSpec', monogram: 'OS' },
   { name: 'Microsoft Office', slug: 'microsoftoffice', localIcon: '/icons/microsoftoffice.svg' },
   { name: 'Copilot Chat', slug: 'githubcopilot' },
-  { name: 'XNA', monogram: 'XNA' },
+  { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg' },
   { name: 'MonoGame', slug: 'monogame' },
   { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg' },
   { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg' },
