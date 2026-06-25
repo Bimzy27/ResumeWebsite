@@ -78,7 +78,7 @@ const techStack: TechItem[] = [
   { name: 'Expo', slug: 'expo', docsUrl: 'https://docs.expo.dev/', category: 'Framework' },
 
   { name: 'VS Code', slug: 'visualstudiocode', localIcon: '/icons/visualstudiocode.svg', docsUrl: 'https://code.visualstudio.com/docs', category: 'IDE' },
-  { name: 'VisualStudio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
+  { name: 'Visual Studio', slug: 'visualstudio', localIcon: '/icons/visualstudio.svg', docsUrl: 'https://learn.microsoft.com/en-us/visualstudio/', category: 'IDE' },
   { name: 'Rider', slug: 'rider', localIcon: '/icons/rider.svg', docsUrl: 'https://www.jetbrains.com/rider/documentation/', category: 'IDE' },
   { name: 'PyCharm', slug: 'pycharm', localIcon: '/icons/pycharm.svg', docsUrl: 'https://www.jetbrains.com/help/pycharm/', category: 'IDE' },
   { name: 'Neovim', slug: 'neovim', docsUrl: 'https://neovim.io/doc/', category: 'IDE' },
@@ -239,6 +239,16 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 14px 16px 16px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+/* Match the accent treatment the individual cards use: on hover the whole
+   category box picks up the primary border colour and a soft shadow. */
+.tech-category:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
 }
 
 .tech-category__title {
@@ -270,7 +280,17 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
 
 .tech-card {
   display: flex;
-  flex: 0 0 64px;
+  /* Cards hug their content with a 64px floor: short labels render at a uniform
+     64px, but a label wider than that (e.g. "VisualStudio", "PowerShell",
+     "GH Actions") widens its own card instead of overflowing it.
+     A fixed basis (flex: 0 0 64px) was the bug: a long white-space:nowrap label
+     triggers the flex automatic-minimum and forces that one card wider than
+     64px, yet the enclosing box's max-content width was computed from the 64px
+     bases — so the box came out one card too narrow and the trailing card spilled
+     past its border. A content-based basis makes the box's max-content equal the
+     real summed card widths, so the box always wraps every card. */
+  flex: 0 0 auto;
+  min-width: 64px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
