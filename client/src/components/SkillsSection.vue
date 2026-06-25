@@ -108,4 +108,31 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  bo
+  border-top: 4px solid var(--accent-color, var(--color-primary));
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.strength-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-color, var(--color-primary));
+  box-shadow: 0 16px 32px color-mix(in srgb, var(--accent-color, var(--color-primary)) 22%, transparent);
+}
+
+.strength-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.accent-violet {
+  --accent-color: var(--color-primary);
+}
+.accent-coral {
+  --accent-color: var(--color-accent);
+}
+.accent-cyan {
+  --accent-color: var(--color-cyan);
+}
+</style>

@@ -351,3 +351,6 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
   .tech-category {
     width: auto !important;
     flex: 1 1 100%;
+  }
+}
+</style>

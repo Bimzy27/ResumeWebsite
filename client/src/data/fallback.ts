@@ -215,4 +215,54 @@ export const fallbackProjects: Project[] = [
       alt: 'Slime Slayer gameplay screenshot',
       url: 'https://play.google.com/store/apps/details?id=com.BimzyDezDev.SlimeSlayer&hl=en',
     },
-  
+    actions: [
+      {
+        label: 'Get it on Google Play',
+        url: 'https://play.google.com/store/apps/details?id=com.BimzyDezDev.SlimeSlayer&hl=en',
+        variant: 'primary',
+      },
+    ],
+  },
+  {
+    id: 'bimzydev',
+    title: 'BimzyDev YouTube Channel',
+    description:
+      'My YouTube channel sharing game development tutorials and devlogs. Breaking down techniques, tooling and progress for a community of learners and enthusiasts.',
+    tags: ['Content Creation', 'Game Dev', 'YouTube'],
+    media: {
+      type: 'youtube-channel',
+      url: 'https://www.youtube.com/c/BimzyDev',
+      handle: '@BimzyDev',
+    },
+    actions: [
+      {
+        label: 'Visit the channel',
+        url: 'https://www.youtube.com/c/BimzyDev',
+        variant: 'primary',
+      },
+    ],
+  },
+  {
+    id: 'runes-of-time',
+    title: 'Runes of Time',
+    description:
+      'A 3rd-person action roguelike wizard game built in Unity with a team of two. Transparently built with a YouTube devlog series and playable builds on itch.io.',
+    tags: ['Unity', 'C#', 'Roguelike', 'Multiplayer'],
+    media: {
+      type: 'youtube',
+      videoId: 'uP53F83c0tU',
+    },
+    actions: [
+      {
+        label: 'Play on itch.io',
+        url: 'https://bimzydev.itch.io/runesoftime',
+        variant: 'primary',
+      },
+      {
+        label: 'Watch the devlog',
+        url: 'https://www.youtube.com/watch?v=uP53F83c0tU',
+        variant: 'secondary',
+      },
+    ],
+  },
+]

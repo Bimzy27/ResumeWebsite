@@ -87,4 +87,72 @@ defineProps<{
 
 /* Keep the marker, card and image on the same grid row so the image always
    aligns with its paragraph (grid auto-placement would otherwise push the
-   ima
+   image on right-side rows down into a new row). */
+@media (min-width: 769px) {
+  .timeline-item__marker,
+  .timeline-item__card,
+  .timeline-item__media {
+    grid-row: 1;
+  }
+}
+
+.timeline-item__period {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--color-primary);
+  background: rgba(124, 58, 237, 0.08);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.timeline-item__card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.timeline-item__role {
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.timeline-item__card ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timeline-item__card li {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .timeline-item {
+    grid-template-columns: 32px 1fr;
+  }
+
+  .timeline-item__marker {
+    grid-column: 1;
+    margin-top: 6px;
+  }
+
+  .timeline-item__card,
+  .timeline-item--right .timeline-item__card {
+    grid-column: 2;
+  }
+
+  .timeline-item__media,
+  .timeline-item--right .timeline-item__media {
+    grid-column: 2;
+    margin-top: 16px;
+  }
+}
+</style>

@@ -53,4 +53,37 @@ export interface ProjectMedia {
   type: 'youtube' | 'playstore' | 'youtube-channel' | 'image'
   videoId?: string
   url?: string
-  handle?
+  handle?: string
+  src?: string
+  alt?: string
+}
+
+export interface Project {
+  id: string
+  title: string
+  description: string
+  tags: string[]
+  media?: ProjectMedia
+  actions?: ProjectAction[]
+  links?: ProjectLinks
+}
+
+export interface RecommendationEntry {
+  id: string
+  name: string
+  title: string
+  relationship: string
+  quote: string
+  linkedIn: string
+}
+
+export interface ContactSubmission {
+  name: string
+  email: string
+  message: string
+}
+
+export interface ContactResponse {
+  success: boolean
+  message: string
+}
