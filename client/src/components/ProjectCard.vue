@@ -1,69 +1,42 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { Project } from '../types'
 
 defineProps<{ project: Project }>()
+
+// Lazy YouTube: show the thumbnail until the visitor clicks, then swap in the
+// iframe with autoplay. Keeps the page light (no third-party iframes on load).
+const playing = ref(false)
 </script>
 
 <template>
   <article class="project-card">
-    <h3>{{ project.title }}</h3>
-    <p>{{ project.description }}</p>
-    <div class="project-card__tags">
-      <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
-    </div>
-    <div class="project-card__links">
-      <a v-if="project.links.repo" :href="project.links.repo" target="_blank" rel="noopener">Source</a>
-      <a v-if="project.links.demo" :href="project.links.demo" target="_blank" rel="noopener">Live demo</a>
-    </div>
-  </article>
-</template>
-
-<style scoped>
-.project-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(27, 27, 47, 0.08);
-}
-
-.project-card h3 {
-  font-size: 1.2rem;
-}
-
-.project-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.project-card__tags span {
-  font-size: 0.78rem;
-  font-weight: 600;
-  font-family: var(--font-display);
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(6, 182, 212, 0.1);
-  color: var(--color-cyan);
-}
-
-.project-card__links {
-  display: flex;
-  gap: 16px;
-  margin-top: auto;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.project-card__links a {
-  text-decoration: none;
-}
-</style>
+    <!-- Click-to-play YouTube embed -->
+    <div v-if="project.media?.type === 'youtube'" class="project-card__media">
+      <iframe
+        v-if="playing"
+        class="project-card__iframe"
+        :src="`https://www.youtube-nocookie.com/embed/${project.media.videoId}?autoplay=1&rel=0`"
+        :title="`${project.title} video`"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+      <button
+        v-else
+        type="button"
+        class="project-card__play"
+        :aria-label="`Play ${project.title} video`"
+        @click="playing = true"
+      >
+        <img
+          class="project-card__thumb"
+          :src="`https://img.youtube.com/vi/${project.media.videoId}/hqdefault.jpg`"
+          :alt="project.title"
+          loading="lazy"
+        />
+        <span class="project-card__play-icon" aria-hidden="true">
+          <svg viewBox="0 0 68 48">
+            <path
+              class="yt-shell"
+              d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.5 34 .5 34 .5S12.5.5 7.4 1.8C4.5 2.6 2.3 4.8 1.5 7.7.2 12.8.2 24 .2

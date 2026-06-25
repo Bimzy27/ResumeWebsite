@@ -20,7 +20,7 @@ interface TechItem {
   // Link to the tool's official documentation. Each card is rendered as a
   // link that opens this in a new tab.
   docsUrl: string
-  // Grouping used to render the grid as labeled sections. See CATEGORY_ORDER
+  // Grouping used to render the grid as labeled sections. See CATEGORY_ROWS
   // below for the display order.
   category: Category
 }
@@ -37,29 +37,22 @@ type Category =
   | 'Database'
   | 'Hosting'
   | 'Game Dev'
-  | 'AI Tools'
+  | 'AI Tooling'
   | 'Productivity & Design'
   | 'Misc'
 
-// Display order for category sections. Beyond the categories explicitly
-// requested (IDE, Language, CI/CD, OS, Terminal, Misc, Database), a few more
-// were added to avoid dumping unrelated tools into "Misc": Framework,
-// Version Control, Testing, Hosting, Game Dev, and AI Tools.
-const CATEGORY_ORDER: Category[] = [
-  'Language',
-  'Framework',
-  'IDE',
-  'Terminal',
-  'OS',
-  'Version Control',
-  'CI/CD',
-  'Testing',
-  'Database',
-  'Hosting',
-  'Game Dev',
-  'AI Tools',
-  'Productivity & Design',
-  'Misc',
+// The category sections are laid out as exactly FOUR explicit rows (rather
+// than a single flex-wrap container that the browser packs into a variable
+// number of rows). Each inner array is one visible row, rendered left to
+// right; the rows stack top to bottom. AI Tooling is intentionally the very
+// first box in the first row. The grouping is hand-balanced so each row's
+// boxes have a similar combined width and no row overflows the section
+// width (which would make it wrap internally and appear as a 5th row).
+const CATEGORY_ROWS: Category[][] = [
+  ['AI Tooling', 'Language', 'Hosting'],
+  ['Framework', 'IDE', 'OS'],
+  ['Productivity & Design', 'Database', 'CI/CD'],
+  ['Game Dev', 'Misc', 'Version Control', 'Terminal', 'Testing'],
 ]
 
 // Resolves the actual <img> src for a tech item: a local asset if one was
@@ -93,7 +86,7 @@ const techStack: TechItem[] = [
   { name: 'WezTerm', slug: 'wezterm', docsUrl: 'https://wezterm.org/', category: 'Terminal' },
   { name: 'PowerShell', slug: 'powershell', localIcon: '/icons/powershell.svg', docsUrl: 'https://learn.microsoft.com/en-us/powershell/', category: 'Terminal' },
 
-  { name: 'Windows', slug: 'windows', docsUrl: 'https://learn.microsoft.com/en-us/windows/', category: 'OS' },
+  { name: 'Windows', slug: 'windows', localIcon: '/icons/windows_os.svg', docsUrl: 'https://learn.microsoft.com/en-us/windows/', category: 'OS' },
   { name: 'Ubuntu', slug: 'ubuntu', localIcon: '/icons/ubuntu.svg', docsUrl: 'https://ubuntu.com/server/docs', category: 'OS' },
   { name: 'Omarchy', slug: 'omarchy', docsUrl: 'https://learn.omacom.io/2/the-omarchy-manual', category: 'OS' },
 
@@ -118,11 +111,11 @@ const techStack: TechItem[] = [
   { name: 'MonoGame', slug: 'monogame', docsUrl: 'https://docs.monogame.net/', category: 'Game Dev' },
   { name: 'XNA', monogram: 'XNA', localIcon: '/icons/xna.svg', docsUrl: 'https://learn.microsoft.com/en-us/previous-versions/windows/xna/bb200104(v=xnagamestudio.41)', category: 'Game Dev' },
 
-  { name: 'Claude', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tools' },
-  { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tools' },
-  { name: 'OpenCode', monogram: 'OC', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tools' },
-  { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tools' },
-  { name: 'MCP', localIcon: '/icons/Model_Context_Protocol_logo.svg', docsUrl: 'https://modelcontextprotocol.io/', category: 'AI Tools' },
+  { name: 'Claude', slug: 'claude', docsUrl: 'https://code.claude.com/docs/en/overview', category: 'AI Tooling' },
+  { name: 'Copilot', slug: 'githubcopilot', docsUrl: 'https://docs.github.com/en/copilot', category: 'AI Tooling' },
+  { name: 'MCP', localIcon: '/icons/Model_Context_Protocol_logo.svg', docsUrl: 'https://modelcontextprotocol.io/', category: 'AI Tooling' },
+  { name: 'OpenCode', localIcon: '/icons/opencode.svg', docsUrl: 'https://opencode.ai/docs/', category: 'AI Tooling' },
+  { name: 'OpenSpec', monogram: 'OS', docsUrl: 'https://github.com/Fission-AI/OpenSpec', category: 'AI Tooling' },
 
   { name: 'Figma', slug: 'figma', docsUrl: 'https://help.figma.com/', category: 'Productivity & Design' },
   { name: 'Canva', slug: 'canva', localIcon: '/icons/canva.svg', docsUrl: 'https://www.canva.com/help/', category: 'Productivity & Design' },
@@ -135,48 +128,24 @@ const techStack: TechItem[] = [
   { name: 'NuGet', slug: 'nuget', docsUrl: 'https://learn.microsoft.com/en-us/nuget/', category: 'Misc' },
 ]
 
-// Group techStack into ordered, named sections for rendering.
-const techStackByCategory = CATEGORY_ORDER.map((category) => ({
-  category,
-  items: techStack.filter((tech) => tech.category === category),
-})).filter((group) => group.items.length > 0)
+// Group techStack into the four hand-balanced rows for rendering. Each row
+// is an array of { category, items } groups; empty categories are dropped.
+const techStackRows = CATEGORY_ROWS.map((row) =>
+  row
+    .map((category) => ({
+      category,
+      items: techStack.filter((tech) => tech.category === category),
+    }))
+    .filter((group) => group.items.length > 0),
+)
 
-// Card width/gap must match the .tech-card / .tech-grid CSS below exactly.
-// Relying on the browser to auto-size a category box around a nested flex
-// row (intrinsic sizing through two layers of flex) was unreliable — boxes
-// kept rendering uneven left/right padding around the cards (and sometimes
-// clipped the last card). Computing every width explicitly in pixels — both
-// the card row and the box that wraps it — removes that ambiguity entirely:
-// nothing is left for the browser to auto-fit.
-const CARD_WIDTH = 64
-const CARD_GAP = 8
-const BOX_PAD_H = 16 // matches the left/right value in .tech-category's padding
-const BOX_BORDER = 1 // matches .tech-category's border-width
-
-function cardRowWidth(count: number): number {
-  return count * CARD_WIDTH + (count - 1) * CARD_GAP
-}
-
-function rowWidthPx(count: number): string {
-  return `${cardRowWidth(count)}px`
-}
-
-// Rough, deliberately generous estimate of a category title's rendered
-// width (bold, uppercase, letter-spaced Space Grotesk at 0.78rem) — it only
-// needs to never undershoot the real text, not match it exactly.
-function titleEstimateWidth(title: string): number {
-  return title.length * 9.5 + 24
-}
-
-// The box must be at least as wide as its card row AND at least as wide as
-// its title, whichever is larger — and that exact number, not something the
-// browser approximates. Cards are then centered (.tech-grid's margin: 0
-// auto) inside whatever width results, so left/right padding around them is
-// always equal.
-function categoryWidthPx(category: string, count: number): string {
-  const content = Math.max(cardRowWidth(count), titleEstimateWidth(category))
-  return `${content + BOX_PAD_H * 2 + BOX_BORDER * 2}px`
-}
+// NOTE: All sizing is now done in CSS, not computed here. Earlier versions
+// derived pixel widths from a fixed 64px-per-card assumption, but cards whose
+// label is wider than 64px (e.g. "VisualStudio") grow past that, so the
+// computed width no longer matched the real card row and the cards drifted off
+// center. Instead the card row (.tech-grid) and category box (.tech-category)
+// shrink-wrap to their real content via CSS width: max-content, so they always
+// hug the true cards — long labels included — with no manual pixel math.
 </script>
 
 <template>
@@ -189,34 +158,39 @@ function categoryWidthPx(category: string, count: number): string {
         development.
       </p>
 
-      <div class="tech-categories">
+      <div class="tech-rows">
         <div
-          v-for="group in techStackByCategory"
-          :key="group.category"
-          class="tech-category"
-          :style="{ width: categoryWidthPx(group.category, group.items.length) }"
+          v-for="(row, rowIndex) in techStackRows"
+          :key="rowIndex"
+          class="tech-row"
         >
-          <h3 class="tech-category__title">{{ group.category }}</h3>
-          <div class="tech-grid" :style="{ width: rowWidthPx(group.items.length) }">
-            <a
-              v-for="tech in group.items"
-              :key="tech.name"
-              :href="tech.docsUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="tech-card"
-              :aria-label="`Open ${tech.name} documentation`"
-            >
-              <img
-                v-if="tech.slug || tech.localIcon"
-                :src="iconSrc(tech)"
-                :alt="tech.name"
-                class="tech-card__icon"
-                loading="lazy"
-              />
-              <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
-              <span class="tech-card__name">{{ tech.name }}</span>
-            </a>
+          <div
+            v-for="group in row"
+            :key="group.category"
+            class="tech-category"
+          >
+            <h3 class="tech-category__title">{{ group.category }}</h3>
+            <div class="tech-grid">
+              <a
+                v-for="tech in group.items"
+                :key="tech.name"
+                :href="tech.docsUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="tech-card"
+                :aria-label="`Open ${tech.name} documentation`"
+              >
+                <img
+                  v-if="tech.slug || tech.localIcon"
+                  :src="iconSrc(tech)"
+                  :alt="tech.name"
+                  class="tech-card__icon"
+                  loading="lazy"
+                />
+                <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
+                <span class="tech-card__name">{{ tech.name }}</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -225,25 +199,43 @@ function categoryWidthPx(category: string, count: number): string {
 </template>
 
 <style scoped>
-/* Each category is a self-contained block. Its width is set explicitly via
-   an inline style (computed by categoryWidthPx) rather than left to the
-   browser to auto-fit around its nested children — that auto-fit approach
-   repeatedly produced uneven left/right padding around the cards. The outer
-   container then flex-wraps those fixed-width blocks left-to-right,
-   top-to-bottom — the browser's wrapping algorithm packs differently-sized
-   category blocks together "tetris-style" to fill the available width,
-   rather than every category eating a full row regardless of how few items
-   it has. */
-.tech-categories {
+/* Give this section more horizontal room than the default 1100px container so
+   each of the four category rows fits on one line (with the boxes justified
+   across the full width) instead of wrapping into a fifth row. */
+#tech-stack .container {
+  max-width: 1240px;
+}
+
+/* Four explicit rows, stacked vertically. The block spans the full container
+   width, and each row spreads its boxes across that full width (space-between),
+   so every row's first box sits flush to the same left edge and its last box
+   flush to the same right edge. */
+.tech-rows {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 18px;
   margin-top: 32px;
 }
 
+.tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  /* space-between pushes the first box to the row's left edge and the last box
+     to its right edge; the 18px gap is the minimum spacing between boxes, with
+     any extra width distributed into the gaps. */
+  justify-content: space-between;
+  gap: 18px;
+}
+
+/* Each box shrink-wraps to its content via width: max-content — it is exactly
+   as wide as whichever is wider, its title or its real card row (long card
+   labels included). The card row inside is centered (margin: 0 auto) and the
+   left/right padding is symmetric, so the cards always sit 16px in from each
+   edge and never spill past the border. */
 .tech-category {
   flex: 0 0 auto;
+  width: max-content;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: 14px 16px 16px;
@@ -257,22 +249,22 @@ function categoryWidthPx(category: string, count: number): string {
   text-transform: uppercase;
   color: var(--color-text-muted, var(--color-text));
   margin-bottom: 10px;
-  /* The box's explicit width (see categoryWidthPx) is whichever is larger
-     of the title or the card row, so the narrower of the two always has
-     slack space on either side. Centering both the title and the card row
-     (below) splits that slack evenly, instead of the narrower one hugging
-     the left edge. */
+  /* Centered over the box; a title longer than the card row wraps (and breaks
+     a too-long single word) rather than widening the box. */
   text-align: center;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
-/* Single row per category: cards never wrap to a second line. The row sizes
-   itself to fit its cards exactly (no overflow, no scrollbar) — the
-   category block's width simply grows to match, and the outer flex-wrap
-   container packs blocks around it. */
+/* Single row of cards, never wrapping. width: max-content makes it exactly as
+   wide as the real cards — including any card that grew past 64px for a long
+   label — and margin: 0 auto centers it inside the box, so the padding on both
+   sides stays equal and the cards never overflow the border. */
 .tech-grid {
   display: flex;
   flex-wrap: nowrap;
   gap: 8px;
+  width: max-content;
   margin: 0 auto;
 }
 
@@ -340,10 +332,17 @@ function categoryWidthPx(category: string, count: number): string {
 
 /* On narrow viewports a full-width single-row category could overflow the
    page horizontally. Let those rows wrap to a second line there instead of
-   forcing a scrollbar or clipping cards. The explicit widths set inline (to
-   make box sizing exact on desktop) have to be overridden here, since an
-   inline style otherwise wins over a stylesheet rule. */
+   forcing a scrollbar or clipping cards. The explicit grid width set inline
+   has to be overridden here, since an inline style otherwise wins. */
 @media (max-width: 480px) {
+  .tech-rows {
+    width: auto !important;
+  }
+
+  .tech-row {
+    justify-content: center;
+  }
+
   .tech-grid {
     width: auto !important;
     flex-wrap: wrap;
@@ -352,6 +351,3 @@ function categoryWidthPx(category: string, count: number): string {
   .tech-category {
     width: auto !important;
     flex: 1 1 100%;
-  }
-}
-</style>

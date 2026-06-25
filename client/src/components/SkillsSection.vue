@@ -82,6 +82,19 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   color: var(--color-text);
+  cursor: default;
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.skills__tag:hover {
+  transform: translateY(-2px);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 14px rgba(124, 58, 237, 0.18);
 }
 
 .skills__strengths {
@@ -95,21 +108,4 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-top: 4px solid var(--accent-color, var(--color-primary));
-}
-
-.strength-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
-.accent-violet {
-  --accent-color: var(--color-primary);
-}
-.accent-coral {
-  --accent-color: var(--color-accent);
-}
-.accent-cyan {
-  --accent-color: var(--color-cyan);
-}
-</style>
+  bo

@@ -32,6 +32,8 @@ export interface ExperienceEntry {
   role: string
   period: string
   highlights: string[]
+  image?: string
+  imageAlt?: string
 }
 
 export interface ProjectLinks {
@@ -39,30 +41,16 @@ export interface ProjectLinks {
   demo?: string
 }
 
-export interface Project {
-  id: string
-  title: string
-  description: string
-  tags: string[]
-  links: ProjectLinks
+export interface ProjectAction {
+  label: string
+  url: string
+  variant?: 'primary' | 'secondary'
 }
 
-export interface RecommendationEntry {
-  id: string
-  name: string
-  title: string
-  relationship: string
-  quote: string
-  linkedIn: string
-}
-
-export interface ContactSubmission {
-  name: string
-  email: string
-  message: string
-}
-
-export interface ContactResponse {
-  success: boolean
-  message: string
-}
+export interface ProjectMedia {
+  // 'youtube' = click-to-play video embed, 'playstore' = Google Play block,
+  // 'youtube-channel' = channel link block, 'image' = static screenshot.
+  type: 'youtube' | 'playstore' | 'youtube-channel' | 'image'
+  videoId?: string
+  url?: string
+  handle?

@@ -26,9 +26,9 @@ export const fallbackProfile: Profile = {
   ],
   strengths: [
     {
-      title: 'Full-Stack Development',
+      title: 'Problem Solving',
       description:
-        'Comfortable across the stack, pairing responsive Vue.js and TypeScript interfaces with robust C# and .NET back-end services and APIs.',
+        'An innate confidence in my problem solving capabilities. I enjoy breaking down complex, ambiguous problems and working through them methodically until I land on a clean, reliable solution.',
     },
     {
       title: 'Leadership and Team Dynamics',
@@ -61,6 +61,8 @@ export const fallbackExperience: ExperienceEntry[] = [
       'Built reusable, slot-based UI components for a shared design system, including a configurable, branding-aware login layout rolled out across numerous web portals.',
       'Created and evolved an internal multi-framework test runner adopted across the organization, extending it from a single framework to several by decoupling the runner architecture from any one testing framework. Adapted this test runner for agent usage to provide a more token-efficient way to discover/run/fix related tests.',
     ],
+    image: '/wisetech.jpg',
+    imageAlt: 'WiseTech Global',
   },
   {
     id: 'mighty-kingdom',
@@ -73,6 +75,8 @@ export const fallbackExperience: ExperienceEntry[] = [
       'Took the lead in implementing comprehensive testing strategies, including rigorous device testing, unit and end-to-end tests, and integration of data validation.',
       'Employed CI/CD methodologies to streamline game production processes, ensuring efficiency and stability in releases.',
     ],
+    image: '/mightykingdom.jpg',
+    imageAlt: 'Mighty Kingdom',
   },
   {
     id: 'wymac',
@@ -84,6 +88,8 @@ export const fallbackExperience: ExperienceEntry[] = [
       "Led the end-to-end development process, from conceptualization to release, ensuring the successful delivery of Wymac's core games.",
       'Applied a diverse skill set encompassing problem-solving, mathematical analysis, and effective stakeholder engagement to drive project success.',
     ],
+    image: '/wymac.jpg',
+    imageAlt: 'Wymac Gaming Solutions',
   },
   {
     id: 'lazy-rhino',
@@ -95,6 +101,8 @@ export const fallbackExperience: ExperienceEntry[] = [
       "Spearheaded the development and deployment of 'Endless Miner,' a charming game released on the Android marketplace, showcasing the company's creativity and technical prowess.",
       'Organized and executed press events and presentations targeting various game companies, promoting our products and fostering valuable industry connections.',
     ],
+    image: '/lazyrhinostudios.jpg',
+    imageAlt: 'Lazy Rhino Studios',
   },
   {
     id: 'code-camp',
@@ -105,6 +113,8 @@ export const fallbackExperience: ExperienceEntry[] = [
       'Engaged as a full-time educator and extracurricular instructor, imparting foundational programming concepts to classroom environments comprising approximately thirty eager young learners.',
       'Enhanced leadership, presentation, teamwork, and public speaking skills during tenure at both Code Camp and Junior Engineers.',
     ],
+    image: '/codecamp.jpg',
+    imageAlt: 'Code Camp & Junior Engineers',
   },
 ]
 
@@ -194,27 +204,15 @@ export const fallbackRecommendations: RecommendationEntry[] = [
 
 export const fallbackProjects: Project[] = [
   {
-    id: 'portfolio-site',
-    title: 'This Portfolio Website',
-    description:
-      'A full-stack portfolio built with a Vue 3 + TypeScript front end and an ASP.NET Core minimal API back end, demonstrating the exact stack used day-to-day.',
-    tags: ['Vue', 'TypeScript', 'C#', '.NET', 'REST API'],
-    links: {},
-  },
-  {
     id: 'slime-slayer',
     title: 'Slime Slayer',
     description:
-      'A top-down shooter for mobile, built as a Test-Driven Development case study covering the full game development lifecycle from concept through to release on Google Play and the App Store.',
-    tags: ['Unity', 'C#', 'TDD', 'Mobile'],
-    links: {},
-  },
-  {
-    id: 'bimzydev',
-    title: 'BimzyDev YouTube Channel',
-    description:
-      'A YouTube channel sharing game development tutorials and devlogs, showcasing techniques and progress to a community of learners and enthusiasts.',
-    tags: ['Content Creation', 'Game Development', 'YouTube'],
-    links: {},
-  },
-]
+      'A colourful top-down survival shooter for mobile, built in a team of two as a TDD case study from concept to release on Google Play. I also wrote my own dependency injection system from scratch to better understand the patterns.',
+    tags: ['Unity', 'C#', 'TDD', 'Dependency Injection', 'Mobile'],
+    media: {
+      type: 'image',
+      src: '/slimeSlayer.png',
+      alt: 'Slime Slayer gameplay screenshot',
+      url: 'https://play.google.com/store/apps/details?id=com.BimzyDezDev.SlimeSlayer&hl=en',
+    },
+  
