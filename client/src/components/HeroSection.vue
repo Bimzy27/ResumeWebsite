@@ -14,7 +14,7 @@ const { data: recommendations } = useApiResource<RecommendationEntry[]>(
 <template>
   <section id="top" class="hero">
     <div class="container hero__inner">
-      <p class="section-eyebrow">Senior Full-Stack Software Engineer</p>
+      <p class="section-eyebrow">Senior Software Engineer</p>
       <h1 class="hero__name">
         Hi, I'm <span class="hero__highlight">{{ profile.name }}</span>
       </h1>

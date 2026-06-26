@@ -4,7 +4,7 @@ export const fallbackProfile: Profile = {
   name: 'Branden Immerzeel',
   title: 'Senior Software Engineer',
   summary:
-    'Experienced Full-Stack Software Engineer with over 8 years of experience across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.',
+    'Full-Stack Software Engineer with over eight years across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.',
   contact: {
     email: 'branden.immerzeel@gmail.com',
     phone: '0423 889 259',
@@ -12,6 +12,7 @@ export const fallbackProfile: Profile = {
     linkedIn: 'https://www.linkedin.com/in/branden-immerzeel/',
   },
   skills: [
+    'AI Tooling',
     'C#',
     '.NET',
     'Vue.js',
@@ -20,7 +21,6 @@ export const fallbackProfile: Profile = {
     'Software Architecture',
     'Unit & E2E Testing',
     'CI/CD',
-    'AI Tooling',
     'Unity',
     'Git',
   ],
@@ -28,21 +28,21 @@ export const fallbackProfile: Profile = {
     {
       title: 'Problem Solving',
       description:
-        'An innate confidence in my problem solving capabilities. I enjoy breaking down complex, ambiguous problems and working through them methodically until I land on a clean, reliable solution.',
+        'A confident, methodical approach to breaking down complex, ambiguous problems into clean, reliable solutions.',
     },
     {
       title: 'Leadership and Team Dynamics',
-      description: 'Proven ability to lead, manage and coach team members towards project success.',
+      description: 'Proven ability to lead, manage, and coach team members towards project success.',
     },
     {
       title: 'End-to-End Ownership',
       description:
-        'Drives features from initial technical design through to production rollout, delivering reliably under tight deadlines.',
+        'Proven ownership of features from initial technical design through to production rollout, delivering reliably under tight deadlines.',
     },
   ],
   education: [
     {
-      degree: 'Bachelor of Interactive Digital Media (CS Major)',
+      degree: 'Bachelor of Interactive Digital Media (Computer Science Major)',
       institution: 'Queensland University of Technology',
       period: '2017 Cohort',
     },
@@ -57,9 +57,9 @@ export const fallbackExperience: ExperienceEntry[] = [
     period: '08/2024 - 06/2026',
     highlights: [
       'Architected and delivered full-stack features for a large-scale enterprise web platform, owning a complex workflow management module end-to-end across feature flags, back-end API endpoints, and multi-tab dialog interfaces, from initial technical design through to production rollout.',
-      'Designed and implemented a standalone, metadata-driven security configuration for CRUD operations spanning multiple repositories, enabling teams to configure access roles directly. Recognized by leadership for end-to-end ownership under tight deadlines.',
+      'Designed and implemented a standalone, metadata-driven security configuration for CRUD operations spanning multiple repositories, enabling teams to configure access roles directly. Recognised by leadership for end-to-end ownership under tight deadlines.',
       'Built reusable, slot-based UI components for a shared design system, including a configurable, branding-aware login layout rolled out across numerous web portals.',
-      'Created and evolved an internal multi-framework test runner adopted across the organization, extending it from a single framework to several by decoupling the runner architecture from any one testing framework. Adapted this test runner for agent usage to provide a more token-efficient way to discover/run/fix related tests.',
+      'Created and evolved an internal multi-framework test runner adopted across the organisation, extending it from a single framework to several by decoupling the runner architecture from any one testing framework. Adapted this test runner for agent usage to provide a more token-efficient way to discover, run, and fix related tests.',
     ],
     image: '/wisetech.jpg',
     imageAlt: 'WiseTech Global',
@@ -85,7 +85,7 @@ export const fallbackExperience: ExperienceEntry[] = [
     period: '06/2018 - 08/2021',
     highlights: [
       'Played a pivotal role as a core game development team member, collaborating closely with designers, artists, sound engineers, and testers to deliver high-quality games for casinos, pubs, and clubs.',
-      "Led the end-to-end development process, from conceptualization to release, ensuring the successful delivery of Wymac's core games.",
+      "Led the end-to-end development process, from conceptualisation to release, ensuring the successful delivery of Wymac's core games.",
       'Applied a diverse skill set encompassing problem-solving, mathematical analysis, and effective stakeholder engagement to drive project success.',
     ],
     image: '/wymac.jpg',
@@ -98,8 +98,8 @@ export const fallbackExperience: ExperienceEntry[] = [
     period: '2017 - 2018',
     highlights: [
       "Orchestrated the collaboration of a talented team of game developers from QUT, guiding them through the development and successful release of the strategy game 'Monsters of Mayhem'.",
-      "Spearheaded the development and deployment of 'Endless Miner,' a charming game released on the Android marketplace, showcasing the company's creativity and technical prowess.",
-      'Organized and executed press events and presentations targeting various game companies, promoting our products and fostering valuable industry connections.',
+      "Spearheaded the development and deployment of 'Endless Miner,' a charming game released on Google Play, showcasing the company's creativity and technical prowess.",
+      'Organised and executed press events and presentations targeting various game companies, promoting our products and fostering valuable industry connections.',
     ],
     image: '/lazyrhinostudios.jpg',
     imageAlt: 'Lazy Rhino Studios',
@@ -110,7 +110,7 @@ export const fallbackExperience: ExperienceEntry[] = [
     role: 'Programming Teacher',
     period: '2016 - 2017',
     highlights: [
-      'Engaged as a full-time educator and extracurricular instructor, imparting foundational programming concepts to classroom environments comprising approximately thirty eager young learners.',
+      'Engaged as a full-time educator and extracurricular instructor, imparting foundational programming concepts to classrooms of approximately thirty eager young learners.',
       'Enhanced leadership, presentation, teamwork, and public speaking skills during tenure at both Code Camp and Junior Engineers.',
     ],
     image: '/codecamp.jpg',
@@ -125,7 +125,7 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     title: 'Software Architect at WiseTech Global',
     relationship: 'Senior to Branden, did not manage him directly',
     quote:
-      "I had the pleasure of working closely with Branden at Wisetech, where he consistently stood out as an exceptional Senior Software Engineer. Branden doesn't just write clean, high-quality code; he possess a rare ability to look at complex, ambiguous problems and architect and deliver elegant, scalable solutions that align perfectly with business goals. Not only a great developer but also a great person to work with. I can't recommend him enough.",
+      "I had the pleasure of working closely with Branden at WiseTech, where he consistently stood out as an exceptional Senior Software Engineer. Branden doesn't just write clean, high-quality code; he possesses a rare ability to look at complex, ambiguous problems and architect and deliver elegant, scalable solutions that align perfectly with business goals. Not only a great developer but also a great person to work with. I can't recommend him enough.",
     linkedIn: 'https://www.linkedin.com/in/jdmerinor/en/',
   },
   {
@@ -152,7 +152,7 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     title: 'Product Manager, PAVE and Productivity Tools at WiseTech Global',
     relationship: 'Senior to Branden, did not manage him directly',
     quote:
-      "As a product manager you want teams that can execute and do so effectively. Branden always came to work with the attitude to help me solve the teams problems. Branden would come with multiple solutions and help explore trade-offs in a way few engineers do effectively. Any team would benefit from having Branden, not just because of his technical ability - but because of his ability to take the problems and pragmatically explore solutions. If I was to assemble my dream team, Branden would be on it.",
+      "As a product manager you want teams that can execute and do so effectively. Branden always came to work with the attitude to help me solve the team's problems. Branden would come with multiple solutions and help explore trade-offs in a way few engineers do effectively. Any team would benefit from having Branden, not just because of his technical ability - but because of his ability to take the problems and pragmatically explore solutions. If I was to assemble my dream team, Branden would be on it.",
     linkedIn: 'https://www.linkedin.com/in/alexander-eaglessydney/',
   },
   {
@@ -170,7 +170,7 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     title: 'Senior Software Engineer at Discovery Parks',
     relationship: 'Worked with Branden on the same team',
     quote:
-      "It was excellent being able to work along side Branden on our product together. He has a strong focus on systems design and consistently plans pragmatic and well designed solutions for given problems. His care for our code base, consistently looking for room for improvement made him a staple in our team. He was great at communicating feedback amongst engineers as well as to wider stakeholders. He's definitely missed!",
+      "It was excellent being able to work alongside Branden on our product together. He has a strong focus on systems design and consistently plans pragmatic and well-designed solutions for given problems. His care for our code base, consistently looking for room for improvement made him a staple in our team. He was great at communicating feedback amongst engineers as well as to wider stakeholders. He's definitely missed!",
     linkedIn: 'https://www.linkedin.com/in/scott-cabot/',
   },
   {
@@ -197,12 +197,30 @@ export const fallbackRecommendations: RecommendationEntry[] = [
     title: 'Software Engineer at WiseTech Global',
     relationship: 'Worked with Branden on different teams',
     quote:
-      'I have worked with Branden in the same office for over 1 year and a half. Branden consistently brings a great attitude to work. Whether facing a tough deadline or a tricky technical problem, he approaches challenges with genuine enthusiasm to make solid contributions and deliver the results. Branden always tries to kick up a notch and strech himself. As a software engineer, Branden has always been seeking challenges beyond the scope, including proactively taking the lead in a squad, mentoring people and providing support for his team. It was a pleasure for me to have been working with Branden and with his skills I genuinely believe any team would be lucky to have Branden. I wish Branden all the best with his career.',
+      'I have worked with Branden in the same office for over 1 year and a half. Branden consistently brings a great attitude to work. Whether facing a tough deadline or a tricky technical problem, he approaches challenges with genuine enthusiasm to make solid contributions and deliver the results. Branden always tries to kick up a notch and stretch himself. As a software engineer, Branden has always been seeking challenges beyond the scope, including proactively taking the lead in a squad, mentoring people and providing support for his team. It was a pleasure for me to have been working with Branden and with his skills I genuinely believe any team would be lucky to have Branden. I wish Branden all the best with his career.',
     linkedIn: 'https://www.linkedin.com/in/benjamin-wang-579676259/',
   },
 ]
 
 export const fallbackProjects: Project[] = [
+  {
+    id: 'ai-tool',
+    title: 'AI tool for test discovery and execution',
+    description:
+      'An AI tool used to optimise context window and token consumption for test discovery and execution. It reliably enables deterministic discovery of related tests, which is something an agent struggles to do in isolation. When integrated with skills, it can recursively fix failing tests.',
+    tags: ['AI Tooling', 'Token Optimization', 'Tests'],
+    media: {
+      type: 'youtube',
+      videoId: 'k4xWFiC0NFo',
+    },
+    actions: [
+      {
+        label: 'Watch on YouTube',
+        url: 'https://www.youtube.com/watch?v=k4xWFiC0NFo',
+        variant: 'primary',
+      },
+    ],
+  },
   {
     id: 'slime-slayer',
     title: 'Slime Slayer',
@@ -227,7 +245,7 @@ export const fallbackProjects: Project[] = [
     id: 'bimzydev',
     title: 'BimzyDev YouTube Channel',
     description:
-      'My YouTube channel sharing game development tutorials and devlogs. Breaking down techniques, tooling and progress for a community of learners and enthusiasts.',
+      'My YouTube channel sharing game development tutorials and devlogs. Breaking down techniques, tooling, and progress for a community of learners and enthusiasts.',
     tags: ['Content Creation', 'Game Dev', 'YouTube'],
     media: {
       type: 'youtube-channel',
@@ -246,7 +264,7 @@ export const fallbackProjects: Project[] = [
     id: 'runes-of-time',
     title: 'Runes of Time',
     description:
-      'A 3rd-person action roguelike wizard game built in Unity with a team of two. Transparently built with a YouTube devlog series and playable builds on itch.io.',
+      'A 3rd-person action roguelike wizard game built in Unity with a team of two. Developed transparently through a YouTube devlog series and playable builds on itch.io.',
     tags: ['Unity', 'C#', 'Roguelike', 'Multiplayer'],
     media: {
       type: 'youtube',
