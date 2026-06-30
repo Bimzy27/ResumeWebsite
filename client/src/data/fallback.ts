@@ -7,7 +7,7 @@ export const fallbackProfile: Profile = {
     'Full-Stack Software Engineer with over eight years across enterprise web development and game development. Proficient in Vue.js, TypeScript, C#, and .NET. Skilled in software architecture and delivering full-stack features end-to-end, from responsive front-end interfaces to robust back-end APIs, across large, multi-repository codebases.',
   contact: {
     email: 'branden.immerzeel@gmail.com',
-    phone: '0423 889 259',
+    phone: 'Upon request',
     location: 'Adelaide, SA 5163',
     linkedIn: 'https://www.linkedin.com/in/branden-immerzeel/',
   },

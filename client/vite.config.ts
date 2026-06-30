@@ -6,12 +6,4 @@ import { templateCompilerOptions } from '@tresjs/core'
 export default defineConfig({
   plugins: [vue(templateCompilerOptions)],
   assetsInclude: ['**/*.glb', '**/*.gltf'],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5080',
-        changeOrigin: true,
-      },
-    },
-  },
 })
