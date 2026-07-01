@@ -11,6 +11,9 @@ obj/
 .vs/
 .vscode/
 
+# Claude Code local (per-developer) settings
+.claude/settings.local.json
+
 # Blender source files (large, not needed for deployed site)
 *.blend
 *.blend1

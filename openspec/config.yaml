@@ -1,0 +1,21 @@
+schema: spec-driven
+
+# Project context: shown to AI when creating artifacts.
+context: |
+  Personal resume / portfolio website (single-page).
+  Tech stack: Vue 3 + TypeScript, Vite, TresJS (Three.js) for the 3D avatar/desk scene.
+  Deployment: static client only (client/), built and hosted on Vercel. No backend.
+  Content source of truth: client/src/data/fallback.ts (profile, experience, projects, recommendations).
+  Contact form has no API; it opens the visitor's mail client via a mailto: link.
+  Conventions: use plain dashes (never em dashes); do not add AI co-authors to commits.
+  Branching: develop for development work, master is the release branch that Vercel deploys.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
