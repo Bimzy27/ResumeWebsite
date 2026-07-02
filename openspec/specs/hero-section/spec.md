@@ -26,10 +26,14 @@ The system SHALL provide two primary actions in the hero that link to the experi
 
 ### Requirement: Recommendations Carousel
 
-The system SHALL display peer recommendations in a carousel, each showing the recommender's name, title, relationship to the owner, quote, and a link to their LinkedIn profile.
+The system SHALL display peer recommendations in a carousel, one at a time, each showing the recommender's name, title, relationship to the owner, and quote, with controls to move between recommendations.
 
 #### Scenario: Viewing a recommendation
 
 - **WHEN** the recommendations carousel renders
-- **THEN** it shows a recommendation with the recommender's name, title, relationship, and quote
-- **AND** exposes a link to that recommender's LinkedIn profile that opens in a new tab
+- **THEN** it shows a single recommendation with the recommender's name, title, relationship, and quote
+
+#### Scenario: Advancing to the next recommendation
+
+- **WHEN** the visitor activates the next control (or selects a specific recommendation dot)
+- **THEN** the displayed recommendation changes to the selected one
