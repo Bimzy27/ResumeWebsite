@@ -39,4 +39,41 @@ test.describe('Projects showcase', () => {
     // With reduced motion the section is not pinned, but every card is still present.
     await expect(page.locator('#projects article.project-card')).toHaveCount(5)
   })
+
+  // Regression: the pinned scroll-linked slide must work at every desktop
+  // viewport height, including tall windows (it was once disabled above a
+  // height threshold, which silently removed the effect).
+  for (const viewport of [
+    { width: 1280, height: 900 },
+    { width: 1280, height: 1200 },
+  ]) {
+    test(`scrolling the page slides the cards when pinned (${viewport.width}x${viewport.height})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport)
+      await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+      const projects = page.locator('#projects')
+      await expect(projects.locator('article.project-card')).toHaveCount(5)
+      await expect(projects).toHaveClass(/projects--pinned/)
+
+      // Scroll to the section top, then further down the page: the card track
+      // must translate horizontally in step with the vertical scroll.
+      const projTop = await projects.evaluate(
+        (el) => el.getBoundingClientRect().top + window.scrollY,
+      )
+      await page.evaluate((y) => window.scrollTo(0, y + 300), projTop)
+
+      await expect
+        .poll(async () => {
+          const transform = await page
+            .locator('.projects__track')
+            .evaluate((el) => getComputedStyle(el).transform)
+          // matrix(1, 0, 0, 1, tx, ty) -> tx
+          const tx = Number(transform.match(/matrix\([^)]*\)/)?.[0].split(',')[4] ?? 0)
+          return tx
+        })
+        .toBeLessThan(-250)
+    })
+  }
 })
