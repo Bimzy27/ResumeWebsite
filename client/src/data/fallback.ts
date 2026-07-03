@@ -222,6 +222,29 @@ export const fallbackProjects: Project[] = [
     ],
   },
   {
+    id: 'portfolio-website',
+    title: 'This Portfolio Website',
+    description:
+      'The very site you are viewing, a single-page portfolio built with Vue 3, TypeScript, and Vite. Featuring a scroll-driven 3D avatar and desk scene rendered with Three.js. The linked video walks through how it was made using a variety of AI tools.',
+    tags: ['Vue.js', 'TypeScript', 'Three.js', 'Vite'],
+    media: {
+      type: 'youtube',
+      videoId: 'Qyi_hvGAZt4',
+    },
+    actions: [
+      {
+        label: 'Watch on YouTube',
+        url: 'https://www.youtube.com/watch?v=Qyi_hvGAZt4',
+        variant: 'primary',
+      },
+      {
+        label: 'View source',
+        url: 'https://github.com/Bimzy27/ResumeWebsite',
+        variant: 'secondary',
+      },
+    ],
+  },
+  {
     id: 'slime-slayer',
     title: 'Slime Slayer',
     description:

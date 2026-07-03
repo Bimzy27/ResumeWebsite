@@ -6,10 +6,11 @@ test.describe('Projects showcase', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     const cards = page.locator('#projects article.project-card')
-    await expect(cards).toHaveCount(4)
+    await expect(cards).toHaveCount(5)
 
     for (const title of [
       'AI tool for test discovery and execution',
+      'This Portfolio Website',
       'Slime Slayer',
       'BimzyDev YouTube Channel',
       'Runes of Time',
@@ -36,6 +37,6 @@ test.describe('Projects showcase', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     // With reduced motion the section is not pinned, but every card is still present.
-    await expect(page.locator('#projects article.project-card')).toHaveCount(4)
+    await expect(page.locator('#projects article.project-card')).toHaveCount(5)
   })
 })

@@ -322,7 +322,8 @@ const playing = ref(false)
 
 .project-card__actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
   margin-top: auto;
   padding-top: 4px;
