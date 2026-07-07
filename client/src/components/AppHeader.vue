@@ -58,6 +58,7 @@ function scrollToTop(event: MouseEvent) {
   font-size: 1.1rem;
   color: var(--color-text);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .header__nav {
@@ -71,18 +72,43 @@ function scrollToTop(event: MouseEvent) {
   font-weight: 500;
   font-size: 0.95rem;
   transition: color 0.15s ease;
+  /* Touch-size hit area; visually inert because the fixed-height header row
+     centers the links. */
+  padding: 14px 0;
 }
 
 .header__nav a:hover {
   color: var(--color-primary);
 }
 
-@media (max-width: 640px) {
-  .header__nav {
-    gap: 16px;
+/* tablet, see breakpoints in style.css. One row can't fit the logo plus all
+   five links below ~620px, so the header becomes two rows: logo on top, nav
+   spread across its own full-width row. The links' vertical padding gives
+   each a 44px-plus touch target. */
+@media (max-width: 768px) {
+  .header__inner {
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 12px;
   }
+
+  .header__nav {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
   .header__nav a {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    padding: 14px 4px;
+  }
+
+  /* Padded hit area for the logo link; the negative margin keeps the two
+     header rows at their visual height. */
+  .header__logo {
+    padding: 11px 0;
+    margin: -11px 0;
   }
 }
 </style>

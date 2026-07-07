@@ -48,6 +48,24 @@ const { data: recommendations } = useApiResource<RecommendationEntry[]>(
   }
 }
 
+/* phone, see breakpoints in style.css. Without the 3D scene the desktop
+   whitespace budget just reads as an empty band above the fold. */
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 56px;
+    min-height: 0;
+  }
+
+  .hero__summary {
+    font-size: 1rem;
+  }
+
+  .hero__spacer {
+    height: 24px;
+  }
+}
+
 .hero__inner {
   position: relative;
   z-index: 1;

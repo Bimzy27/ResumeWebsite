@@ -351,10 +351,18 @@ onBeforeUnmount(() => {
   scroll-snap-align: start;
 }
 
+/* tablet, see breakpoints in style.css. Below the pin breakpoint cards
+   become swipeable panels. The basis is sized so ~30-45px of the next card
+   stays visible past the rail padding at phone widths — without that peek
+   nothing signals that more projects exist. Mandatory snap keeps swipes
+   landing on whole cards. */
 @media (max-width: 768px) {
-  /* Below the pin breakpoint cards become swipeable viewport-width panels. */
+  .projects__viewport {
+    scroll-snap-type: x mandatory;
+  }
+
   .projects__track > * {
-    flex-basis: min(85vw, 340px);
+    flex-basis: min(78vw, 340px);
   }
 }
 </style>

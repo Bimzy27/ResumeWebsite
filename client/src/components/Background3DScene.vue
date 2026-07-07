@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { TresCanvas } from '@tresjs/core'
 import { NoToneMapping } from 'three'
 import DeskScene from './DeskScene.vue'
@@ -8,9 +8,25 @@ const props = defineProps<{ progress?: number }>()
 
 const webglSupported = ref(false)
 
+// Mirrors the CSS scene cutoff (see breakpoints in style.css). Without this
+// gate the canvas would still mount inside its display:none box on phones,
+// downloading the desk model and rendering to an invisible surface.
+const wideEnough = ref(false)
+let sceneQuery: MediaQueryList | null = null
+const onSceneQueryChange = (e: MediaQueryListEvent) => {
+  wideEnough.value = e.matches
+}
+
 onMounted(() => {
   const canvas = document.createElement('canvas')
   webglSupported.value = !!(canvas.getContext('webgl2') ?? canvas.getContext('webgl'))
+  sceneQuery = window.matchMedia('(min-width: 901px)')
+  wideEnough.value = sceneQuery.matches
+  sceneQuery.addEventListener('change', onSceneQueryChange)
+})
+
+onUnmounted(() => {
+  sceneQuery?.removeEventListener('change', onSceneQueryChange)
 })
 
 // Reference DeskScene explicitly so noUnusedLocals is satisfied.
@@ -69,7 +85,7 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
 <template>
   <div class="bg3d" aria-hidden="true">
     <TresCanvas
-      v-if="webglSupported"
+      v-if="webglSupported && wideEnough"
       alpha
       :clear-alpha="0"
       :tone-mapping="NoToneMapping"
@@ -109,6 +125,8 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
   pointer-events: none;
 }
 
+/* scene cutoff, see breakpoints in style.css. Belt and braces with the
+   wideEnough mount gate above. */
 @media (max-width: 900px) {
   .bg3d {
     display: none;

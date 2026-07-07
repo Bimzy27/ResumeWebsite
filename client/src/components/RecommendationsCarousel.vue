@@ -235,27 +235,76 @@ onUnmounted(stopAutoplay)
 
 .recs__dots {
   /* Vertically stacked between the prev/next arrows rather than the usual
-     horizontal row below the card. */
+     horizontal row below the card. The dots' own hit-area padding provides
+     the visual spacing, so no gap on top of it. */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 0;
 }
 
 .recs__dot {
+  /* The visible dot stays 7px; content-box padding grows the hit area to
+     19px without changing the visual. The dots are a secondary control —
+     the 44px arrows reach every slide — so they don't need the full 44px
+     touch target themselves. */
   width: 7px;
   height: 7px;
-  padding: 0;
+  box-sizing: content-box;
+  padding: 6px;
   border: none;
   border-radius: 50%;
   background: var(--color-border);
+  background-clip: content-box;
   cursor: pointer;
   transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .recs__dot.is-active {
-  background: var(--color-primary);
+  /* background-color, not the background shorthand: the shorthand would
+     reset background-clip and flood the padded hit area with color. */
+  background-color: var(--color-primary);
   transform: scale(1.3);
+}
+
+/* tablet, see breakpoints in style.css. Touch-range viewports get full
+   44px touch-size arrows. */
+@media (max-width: 768px) {
+  .recs__arrow {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* phone, see breakpoints in style.css. The vertical rail would steal ~56px
+   of card width from a 360px screen, so the controls move below the card as
+   a horizontal row. */
+@media (max-width: 480px) {
+  .recs__row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .recs__nav {
+    order: 2;
+    flex-direction: row;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .recs__dots {
+    flex-direction: row;
+  }
+
+  /* Horizontal arrangement, so ‹ and › read correctly unrotated. */
+  .recs__arrow--prev,
+  .recs__arrow--next {
+    transform: none;
+  }
+
+  .recs__author {
+    font-size: 0.875rem;
+  }
 }
 
 .recs-fade-enter-active,

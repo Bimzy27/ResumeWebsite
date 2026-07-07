@@ -350,10 +350,12 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
   white-space: nowrap;
 }
 
-/* On narrow viewports a full-width single-row category could overflow the
-   page horizontally. Let those rows wrap to a second line there instead of
-   forcing a scrollbar or clipping cards. The explicit grid width set inline
-   has to be overridden here, since an inline style otherwise wins. */
+/* phone, see breakpoints in style.css. On narrow viewports a full-width
+   single-row category could overflow the page horizontally. Let those rows
+   wrap to a second line there instead of forcing a scrollbar or clipping
+   cards. The explicit grid width set inline has to be overridden here,
+   since an inline style otherwise wins. Card names also get a readable
+   size (0.68rem computes to ~10.9px, too small on a phone). */
 @media (max-width: 480px) {
   .tech-rows {
     width: auto !important;
@@ -371,6 +373,10 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
   .tech-category {
     width: auto !important;
     flex: 1 1 100%;
+  }
+
+  .tech-card__name {
+    font-size: 0.8rem;
   }
 }
 </style>

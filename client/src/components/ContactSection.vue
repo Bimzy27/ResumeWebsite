@@ -205,7 +205,8 @@ const initials = computed(() =>
   flex-wrap: nowrap;
 }
 
-/* Let the buttons wrap only when the viewport is too narrow to fit them. */
+/* tablet, see breakpoints in style.css. Let the buttons wrap only when the
+   viewport is too narrow to fit them. */
 @media (max-width: 768px) {
   .contact__social {
     flex-wrap: wrap;
@@ -341,5 +342,22 @@ const initials = computed(() =>
 
 .contact__details a:hover {
   color: var(--color-primary);
+}
+
+/* tablet, see breakpoints in style.css. Touch-range viewports get 44px
+   buttons, and the email link's hit area is padded out without shifting
+   the visual rhythm (negative margin cancels the padding). Placed after
+   the base rules above so these same-specificity overrides win. */
+@media (max-width: 768px) {
+  .icon-btn,
+  .resume-btn {
+    height: 44px;
+  }
+
+  .contact__details a {
+    display: inline-block;
+    padding: 12px 0;
+    margin: -12px 0;
+  }
 }
 </style>

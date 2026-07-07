@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
+/* Shared responsive breakpoints. Media queries can't read custom properties,
+   so every component references these literal values with a comment pointing
+   here. The mobile E2E suite asserts sections switch layouts together.
+
+     phone   max-width: 480px   single-column phone layouts
+     tablet  max-width: 768px   two-row header, swipe-track projects,
+                                stacked timeline
+     scene   max-width: 900px   3D desk scene disabled (performance cutoff,
+                                deliberately separate from layout breakpoints;
+                                hero/skills desktop layouts start at 901px)
+*/
+
 :root {
   --color-bg: #fdfcff;
   --color-surface: #ffffff;
@@ -35,6 +47,19 @@
 
 body {
   margin: 0;
+}
+
+/* Anchor navigation lands below the sticky header instead of underneath it.
+   The offset tracks the header's height: one row on desktop, logo row plus
+   nav row at the tablet breakpoint (see AppHeader.vue). */
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+@media (max-width: 768px) /* tablet, see breakpoints above */ {
+  section[id] {
+    scroll-margin-top: 96px;
+  }
 }
 
 h1,
@@ -120,4 +145,12 @@ section {
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
+}
+
+/* tablet, see breakpoints above. Touch-range viewports get 44px-tall
+   buttons; desktop keeps its exact current metrics. */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px;
+  }
 }

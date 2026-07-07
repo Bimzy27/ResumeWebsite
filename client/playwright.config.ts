@@ -27,6 +27,17 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      // Desktop specs assert wide layouts (pinned project scrolling, one-row
+      // header); the phone project runs its own spec instead.
+      testIgnore: /mobile\.spec\.ts/,
+    },
+    {
+      name: 'mobile-chromium',
+      // Pixel 7 emulation (touch, mobile UA, device scale factor) but at
+      // 360px width, the strictest common phone viewport the mobile spec
+      // is written against.
+      use: { ...devices['Pixel 7'], viewport: { width: 360, height: 740 } },
+      testMatch: /mobile\.spec\.ts/,
     },
   ],
 

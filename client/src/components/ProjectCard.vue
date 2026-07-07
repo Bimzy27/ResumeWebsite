@@ -360,4 +360,14 @@ const playing = ref(false)
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
+
+/* tablet, see breakpoints in style.css. Touch-range viewports get full
+   44px-tall action buttons. */
+@media (max-width: 768px) {
+  .proj-btn {
+    min-height: 44px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+}
 </style>

@@ -112,13 +112,27 @@ onUnmounted(() => {
   z-index: 1;
 }
 
+/* scene cutoff, see breakpoints in style.css. The 3D canvas is disabled
+   (Background3DScene unmounts it), but the CSS glow costs nothing and keeps
+   the hero from falling back to a flat white page, so the bg layer stays,
+   absolutely positioned over the first viewport-height of the page. */
 @media (max-width: 900px) {
   .scrolly {
     display: block;
+    position: relative;
   }
 
   .scrolly__bg {
-    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+  }
+
+  .scrolly__fg {
+    position: relative;
+    z-index: 1;
   }
 }
 </style>
