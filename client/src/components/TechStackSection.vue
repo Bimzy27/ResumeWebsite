@@ -151,8 +151,12 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
 <template>
   <section id="tech-stack">
     <div class="container">
-      <p class="section-eyebrow">Tech Stack</p>
-      <h2 class="section-title">Tools &amp; technologies I work with</h2>
+      <p class="section-eyebrow">
+        Tech Stack
+      </p>
+      <h2 class="section-title">
+        Tools &amp; technologies I work with
+      </h2>
       <p class="section-intro">
         The languages, frameworks, and tooling I reach for across full-stack web and game
         development.
@@ -169,7 +173,9 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
             :key="group.category"
             class="tech-category"
           >
-            <h3 class="tech-category__title">{{ group.category }}</h3>
+            <h3 class="tech-category__title">
+              {{ group.category }}
+            </h3>
             <div class="tech-grid">
               <a
                 v-for="tech in group.items"
@@ -186,8 +192,12 @@ const techStackRows = CATEGORY_ROWS.map((row) =>
                   :alt="tech.name"
                   class="tech-card__icon"
                   loading="lazy"
-                />
-                <span v-else class="tech-card__icon tech-card__icon--monogram" aria-hidden="true">{{ tech.monogram }}</span>
+                >
+                <span
+                  v-else
+                  class="tech-card__icon tech-card__icon--monogram"
+                  aria-hidden="true"
+                >{{ tech.monogram }}</span>
                 <span class="tech-card__name">{{ tech.name }}</span>
               </a>
             </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { shallowRef, onMounted, onUnmounted } from 'vue'
 import { useLoop } from '@tresjs/core'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import * as THREE from 'three'
 
@@ -152,9 +152,7 @@ const gltfLoader = new GLTFLoader()
 gltfLoader.setDRACOLoader(dracoLoader)
 
 function loadGLTF(url: string) {
-  return new Promise<{ scene: THREE.Group; animations: THREE.AnimationClip[] }>(
-    (resolve, reject) => gltfLoader.load(url, resolve as any, undefined, reject),
-  )
+  return new Promise<GLTF>((resolve, reject) => gltfLoader.load(url, resolve, undefined, reject))
 }
 
 // ── load everything on mount ──────────────────────────────────────────────────
@@ -233,9 +231,15 @@ onBeforeRender(({ delta }) => {
   -->
 
   <!-- Desk, chair, monitor, keyboard, mug, notepad, plant, body -->
-  <primitive v-if="propsScene"    :object="propsScene" />
+  <primitive
+    v-if="propsScene"
+    :object="propsScene"
+  />
 
   <!-- Avatar head: standalone mesh, no rig — wrapped in a pivot Group (see
        script) so it can rotate toward the cursor from the neck joint. -->
-  <primitive v-if="headPivot"     :object="headPivot" />
+  <primitive
+    v-if="headPivot"
+    :object="headPivot"
+  />
 </template>

@@ -21,15 +21,18 @@ function scrollToTop(event: MouseEvent) {
 <template>
   <header class="header">
     <div class="container header__inner">
-      <a href="#top" class="header__logo" @click="scrollToTop">Branden Immerzeel</a>
+      <a
+        href="#top"
+        class="header__logo"
+        @click="scrollToTop"
+      >Branden Immerzeel</a>
       <nav class="header__nav">
         <a
           v-for="link in links"
           :key="link.id"
           :href="`#${link.id}`"
           @click="link.id === 'top' ? scrollToTop($event) : undefined"
-          >{{ link.label }}</a
-        >
+        >{{ link.label }}</a>
       </nav>
     </div>
   </header>

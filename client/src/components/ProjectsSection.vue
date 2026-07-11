@@ -231,8 +231,12 @@ onBeforeUnmount(() => {
   >
     <div class="projects__sticky">
       <div class="container">
-        <p class="section-eyebrow">Projects</p>
-        <h2 class="section-title">Things I've built</h2>
+        <p class="section-eyebrow">
+          Projects
+        </p>
+        <h2 class="section-title">
+          Things I've built
+        </h2>
         <p class="section-intro">
           A selection of things I've designed and built.
         </p>
@@ -240,17 +244,21 @@ onBeforeUnmount(() => {
 
       <div class="projects__rail">
         <div
+          ref="viewport"
           class="projects__viewport"
           :class="{ 'is-grabbable': !pinned && !centered }"
-          ref="viewport"
         >
           <div
+            ref="track"
             class="projects__track"
             :class="{ 'projects__track--centered': centered }"
-            ref="track"
             :style="trackStyle"
           >
-            <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+            <ProjectCard
+              v-for="project in projects"
+              :key="project.id"
+              :project="project"
+            />
           </div>
         </div>
       </div>

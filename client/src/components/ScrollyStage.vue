@@ -57,11 +57,13 @@ onUnmounted(() => {
            above is alpha-transparent except where the avatar actually draws,
            so this shows through everywhere except where it's occluded by
            the avatar. -->
-      <div class="scrolly__glow"></div>
+      <div class="scrolly__glow" />
       <Background3D :progress="progress" />
     </div>
     <div class="scrolly__fg">
-      <div ref="heroRef"><HeroSection /></div>
+      <div ref="heroRef">
+        <HeroSection />
+      </div>
       <SkillsSection />
     </div>
   </div>

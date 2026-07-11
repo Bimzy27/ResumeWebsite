@@ -83,7 +83,10 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
 </script>
 
 <template>
-  <div class="bg3d" aria-hidden="true">
+  <div
+    class="bg3d"
+    aria-hidden="true"
+  >
     <TresCanvas
       v-if="webglSupported && wideEnough"
       alpha
@@ -108,9 +111,20 @@ const cameraFov = computed(() => lerp(CLOSEUP.fov, WIDE.fov, eased.value))
            kept modest since NoToneMapping won't compress highlights the way
            ACES did — tune to taste if anything looks blown out. -->
       <TresAmbientLight :intensity="0.8" />
-      <TresDirectionalLight :position="[-3, 5, 4]"  :intensity="1.1" />
-      <TresDirectionalLight :position="[3, 2, -1]" :intensity="0.3" color="#7c3aed" />
-      <TresDirectionalLight :position="[0, 3, -4]"  :intensity="0.2" color="#a78bfa" />
+      <TresDirectionalLight
+        :position="[-3, 5, 4]"
+        :intensity="1.1"
+      />
+      <TresDirectionalLight
+        :position="[3, 2, -1]"
+        :intensity="0.3"
+        color="#7c3aed"
+      />
+      <TresDirectionalLight
+        :position="[0, 3, -4]"
+        :intensity="0.2"
+        color="#a78bfa"
+      />
 
       <DeskScene :progress="eased" />
     </TresCanvas>

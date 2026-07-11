@@ -66,14 +66,25 @@ onUnmounted(stopAutoplay)
     @mouseenter="stopAutoplay"
     @mouseleave="startAutoplay"
   >
-    <p class="recs__eyebrow">What colleagues say</p>
+    <p class="recs__eyebrow">
+      What colleagues say
+    </p>
 
     <div class="recs__row">
       <div class="recs__nav">
-        <button type="button" class="recs__arrow recs__arrow--prev" aria-label="Previous recommendation" @click="manualPrev">
+        <button
+          type="button"
+          class="recs__arrow recs__arrow--prev"
+          aria-label="Previous recommendation"
+          @click="manualPrev"
+        >
           ‹
         </button>
-        <div class="recs__dots" role="tablist" aria-label="Choose a recommendation">
+        <div
+          class="recs__dots"
+          role="tablist"
+          aria-label="Choose a recommendation"
+        >
           <button
             v-for="(r, i) in recommendations"
             :key="r.id"
@@ -86,18 +97,34 @@ onUnmounted(stopAutoplay)
             @click="manualGoTo(i)"
           />
         </div>
-        <button type="button" class="recs__arrow recs__arrow--next" aria-label="Next recommendation" @click="manualNext">
+        <button
+          type="button"
+          class="recs__arrow recs__arrow--next"
+          aria-label="Next recommendation"
+          @click="manualNext"
+        >
           ›
         </button>
       </div>
 
       <div class="recs__viewport">
-        <Transition name="recs-fade" mode="out-in">
-          <blockquote :key="current.id" class="recs__card">
-            <p class="recs__quote">&ldquo;{{ current.quote }}&rdquo;</p>
+        <Transition
+          name="recs-fade"
+          mode="out-in"
+        >
+          <blockquote
+            :key="current.id"
+            class="recs__card"
+          >
+            <p class="recs__quote">
+              &ldquo;{{ current.quote }}&rdquo;
+            </p>
             <footer class="recs__author">
               <span class="recs__name">{{ current.name }}</span>
-              <span class="recs__sep" aria-hidden="true">·</span>
+              <span
+                class="recs__sep"
+                aria-hidden="true"
+              >·</span>
               <span class="recs__title">{{ current.title }}</span>
               <span class="recs__relationship">{{ current.relationship }}</span>
             </footer>

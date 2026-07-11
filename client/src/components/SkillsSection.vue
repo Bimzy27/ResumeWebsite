@@ -11,15 +11,23 @@ const accentClasses = ['accent-violet', 'accent-coral', 'accent-cyan']
 <template>
   <section id="skills">
     <div class="container">
-      <p class="section-eyebrow">Skills &amp; Strengths</p>
-      <h2 class="section-title">A full-stack toolkit, sharpened across two industries</h2>
+      <p class="section-eyebrow">
+        Skills &amp; Strengths
+      </p>
+      <h2 class="section-title">
+        A full-stack toolkit, sharpened across two industries
+      </h2>
       <p class="section-intro">
         From responsive Vue.js front ends to robust C# / .NET back-end services, with the
         engineering discipline that comes from shipping games under tight deadlines.
       </p>
 
       <div class="skills__tags">
-        <span v-for="skill in profile.skills" :key="skill" class="skills__tag">{{ skill }}</span>
+        <span
+          v-for="skill in profile.skills"
+          :key="skill"
+          class="skills__tag"
+        >{{ skill }}</span>
       </div>
 
       <div class="skills__strengths">

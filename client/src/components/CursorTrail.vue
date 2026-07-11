@@ -41,7 +41,7 @@ let trailLength = DEFAULT_TRAIL_LENGTH
 
 const target: Point = { x: 0, y: 0 }
 const head: Point = { x: 0, y: 0 }
-let trail: Point[] = []
+const trail: Point[] = []
 let hasMoved = false
 
 function resize() {
@@ -135,7 +135,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <canvas ref="canvasRef" class="cursor-trail" aria-hidden="true"></canvas>
+  <canvas
+    ref="canvasRef"
+    class="cursor-trail"
+    aria-hidden="true"
+  />
 </template>
 
 <style scoped>

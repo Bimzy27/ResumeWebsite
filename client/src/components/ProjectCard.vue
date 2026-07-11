@@ -12,7 +12,10 @@ const playing = ref(false)
 <template>
   <article class="project-card">
     <!-- Click-to-play YouTube embed -->
-    <div v-if="project.media?.type === 'youtube'" class="project-card__media">
+    <div
+      v-if="project.media?.type === 'youtube'"
+      class="project-card__media"
+    >
       <iframe
         v-if="playing"
         class="project-card__iframe"
@@ -21,7 +24,7 @@ const playing = ref(false)
         loading="lazy"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
-      ></iframe>
+      />
       <button
         v-else
         type="button"
@@ -34,14 +37,20 @@ const playing = ref(false)
           :src="`https://img.youtube.com/vi/${project.media.videoId}/hqdefault.jpg`"
           :alt="project.title"
           loading="lazy"
-        />
-        <span class="project-card__play-icon" aria-hidden="true">
+        >
+        <span
+          class="project-card__play-icon"
+          aria-hidden="true"
+        >
           <svg viewBox="0 0 68 48">
             <path
               class="yt-shell"
               d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.5 34 .5 34 .5S12.5.5 7.4 1.8C4.5 2.6 2.3 4.8 1.5 7.7.2 12.8.2 24 .2 24s0 11.2 1.3 16.3c.8 2.9 3 5.1 5.9 5.9C13.5 47.5 34 47.5 34 47.5s21.5 0 26.6-1.3c2.9-.8 5.1-3 5.9-5.9C67.8 35.2 67.8 24 67.8 24s0-11.2-1.3-16.3z"
             />
-            <path d="M27 34l18-10-18-10z" fill="#fff" />
+            <path
+              d="M27 34l18-10-18-10z"
+              fill="#fff"
+            />
           </svg>
         </span>
       </button>
@@ -61,7 +70,7 @@ const playing = ref(false)
         :src="project.media.src"
         :alt="project.media.alt ?? project.title"
         loading="lazy"
-      />
+      >
     </component>
 
     <!-- Google Play block -->
@@ -74,11 +83,27 @@ const playing = ref(false)
       :aria-label="`${project.title} on Google Play`"
     >
       <span class="store-badge">
-        <svg class="store-badge__icon" viewBox="0 0 512 512" aria-hidden="true">
-          <path fill="#00d3ff" d="M48 32 322 256 48 480c-9-5-16-15-16-28V60c0-13 7-23 16-28z" />
-          <path fill="#00f076" d="M48 32c4-2 9-3 14-2l254 146-60 60z" />
-          <path fill="#ff3a44" d="M256 256l60 60L62 462c-5 1-10 0-14-2z" />
-          <path fill="#ffc800" d="M316 196l84 48c18 10 18 34 0 44l-84 48-60-60z" />
+        <svg
+          class="store-badge__icon"
+          viewBox="0 0 512 512"
+          aria-hidden="true"
+        >
+          <path
+            fill="#00d3ff"
+            d="M48 32 322 256 48 480c-9-5-16-15-16-28V60c0-13 7-23 16-28z"
+          />
+          <path
+            fill="#00f076"
+            d="M48 32c4-2 9-3 14-2l254 146-60 60z"
+          />
+          <path
+            fill="#ff3a44"
+            d="M256 256l60 60L62 462c-5 1-10 0-14-2z"
+          />
+          <path
+            fill="#ffc800"
+            d="M316 196l84 48c18 10 18 34 0 44l-84 48-60-60z"
+          />
         </svg>
         <span class="store-badge__text">
           <small>GET IT ON</small>
@@ -96,13 +121,19 @@ const playing = ref(false)
       rel="noopener"
       :aria-label="`${project.title} on YouTube`"
     >
-      <span class="channel-play" aria-hidden="true">
+      <span
+        class="channel-play"
+        aria-hidden="true"
+      >
         <svg viewBox="0 0 68 48">
           <path
             fill="#ff0000"
             d="M66.5 7.7c-.8-2.9-3-5.1-5.9-5.9C55.5.5 34 .5 34 .5S12.5.5 7.4 1.8C4.5 2.6 2.3 4.8 1.5 7.7.2 12.8.2 24 .2 24s0 11.2 1.3 16.3c.8 2.9 3 5.1 5.9 5.9C13.5 47.5 34 47.5 34 47.5s21.5 0 26.6-1.3c2.9-.8 5.1-3 5.9-5.9C67.8 35.2 67.8 24 67.8 24s0-11.2-1.3-16.3z"
           />
-          <path d="M27 34l18-10-18-10z" fill="#fff" />
+          <path
+            d="M27 34l18-10-18-10z"
+            fill="#fff"
+          />
         </svg>
       </span>
       <span class="channel-handle">{{ project.media.handle }}</span>
@@ -112,9 +143,15 @@ const playing = ref(false)
       <h3>{{ project.title }}</h3>
       <p>{{ project.description }}</p>
       <div class="project-card__tags">
-        <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+        <span
+          v-for="tag in project.tags"
+          :key="tag"
+        >{{ tag }}</span>
       </div>
-      <div v-if="project.actions?.length" class="project-card__actions">
+      <div
+        v-if="project.actions?.length"
+        class="project-card__actions"
+      >
         <a
           v-for="action in project.actions"
           :key="action.url"

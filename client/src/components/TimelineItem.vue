@@ -8,18 +8,35 @@ defineProps<{
 </script>
 
 <template>
-  <div class="timeline-item" :class="{ 'timeline-item--right': index % 2 === 1 }">
-    <div class="timeline-item__marker"></div>
+  <div
+    class="timeline-item"
+    :class="{ 'timeline-item--right': index % 2 === 1 }"
+  >
+    <div class="timeline-item__marker" />
     <div class="timeline-item__card">
       <span class="timeline-item__period">{{ entry.period }}</span>
       <h3>{{ entry.company }}</h3>
-      <p class="timeline-item__role">{{ entry.role }}</p>
+      <p class="timeline-item__role">
+        {{ entry.role }}
+      </p>
       <ul>
-        <li v-for="(highlight, i) in entry.highlights" :key="i">{{ highlight }}</li>
+        <li
+          v-for="(highlight, i) in entry.highlights"
+          :key="i"
+        >
+          {{ highlight }}
+        </li>
       </ul>
     </div>
-    <div v-if="entry.image" class="timeline-item__media">
-      <img :src="entry.image" :alt="entry.imageAlt ?? entry.company" loading="lazy" />
+    <div
+      v-if="entry.image"
+      class="timeline-item__media"
+    >
+      <img
+        :src="entry.image"
+        :alt="entry.imageAlt ?? entry.company"
+        loading="lazy"
+      >
     </div>
   </div>
 </template>
