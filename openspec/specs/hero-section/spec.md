@@ -24,6 +24,15 @@ The system SHALL provide two primary actions in the hero that link to the experi
 - **WHEN** the visitor activates "View my experience" or "Get in touch"
 - **THEN** the page navigates to `#experience` or `#contact` respectively
 
+### Requirement: Hero Resume Download
+
+The system SHALL provide a "Resume" action in the hero that opens the owner's resume PDF in a new tab.
+
+#### Scenario: Downloading the resume from the hero
+
+- **WHEN** the visitor activates the "Resume" action in the hero
+- **THEN** `/Branden-Immerzeel-Resume.pdf` opens in a new tab
+
 ### Requirement: Recommendations Carousel
 
 The system SHALL display peer recommendations in a carousel, one at a time, each showing the recommender's name, title, relationship to the owner, and quote, with controls to move between recommendations.

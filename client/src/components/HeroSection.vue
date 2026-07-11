@@ -12,19 +12,64 @@ const { data: recommendations } = useApiResource<RecommendationEntry[]>(
 </script>
 
 <template>
-  <section id="top" class="hero">
+  <section
+    id="top"
+    class="hero"
+  >
     <div class="container hero__inner">
-      <p class="section-eyebrow">Senior Software Engineer</p>
+      <p class="section-eyebrow">
+        Senior Software Engineer
+      </p>
       <h1 class="hero__name">
         Hi, I'm <span class="hero__highlight">{{ profile.name }}</span>
       </h1>
-      <p class="hero__summary">{{ profile.summary }}</p>
+      <p class="hero__summary">
+        {{ profile.summary }}
+      </p>
       <div class="hero__actions">
-        <a href="#experience" class="btn btn-primary">View my experience</a>
-        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+        <a
+          href="#experience"
+          class="btn btn-primary"
+        >View my experience</a>
+        <a
+          href="#contact"
+          class="btn btn-secondary"
+        >Get in touch</a>
+        <a
+          href="/Branden-Immerzeel-Resume.pdf"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-secondary"
+          aria-label="Download resume (PDF)"
+        >
+          <svg
+            class="hero__resume-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line
+              x1="12"
+              y1="18"
+              x2="12"
+              y2="12"
+            />
+            <polyline points="9 15 12 18 15 15" />
+          </svg>
+          <span>Resume</span>
+        </a>
       </div>
 
-      <div class="hero__spacer" aria-hidden="true"></div>
+      <div
+        class="hero__spacer"
+        aria-hidden="true"
+      />
       <RecommendationsCarousel :recommendations="recommendations" />
     </div>
   </section>
@@ -106,6 +151,12 @@ const { data: recommendations } = useApiResource<RecommendationEntry[]>(
   gap: 16px;
   flex-wrap: wrap;
   margin-top: 8px;
+}
+
+.hero__resume-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
 }
 
 /* Preserves the vertical gap left by the removed location/email meta row, so

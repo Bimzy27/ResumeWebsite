@@ -21,6 +21,15 @@ test.describe('Hero section', () => {
     await expect(page.getByRole('link', { name: 'Get in touch' })).toHaveAttribute('href', '#contact')
   })
 
+  test('offers a resume download that opens the PDF in a new tab', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+    const resume = page.locator('#top').getByRole('link', { name: 'Download resume (PDF)' })
+    await expect(resume).toBeVisible()
+    await expect(resume).toHaveAttribute('href', '/Branden-Immerzeel-Resume.pdf')
+    await expect(resume).toHaveAttribute('target', '_blank')
+  })
+
   test('shows a recommendations carousel that can advance', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
