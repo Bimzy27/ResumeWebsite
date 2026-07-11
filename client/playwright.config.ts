@@ -4,7 +4,11 @@ import { defineConfig, devices } from '@playwright/test'
 // server, which Playwright starts automatically (and reuses if one is already
 // running locally). Behaviour is identical to the production build for the
 // interactions these tests cover, and the dev server is faster to spin up.
-const PORT = 5173
+// The port is overridable (E2E_PORT) so the suite can run when another dev
+// server already occupies the default, and the webServer command binds it
+// with --strictPort so Playwright never silently reuses or health-checks a
+// different app that happens to listen on the expected port.
+const PORT = Number(process.env.E2E_PORT ?? 5173)
 const baseURL = `http://localhost:${PORT}`
 
 export default defineConfig({
@@ -43,7 +47,7 @@ export default defineConfig({
 
   // Start the dev server before running tests.
   webServer: {
-    command: 'npm run dev',
+    command: `npm run dev -- --port ${PORT} --strictPort`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
