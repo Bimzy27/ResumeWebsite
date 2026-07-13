@@ -5,6 +5,8 @@ import ScrollyStage from './components/ScrollyStage.vue'
 import TechStackSection from './components/TechStackSection.vue'
 import TimelineSection from './components/TimelineSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
+import DeviceSection from './components/DeviceSection.vue'
+import BookshelfSection from './components/BookshelfSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import AppFooter from './components/AppFooter.vue'
 </script>
@@ -17,6 +19,8 @@ import AppFooter from './components/AppFooter.vue'
     <TechStackSection />
     <TimelineSection />
     <ProjectsSection />
+    <DeviceSection />
+    <BookshelfSection />
     <ContactSection />
   </main>
   <AppFooter />

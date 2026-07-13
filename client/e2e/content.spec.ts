@@ -6,7 +6,7 @@ test.describe('Content architecture', () => {
   test('all main sections render from bundled data', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-    for (const id of ['#top', '#skills', '#experience', '#projects', '#contact']) {
+    for (const id of ['#top', '#skills', '#experience', '#projects', '#device', '#bookshelf', '#contact']) {
       await expect(page.locator(id)).toBeVisible()
     }
 

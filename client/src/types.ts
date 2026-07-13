@@ -68,6 +68,25 @@ export interface Project {
   links?: ProjectLinks
 }
 
+export interface DevicePart {
+  id: string
+  // Short part label shown in the specs list (e.g. "CPU", "GPU").
+  label: string
+  // The actual spec line for this part.
+  spec: string
+}
+
+export interface Book {
+  id: string
+  title: string
+  author: string
+  // Cover color for the proxy 3D book (hex string, e.g. '#7c3aed').
+  coverColor: string
+  // Purchase link. Placeholder Amazon search URLs for now; swapped for
+  // affiliate links once Branden provides them.
+  amazonUrl: string
+}
+
 export interface RecommendationEntry {
   id: string
   name: string

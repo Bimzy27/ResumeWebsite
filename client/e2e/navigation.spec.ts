@@ -24,6 +24,8 @@ test.describe('Site navigation', () => {
     await expect(nav.getByRole('link', { name: 'Skills' })).toHaveAttribute('href', '#skills')
     await expect(nav.getByRole('link', { name: 'Experience' })).toHaveAttribute('href', '#experience')
     await expect(nav.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '#projects')
+    await expect(nav.getByRole('link', { name: 'Device' })).toHaveAttribute('href', '#device')
+    await expect(nav.getByRole('link', { name: 'Bookshelf' })).toHaveAttribute('href', '#bookshelf')
     await expect(nav.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '#contact')
   })
 
