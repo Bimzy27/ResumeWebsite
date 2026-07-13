@@ -8,7 +8,7 @@ const links = [
 ]
 
 // The "About" link/logo both target #top, which sits below the sticky
-// header in the document — a plain anchor jump lands at the hero's
+// header in the document - a plain anchor jump lands at the hero's
 // offsetTop (i.e. just past the header), not the literal top of the page.
 // Scrolling the window itself to 0 bypasses that and reaches the true top.
 function scrollToTop(event: MouseEvent) {
