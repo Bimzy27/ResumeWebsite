@@ -41,8 +41,24 @@ test.describe('Device section', () => {
   })
 })
 
+test.describe('Device and bookshelf row', () => {
+  test('the sections sit side by side on desktop: device left, bookshelf right', async ({ page }) => {
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
+
+    const deviceBox = await page.locator('#device').boundingBox()
+    const bookshelfBox = await page.locator('#bookshelf').boundingBox()
+    expect(deviceBox).not.toBeNull()
+    expect(bookshelfBox).not.toBeNull()
+
+    // Same horizontal row: the tops line up (grid row) and the device column
+    // ends where the bookshelf column starts, with no vertical stacking.
+    expect(Math.abs(deviceBox!.y - bookshelfBox!.y)).toBeLessThanOrEqual(1)
+    expect(deviceBox!.x + deviceBox!.width).toBeLessThanOrEqual(bookshelfBox!.x + 1)
+  })
+})
+
 test.describe('Bookshelf section', () => {
-  test('renders below the device section with the 3D carousel', async ({ page }) => {
+  test('renders after the device section in the DOM with the 3D carousel', async ({ page }) => {
     await page.goto('/#bookshelf', { waitUntil: 'networkidle' })
 
     const bookshelf = page.locator('#bookshelf')

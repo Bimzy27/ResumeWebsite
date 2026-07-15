@@ -82,7 +82,9 @@ function makeCoverTexture(book: Book): THREE.CanvasTexture {
 // ── book meshes ───────────────────────────────────────────────────────────
 // Books stand upright on a ring, front cover facing outward; the whole ring
 // spins slowly and pauses while a book is hovered.
-const RING_RADIUS = 1.05
+// Sized to fit the tall half-width column the carousel renders in since the
+// device/bookshelf sections share one row (see BookshelfSection.vue).
+const RING_RADIUS = 0.92
 const BOOK_SIZE: [number, number, number] = [0.36, 0.52, 0.07]
 
 const bookGeometry = new THREE.BoxGeometry(...BOOK_SIZE)

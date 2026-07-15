@@ -1,8 +1,7 @@
-# device-section Specification
+# device-section Delta
 
-## Purpose
-TBD - created by archiving change add-device-bookshelf-sections. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
+
 ### Requirement: Device section placement
 
 The site SHALL present a Device section directly underneath the projects section, introducing the PC Branden builds on.
@@ -32,22 +31,3 @@ Until the real model and specs are supplied, a proxy model and placeholder specs
 
 - **WHEN** a visitor with WebGL support views the section at a viewport wider than 900px
 - **THEN** the 3D PC model renders in a section-scoped canvas above the full spec sheet within the section's column
-
-### Requirement: Part highlighting
-The section SHALL link the spec sheet to the model: hovering or selecting a spec entry highlights the matching part in the 3D model, and hovering or clicking a part in the model highlights its spec entry.
-
-#### Scenario: Spec hover highlights the part
-- **WHEN** the visitor hovers a spec entry
-- **THEN** that entry is marked active and the matching 3D part glows
-
-#### Scenario: Click pins the highlight
-- **WHEN** the visitor clicks a spec entry or a 3D part
-- **THEN** the highlight stays pinned until it is clicked again or another part is pinned
-
-### Requirement: Non-3D fallback
-On viewports 900px or narrower, or without WebGL, the section SHALL NOT mount its canvas and MUST still present the complete spec sheet.
-
-#### Scenario: Phone layout
-- **WHEN** the site is viewed at a phone viewport
-- **THEN** no canvas mounts inside the Device section and the spec sheet renders full-width
-

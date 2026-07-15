@@ -6,7 +6,8 @@ import { books } from '../data/books'
 import { useSectionScene } from '../composables/useSectionScene'
 import BookCarousel from './BookCarousel.vue'
 
-// Bookshelf section: a rotating 3D carousel of the books Branden has read.
+// Bookshelf section: a rotating 3D carousel of the books Branden has read,
+// filling the right column of the shared device/bookshelf row (see App.vue).
 // Clicking a book opens its Amazon purchase link in a new tab. On phones
 // (and without WebGL) the canvas never mounts and the same books render as a
 // plain grid of links instead; on desktop that grid doubles as the
@@ -50,10 +51,14 @@ const hoveredBookId = ref<string | null>(null)
           :clear-alpha="0"
           :tone-mapping="NoToneMapping"
         >
+          <!-- Framed for the tall half-width column this scene now lives in
+               (the canvas only mounts above 900px, where the row is always
+               two columns): pulled back and raised so the full ring fits the
+               narrow horizontal fov with the shelf sitting low in frame. -->
           <TresPerspectiveCamera
-            :position="[0, 0.55, 2.65]"
-            :fov="42"
-            :look-at="[0, 0.02, 0]"
+            :position="[0, 1.2, 4.9]"
+            :fov="46"
+            :look-at="[0, 0, 0]"
           />
           <TresAmbientLight :intensity="0.9" />
           <TresDirectionalLight
@@ -107,8 +112,26 @@ const hoveredBookId = ref<string | null>(null)
 </template>
 
 <style scoped>
+/* The section is the right column of the shared device/bookshelf row
+   (see App.vue). The row's grid stretch makes both columns equally tall;
+   flexing the section lets the scene absorb the slack so the carousel
+   fills the column instead of leaving dead space under it. */
+section {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  /* Auto side margins suppress flex cross-axis stretch; force full width. */
+  width: 100%;
+}
+
 .bookshelf__scene {
-  height: 460px;
+  flex: 1;
+  min-height: 460px;
   margin-top: 32px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);

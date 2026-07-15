@@ -6,7 +6,8 @@ import { deviceParts } from '../data/device'
 import { useSectionScene } from '../composables/useSectionScene'
 import DeviceModel from './DeviceModel.vue'
 
-// Device section: a 3D proxy of Branden's PC next to its spec sheet.
+// Device section: a 3D proxy of Branden's PC above its spec sheet, filling
+// the left column of the shared device/bookshelf row (see App.vue).
 // Hovering a spec row highlights the matching part in the 3D model, and
 // hovering/clicking a part in the model highlights its spec row. On phones
 // (and without WebGL) the 3D canvas never mounts and the spec sheet stands
@@ -103,11 +104,12 @@ function togglePin(partId: string) {
 </template>
 
 <style scoped>
+/* The section occupies the left column of the shared device/bookshelf row
+   (see App.vue), so its own layout is a single column: scene above specs. */
 .device {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
   margin-top: 32px;
 }
 
@@ -168,13 +170,5 @@ function togglePin(partId: string) {
 .device__spec-value {
   color: var(--color-text);
   font-size: 0.95rem;
-}
-
-/* scene cutoff, see breakpoints in style.css. Below 901px the canvas never
-   mounts (useSectionScene gate) and the spec sheet takes the full width. */
-@media (max-width: 900px) {
-  .device {
-    grid-template-columns: 1fr;
-  }
 }
 </style>
