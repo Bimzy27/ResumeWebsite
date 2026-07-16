@@ -16,9 +16,15 @@ async function scrollThroughPage(page: Page) {
   })
 }
 
+// 'networkidle' is unreliable in this suite: under parallel workers the Vite
+// dev server keeps connections busy and goto times out (see 587f024). Every
+// test therefore waits on 'domcontentloaded' and then on an explicit
+// readiness signal - a visible element proving the app has mounted.
+
 test.describe('Mobile experience', () => {
   test('page never scrolls horizontally at 360px', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await expect(page.locator('.hero__name')).toBeVisible()
 
     // Sample overflow while scrolling, not just at the top: pinned and
     // animated sections can introduce overflow only mid-page.
@@ -36,15 +42,18 @@ test.describe('Mobile experience', () => {
   })
 
   test('hero renders without the 3D scene but keeps its background glow', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+    // Readiness first: a visible hero proves the app has mounted, so the
+    // canvas count-0 assertion below cannot pass trivially on a blank page.
+    const heroName = page.locator('.hero__name')
+    await expect(heroName).toBeVisible()
 
     // The 3D canvas must not even mount on phones (battery/data cost of an
     // invisible WebGL scene), while the CSS glow stays as the fallback.
     await expect(page.locator('.bg3d canvas')).toHaveCount(0)
     await expect(page.locator('.scrolly__glow')).toBeAttached()
 
-    const heroName = page.locator('.hero__name')
-    await expect(heroName).toBeVisible()
     // Hero content starts within the first viewport instead of leaving an
     // empty band where the desktop 3D layout budgeted its whitespace.
     const box = await heroName.boundingBox()
@@ -67,7 +76,8 @@ test.describe('Mobile experience', () => {
   })
 
   test('interactive elements meet the 44px touch target', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    await expect(page.locator('.hero__name')).toBeVisible()
     await scrollThroughPage(page)
 
     // The carousel dots are exempt: they are a secondary control with padded
@@ -90,26 +100,32 @@ test.describe('Mobile experience', () => {
   })
 
   test('device and bookshelf sections fall back to non-3D layouts', async ({ page }) => {
-    await page.goto('/#device', { waitUntil: 'networkidle' })
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
-    // Neither section-scoped WebGL canvas mounts on phones (same
-    // battery/data reasoning as the hero desk scene).
-    await expect(page.locator('#device canvas')).toHaveCount(0)
-    await expect(page.locator('#bookshelf canvas')).toHaveCount(0)
-
-    // The device spec sheet stands alone and stays readable.
+    // Readiness first: the device spec sheet stands alone and stays
+    // readable. A visible spec row proves the section has mounted, so the
+    // canvas count-0 assertions cannot pass trivially on a blank page.
     await expect(page.locator('.device__spec').first()).toBeVisible()
 
-    // The bookshelf renders as a visible grid of Amazon links.
+    // The device-scoped WebGL canvas must not mount on phones (same
+    // battery/data reasoning as the hero desk scene).
+    await expect(page.locator('#device canvas')).toHaveCount(0)
+
+    // The bookshelf renders as a visible grid of Amazon links, and its
+    // canvas stays unmounted even once the section is in view (on desktop
+    // the canvases mount lazily on scroll, so assert after scrolling).
     await page.locator('#bookshelf').scrollIntoViewIfNeeded()
     const firstBook = page.locator('.bookshelf__book').first()
     await expect(firstBook).toBeVisible()
     await expect(firstBook).toHaveAttribute('href', /amazon\.com\/dp\/.+\?tag=brandenimmerz-20/)
+    await expect(page.locator('#bookshelf canvas')).toHaveCount(0)
   })
 
   test('timeline collapses to a single left-aligned column', async ({ page }) => {
-    await page.goto('/#experience', { waitUntil: 'networkidle' })
+    await page.goto('/#experience', { waitUntil: 'domcontentloaded' })
 
+    // The visible timeline line is the readiness signal; toBeVisible retries
+    // until the section has mounted.
     const line = page.locator('.timeline__line')
     await expect(line).toBeVisible()
     const lineBox = await line.boundingBox()
@@ -130,9 +146,12 @@ test.describe('Mobile experience', () => {
   })
 
   test('projects track swipes internally and shows a peek of the next card', async ({ page }) => {
-    await page.goto('/#projects', { waitUntil: 'networkidle' })
+    await page.goto('/#projects', { waitUntil: 'domcontentloaded' })
 
+    // Readiness: the first project card is visible before counting, since
+    // count() does not retry.
     const cards = page.locator('.projects__track > *')
+    await expect(cards.first()).toBeVisible()
     const count = await cards.count()
     expect(count).toBeGreaterThan(1)
 
@@ -155,8 +174,11 @@ test.describe('Mobile experience', () => {
   })
 
   test('recommendations carousel shows one quote with tappable controls', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
 
+    // Readiness: a visible card proves the carousel has mounted before the
+    // count and geometry checks below.
+    await expect(page.locator('.recs__card')).toBeVisible()
     await expect(page.locator('.recs__card')).toHaveCount(1)
 
     const next = page.locator('.recs__arrow--next')
@@ -171,9 +193,12 @@ test.describe('Mobile experience', () => {
   })
 
   test('anchor navigation lands sections below the sticky header', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
 
-    await page.locator('.header__nav').getByRole('link', { name: 'Contact' }).click()
+    // Readiness: the nav link must be visible (app mounted) before the tap.
+    const contactLink = page.locator('.header__nav').getByRole('link', { name: 'Contact' })
+    await expect(contactLink).toBeVisible()
+    await contactLink.click()
     const eyebrow = page.locator('#contact .section-eyebrow')
     await expect(eyebrow).toBeVisible()
     const headerBottom = await page.locator('header.header').evaluate((el) => el.getBoundingClientRect().bottom)
