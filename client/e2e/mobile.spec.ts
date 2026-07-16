@@ -104,7 +104,7 @@ test.describe('Mobile experience', () => {
     await page.locator('#bookshelf').scrollIntoViewIfNeeded()
     const firstBook = page.locator('.bookshelf__book').first()
     await expect(firstBook).toBeVisible()
-    await expect(firstBook).toHaveAttribute('href', /amazon\.com/)
+    await expect(firstBook).toHaveAttribute('href', /amazon\.com\/dp\/.+\?tag=brandenimmerz-20/)
   })
 
   test('timeline collapses to a single left-aligned column', async ({ page }) => {

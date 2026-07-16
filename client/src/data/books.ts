@@ -3,10 +3,13 @@ import type { Book } from '../types'
 // Branden's real top five books, in the order he presents them in his
 // "Top 5 Books" video. Cover colors approximate each real cover for the
 // proxy 3D books.
-// Direct Amazon product links (ISBN-10 ASINs): append Branden's Associates
-// tag here once his affiliate account exists.
+// Branden's Amazon Associates tracking tag (Store ID). Every purchase link
+// carries it so book clicks earn referral commission.
+const ASSOCIATES_TAG = 'brandenimmerz-20'
+
+// Direct Amazon product links (ISBN-10 ASINs) with the Associates tag.
 function amazonBook(asin: string): string {
-  return `https://www.amazon.com/dp/${asin}`
+  return `https://www.amazon.com/dp/${asin}?tag=${ASSOCIATES_TAG}`
 }
 
 export const books: Book[] = [

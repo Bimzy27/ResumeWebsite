@@ -86,7 +86,12 @@ test.describe('Bookshelf section', () => {
 
     for (let i = 0; i < count; i++) {
       const link = links.nth(i)
-      await expect(link).toHaveAttribute('href', /amazon\.com/)
+      // Direct product page (/dp/<ASIN>) carrying the Associates tag so
+      // clicks earn referral commission.
+      await expect(link).toHaveAttribute(
+        'href',
+        /^https:\/\/www\.amazon\.com\/dp\/[A-Z0-9]{10}\?tag=brandenimmerz-20$/i,
+      )
       await expect(link).toHaveAttribute('target', '_blank')
       await expect(link).toHaveAttribute('rel', /noopener/)
     }

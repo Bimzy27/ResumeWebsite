@@ -82,8 +82,8 @@ export interface Book {
   author: string
   // Cover color for the proxy 3D book (hex string, e.g. '#7c3aed').
   coverColor: string
-  // Purchase link: a direct Amazon product page. Gains Branden's Associates
-  // tag once his affiliate account exists (see data/books.ts).
+  // Purchase link: a direct Amazon product page carrying Branden's
+  // Associates tag (see data/books.ts).
   amazonUrl: string
 }
 
