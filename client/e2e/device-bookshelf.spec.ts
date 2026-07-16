@@ -28,10 +28,14 @@ test.describe('Device section', () => {
   })
 
   test('mounts the 3D scene and highlights a part when its spec is hovered', async ({ page }) => {
-    await page.goto('/#device', { waitUntil: 'networkidle' })
+    // 'networkidle' is unreliable here: under parallel workers the Vite dev
+    // server keeps connections busy and goto times out. Wait on the actual
+    // readiness signal (the mounted canvas) instead.
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
+    await page.locator('#device').scrollIntoViewIfNeeded()
 
     // The section-scoped 3D canvas mounts once the section is in view.
-    await expect(page.locator('#device canvas')).toHaveCount(1)
+    await expect(page.locator('#device canvas')).toHaveCount(1, { timeout: 15000 })
 
     // Hovering a spec row marks it active (the same state drives the 3D
     // part's emissive highlight).
@@ -59,10 +63,12 @@ test.describe('Device and bookshelf row', () => {
 
 test.describe('Bookshelf section', () => {
   test('renders after the device section in the DOM with the 3D carousel', async ({ page }) => {
-    await page.goto('/#bookshelf', { waitUntil: 'networkidle' })
+    // See the device 3D test above for why this avoids 'networkidle'.
+    await page.goto('/#bookshelf', { waitUntil: 'domcontentloaded' })
 
     const bookshelf = page.locator('#bookshelf')
     await expect(bookshelf).toBeAttached()
+    await bookshelf.scrollIntoViewIfNeeded()
 
     const order = await page.evaluate(() => {
       const device = document.querySelector('#device')!
@@ -71,7 +77,7 @@ test.describe('Bookshelf section', () => {
     })
     expect(order, '#bookshelf follows #device in the DOM').toBeTruthy()
 
-    await expect(bookshelf.locator('canvas')).toHaveCount(1)
+    await expect(bookshelf.locator('canvas')).toHaveCount(1, { timeout: 15000 })
   })
 
   test('every book is reachable as an Amazon link opening in a new tab', async ({ page }) => {
