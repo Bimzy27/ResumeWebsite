@@ -1,68 +1,48 @@
 import type { Book } from '../types'
 
-// Books shown on the Bookshelf section's rotating carousel.
-// PLACEHOLDER DATA: Branden will supply the real reading list (and affiliate
-// purchase links) in a follow-up task; swap these entries then. amazonUrl is
-// a plain Amazon search link until affiliate links exist.
-function amazonSearch(query: string): string {
-  return `https://www.amazon.com/s?k=${encodeURIComponent(query)}`
+// Branden's real top five books, in the order he presents them in his
+// "Top 5 Books" video. Cover colors approximate each real cover for the
+// proxy 3D books.
+// Direct Amazon product links (ISBN-10 ASINs): append Branden's Associates
+// tag here once his affiliate account exists.
+function amazonBook(asin: string): string {
+  return `https://www.amazon.com/dp/${asin}`
 }
 
 export const books: Book[] = [
   {
+    id: 'cracking-the-coding-interview',
+    title: 'Cracking the Coding Interview',
+    author: 'Gayle Laakmann McDowell',
+    coverColor: '#3fa66b',
+    amazonUrl: amazonBook('0984782850'),
+  },
+  {
     id: 'clean-code',
     title: 'Clean Code',
     author: 'Robert C. Martin',
-    coverColor: '#3d6ea5',
-    amazonUrl: amazonSearch('Clean Code Robert Martin'),
+    coverColor: '#26323f',
+    amazonUrl: amazonBook('0132350882'),
   },
   {
-    id: 'pragmatic-programmer',
-    title: 'The Pragmatic Programmer',
-    author: 'Hunt & Thomas',
-    coverColor: '#2f2f3e',
-    amazonUrl: amazonSearch('The Pragmatic Programmer'),
+    id: 'clean-architecture',
+    title: 'Clean Architecture',
+    author: 'Robert C. Martin',
+    coverColor: '#2a4a7b',
+    amazonUrl: amazonBook('0134494164'),
   },
   {
     id: 'ddia',
     title: 'Designing Data-Intensive Applications',
     author: 'Martin Kleppmann',
-    coverColor: '#b0533a',
-    amazonUrl: amazonSearch('Designing Data-Intensive Applications'),
+    coverColor: '#b0432e',
+    amazonUrl: amazonBook('1449373321'),
   },
   {
-    id: 'refactoring',
-    title: 'Refactoring',
-    author: 'Martin Fowler',
-    coverColor: '#5b3d8f',
-    amazonUrl: amazonSearch('Refactoring Martin Fowler'),
-  },
-  {
-    id: 'phoenix-project',
-    title: 'The Phoenix Project',
-    author: 'Gene Kim',
-    coverColor: '#1f6f5c',
-    amazonUrl: amazonSearch('The Phoenix Project Gene Kim'),
-  },
-  {
-    id: 'atomic-habits',
-    title: 'Atomic Habits',
-    author: 'James Clear',
-    coverColor: '#c9a13b',
-    amazonUrl: amazonSearch('Atomic Habits James Clear'),
-  },
-  {
-    id: 'deep-work',
-    title: 'Deep Work',
-    author: 'Cal Newport',
-    coverColor: '#8a3b4a',
-    amazonUrl: amazonSearch('Deep Work Cal Newport'),
-  },
-  {
-    id: 'mythical-man-month',
-    title: 'The Mythical Man-Month',
-    author: 'Frederick P. Brooks Jr.',
-    coverColor: '#46628a',
-    amazonUrl: amazonSearch('The Mythical Man-Month'),
+    id: 'pragmatic-programmer',
+    title: 'The Pragmatic Programmer',
+    author: 'David Thomas & Andrew Hunt',
+    coverColor: '#3f434c',
+    amazonUrl: amazonBook('0135957052'),
   },
 ]
