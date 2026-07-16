@@ -2,6 +2,11 @@
 
 ## Purpose
 TBD - created by archiving change add-device-bookshelf-sections. Update Purpose after archive.
+
+> **Temporarily hidden on master.**
+> The section's content is incomplete and was released early by accident, so the component is not mounted in production (see `client/src/App.vue`).
+> The requirements below describe the capability and apply again once a release restores the section.
+
 ## Requirements
 ### Requirement: Device section placement
 

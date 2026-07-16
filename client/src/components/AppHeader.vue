@@ -4,8 +4,8 @@ const links = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'device', label: 'Device' },
-  { id: 'bookshelf', label: 'Bookshelf' },
+  // Device and Bookshelf links are omitted while their sections are hidden
+  // (incomplete content released early by accident, see App.vue).
   { id: 'contact', label: 'Contact' },
 ]
 

@@ -21,17 +21,18 @@ The system SHALL present a header that remains fixed to the top of the viewport 
 
 ### Requirement: In-Page Section Navigation
 
-The system SHALL provide navigation links that scroll the page to the About, Skills, Experience, Projects, Device, Bookshelf, and Contact sections via their anchors.
+The system SHALL provide navigation links that scroll the page to the About, Skills, Experience, Projects, and Contact sections via their anchors.
+While the Device and Bookshelf sections are hidden on master (incomplete content released early by accident, see the `device-section` and `bookshelf-section` specs), their navigation links are omitted as well.
 
 #### Scenario: Navigating to a section
 
 - **WHEN** the visitor activates a navigation link (e.g. "Projects")
 - **THEN** the page scrolls to the corresponding section anchor (e.g. `#projects`)
 
-#### Scenario: Navigating to the new sections
+#### Scenario: No links to hidden sections
 
-- **WHEN** the visitor activates the "Device" or "Bookshelf" link
-- **THEN** the page scrolls to `#device` or `#bookshelf` respectively
+- **WHEN** the page renders while the Device and Bookshelf sections are hidden
+- **THEN** the navigation shows no "Device" or "Bookshelf" link
 
 ### Requirement: Return To True Top
 

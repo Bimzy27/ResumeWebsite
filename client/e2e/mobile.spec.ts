@@ -56,7 +56,7 @@ test.describe('Mobile experience', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     const viewportWidth = page.viewportSize()!.width
-    for (const label of ['About', 'Skills', 'Experience', 'Projects', 'Device', 'Bookshelf', 'Contact']) {
+    for (const label of ['About', 'Skills', 'Experience', 'Projects', 'Contact']) {
       const link = page.locator('.header__nav').getByRole('link', { name: label })
       await expect(link).toBeVisible()
       const box = await link.boundingBox()
@@ -89,23 +89,9 @@ test.describe('Mobile experience', () => {
     expect(undersized, `touch targets under 44px:\n${undersized.join('\n')}`).toEqual([])
   })
 
-  test('device and bookshelf sections fall back to non-3D layouts', async ({ page }) => {
-    await page.goto('/#device', { waitUntil: 'networkidle' })
-
-    // Neither section-scoped WebGL canvas mounts on phones (same
-    // battery/data reasoning as the hero desk scene).
-    await expect(page.locator('#device canvas')).toHaveCount(0)
-    await expect(page.locator('#bookshelf canvas')).toHaveCount(0)
-
-    // The device spec sheet stands alone and stays readable.
-    await expect(page.locator('.device__spec').first()).toBeVisible()
-
-    // The bookshelf renders as a visible grid of Amazon links.
-    await page.locator('#bookshelf').scrollIntoViewIfNeeded()
-    const firstBook = page.locator('.bookshelf__book').first()
-    await expect(firstBook).toBeVisible()
-    await expect(firstBook).toHaveAttribute('href', /amazon\.com/)
-  })
+  // The device and bookshelf mobile fallback test is parked with the sections
+  // themselves: both are hidden in production until their content is complete
+  // (see App.vue and device-bookshelf.spec.ts).
 
   test('timeline collapses to a single left-aligned column', async ({ page }) => {
     await page.goto('/#experience', { waitUntil: 'networkidle' })
