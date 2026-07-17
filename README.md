@@ -43,6 +43,10 @@ The site presents Branden's profile, work experience timeline, skills, tech stac
 - Hosted on [Vercel](https://vercel.com/) as a static build of `client/` (see `client/vercel.json`).
 - SPA rewrites route every path to `index.html`.
 - Branching model: day-to-day work happens on `develop`; `master` is the release branch that Vercel deploys to production.
+- Releases: nothing is pushed to `master` directly.
+  When a release is ready, the full quality gate (typecheck, lint, Playwright e2e) runs on `develop`, then a release pull request from `develop` into `master` is opened for human review.
+  Merging that PR triggers the production deploy, after which the release is tagged `vX.Y.Z` and published as a GitHub release.
+  The process is automated by the project release skill in `.claude/skills/release/`.
 
 ## Process
 
@@ -53,7 +57,7 @@ The site is built with a **spec-driven workflow** using [OpenSpec](https://githu
 3. Implementation follows the tasks, and each capability's Playwright spec file maps directly to its OpenSpec spec, so behaviour stays verifiable.
 4. Completed changes are archived and their deltas synced back into the main specs.
 
-Development is agent-assisted: the repo carries Claude Code project skills (`.claude/skills/`) that wrap the OpenSpec propose/apply/archive/sync workflow, and every changeset passes a quality gate (typecheck, lint, e2e tests) before it ships.
+Development is agent-assisted: the repo carries Claude Code project skills (`.claude/skills/`) that wrap the OpenSpec propose/apply/archive/sync workflow plus a release skill, and every changeset passes a quality gate (typecheck, lint, e2e tests) before it ships.
 
 ## Repository layout
 
