@@ -37,8 +37,10 @@ test.describe('Site navigation', () => {
 
     await page.locator('.header__logo').click()
 
-    // Smooth scroll settles back to the very top.
-    await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 5000 }).toBe(0)
+    // Smooth scroll settles back to the very top. The animation is rAF-driven and the page
+    // renders WebGL scenes, so under parallel-worker CPU contention it can take well over
+    // 5s; allow a generous window (the asserted end state is unchanged).
+    await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 15000 }).toBe(0)
   })
 
   test('footer shows the current year and build attribution', async ({ page }) => {

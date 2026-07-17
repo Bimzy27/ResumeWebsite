@@ -44,6 +44,7 @@ The site presents Branden's profile, work experience timeline, skills, tech stac
 - SPA rewrites route every path to `index.html`.
 - Branching model: day-to-day work happens on `develop`; `master` is the release branch that Vercel deploys to production.
 - Releases: nothing is pushed to `master` directly.
+  A GitHub branch ruleset (`protect-master`) enforces this at the platform level: it requires changes to reach `master` through a pull request and blocks force pushes and branch deletion, with no bypass for admins.
   When a release is ready, the full quality gate (typecheck, lint, Playwright e2e) runs on `develop`, then a release pull request from `develop` into `master` is opened for human review.
   Merging that PR triggers the production deploy, after which the release is tagged `vX.Y.Z` and published as a GitHub release.
   The process is automated by the project release skill in `.claude/skills/release/`.
