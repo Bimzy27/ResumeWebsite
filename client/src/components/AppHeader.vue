@@ -4,8 +4,8 @@ const links = [
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  // Device and Bookshelf links are omitted while their sections are hidden
-  // (incomplete content released early by accident, see App.vue).
+  { id: 'device', label: 'Device' },
+  { id: 'bookshelf', label: 'Bookshelf' },
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -13,9 +13,38 @@ const links = [
 // header in the document - a plain anchor jump lands at the hero's
 // offsetTop (i.e. just past the header), not the literal top of the page.
 // Scrolling the window itself to 0 bypasses that and reaches the true top.
+//
+// The browser can cancel a programmatic smooth scroll before it completes:
+// a layout shift while heavy content (the 3D scenes) is still loading
+// triggers scroll anchoring, which strands the page a few dozen pixels
+// short of the top. When the scroll settles, snap to 0 if the animation was
+// cut off. `scrollend` fires once per settled scroll in Chromium and
+// Firefox; the timeout covers Safari, which lacks the event. Any user input
+// that scrolls (wheel, touch, keys) disarms the snap so we never yank the
+// page away from someone who changed their mind mid-animation.
+let snapTimer: number | undefined
+const disarmEvents = ['wheel', 'touchstart', 'keydown', 'mousedown'] as const
+
+function disarmSnap() {
+  window.clearTimeout(snapTimer)
+  window.removeEventListener('scrollend', snapToTopIfStranded)
+  for (const event of disarmEvents) window.removeEventListener(event, disarmSnap)
+}
+
+function snapToTopIfStranded() {
+  disarmSnap()
+  if (window.scrollY !== 0) window.scrollTo({ top: 0, behavior: 'instant' })
+}
+
 function scrollToTop(event: MouseEvent) {
   event.preventDefault()
+  disarmSnap()
   window.scrollTo({ top: 0, behavior: 'smooth' })
+  window.addEventListener('scrollend', snapToTopIfStranded)
+  for (const disarmEvent of disarmEvents) {
+    window.addEventListener(disarmEvent, disarmSnap, { passive: true })
+  }
+  snapTimer = window.setTimeout(snapToTopIfStranded, 2000)
   history.replaceState(null, '', '#top')
 }
 </script>

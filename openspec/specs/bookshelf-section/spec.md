@@ -2,11 +2,6 @@
 
 ## Purpose
 TBD - created by archiving change add-device-bookshelf-sections. Update Purpose after archive.
-
-> **Temporarily hidden on master.**
-> The section's content is incomplete and was released early by accident, so the component is not mounted in production (see `client/src/App.vue`).
-> The requirements below describe the capability and apply again once a release restores the section.
-
 ## Requirements
 ### Requirement: Bookshelf section placement
 
@@ -42,7 +37,8 @@ Until the real reading list and bookshelf model are supplied, proxy book geometr
 - **THEN** the carousel eases to a stop and the hovered book is emphasised
 
 ### Requirement: Books link to their purchase pages
-Every book SHALL be clickable and open its Amazon purchase link in a new tab (placeholder search links until affiliate links are supplied).
+Every book SHALL be clickable and open its Amazon purchase link in a new tab.
+Purchase links are direct Amazon product pages carrying Branden's Associates tag so clicks earn referral commission.
 The full book list MUST also exist as real anchor links so books stay reachable by keyboard and assistive technology when the canvas is mounted.
 
 #### Scenario: Clicking a 3D book
