@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { TresCanvas } from '@tresjs/core'
-import { NoToneMapping } from 'three'
+import { ref, defineAsyncComponent } from 'vue'
 import { books } from '../data/books'
 import { useSectionScene } from '../composables/useSectionScene'
-import BookCarousel from './BookCarousel.vue'
 
 // Bookshelf section: a rotating 3D carousel of the books Branden has read,
 // filling the right column of the shared device/bookshelf row (see App.vue).
@@ -14,12 +11,13 @@ import BookCarousel from './BookCarousel.vue'
 // screen-reader/keyboard path (visually hidden), since a WebGL canvas offers
 // neither semantics nor focus.
 
+// All Three.js/TresJS code lives in BookshelfSceneCanvas.vue, loaded async
+// only once show3D holds - keeping the heavy 3D chunk off the critical path
+// and never fetched on phones or WebGL-less browsers.
+const BookshelfSceneCanvas = defineAsyncComponent(() => import('./BookshelfSceneCanvas.vue'))
+
 const sectionRef = ref<HTMLElement | null>(null)
 const { show3D } = useSectionScene(sectionRef)
-
-// Reference BookCarousel explicitly so noUnusedLocals is satisfied.
-// (vue-tsc sometimes fails to detect template-only usage inside TresCanvas.)
-void BookCarousel
 
 const hoveredBookId = ref<string | null>(null)
 </script>
@@ -46,35 +44,10 @@ const hoveredBookId = ref<string | null>(null)
         :class="{ 'bookshelf__scene--hovering': hoveredBookId }"
         aria-hidden="true"
       >
-        <TresCanvas
-          alpha
-          :clear-alpha="0"
-          :tone-mapping="NoToneMapping"
-        >
-          <!-- Framed for the tall half-width column this scene now lives in
-               (the canvas only mounts above 900px, where the row is always
-               two columns): pulled back and raised so the full ring fits the
-               narrow horizontal fov with the shelf sitting low in frame. -->
-          <TresPerspectiveCamera
-            :position="[0, 1.2, 4.9]"
-            :fov="46"
-            :look-at="[0, 0, 0]"
-          />
-          <TresAmbientLight :intensity="0.9" />
-          <TresDirectionalLight
-            :position="[-3, 5, 4]"
-            :intensity="1.0"
-          />
-          <TresDirectionalLight
-            :position="[3, 2, -1]"
-            :intensity="0.35"
-            color="#7c3aed"
-          />
-          <BookCarousel
-            :books="books"
-            @hover="hoveredBookId = $event"
-          />
-        </TresCanvas>
+        <BookshelfSceneCanvas
+          :books="books"
+          @hover="hoveredBookId = $event"
+        />
       </div>
 
       <!-- Non-3D path: the full book list as real links. Visible fallback on

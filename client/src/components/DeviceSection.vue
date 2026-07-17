@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { TresCanvas } from '@tresjs/core'
-import { NoToneMapping } from 'three'
+import { ref, computed, defineAsyncComponent } from 'vue'
 import { deviceParts } from '../data/device'
 import { useSectionScene } from '../composables/useSectionScene'
-import DeviceModel from './DeviceModel.vue'
 
 // Device section: a 3D proxy of Branden's PC above its spec sheet, filling
 // the left column of the shared device/bookshelf row (see App.vue).
@@ -13,12 +10,13 @@ import DeviceModel from './DeviceModel.vue'
 // (and without WebGL) the 3D canvas never mounts and the spec sheet stands
 // alone - same "scene" cutoff as the hero desk scene, see style.css.
 
+// All Three.js/TresJS code lives in DeviceSceneCanvas.vue, loaded async only
+// once show3D holds - keeping the heavy 3D chunk off the critical path and
+// never fetched on phones or WebGL-less browsers.
+const DeviceSceneCanvas = defineAsyncComponent(() => import('./DeviceSceneCanvas.vue'))
+
 const sectionRef = ref<HTMLElement | null>(null)
 const { show3D } = useSectionScene(sectionRef)
-
-// Reference DeviceModel explicitly so noUnusedLocals is satisfied.
-// (vue-tsc sometimes fails to detect template-only usage inside TresCanvas.)
-void DeviceModel
 
 // Hover is transient; clicking a 3D part (or a spec row) pins the highlight
 // until something else is pinned or the same thing is clicked again.
@@ -56,32 +54,11 @@ function togglePin(partId: string) {
           :class="{ 'device__scene--hovering': hoveredId }"
           aria-hidden="true"
         >
-          <TresCanvas
-            alpha
-            :clear-alpha="0"
-            :tone-mapping="NoToneMapping"
-          >
-            <TresPerspectiveCamera
-              :position="[1.55, 0.85, 2.1]"
-              :fov="40"
-              :look-at="[0, 0, 0]"
-            />
-            <TresAmbientLight :intensity="0.85" />
-            <TresDirectionalLight
-              :position="[-3, 5, 4]"
-              :intensity="1.1"
-            />
-            <TresDirectionalLight
-              :position="[3, 2, -1]"
-              :intensity="0.35"
-              color="#7c3aed"
-            />
-            <DeviceModel
-              :active-id="activeId"
-              @hover="hoveredId = $event"
-              @select="togglePin($event)"
-            />
-          </TresCanvas>
+          <DeviceSceneCanvas
+            :active-id="activeId"
+            @hover="hoveredId = $event"
+            @select="togglePin($event)"
+          />
         </div>
 
         <ul class="device__specs">
