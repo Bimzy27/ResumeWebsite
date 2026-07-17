@@ -64,15 +64,23 @@ test.describe('Projects showcase', () => {
       )
       await page.evaluate((y) => window.scrollTo(0, y + 300), projTop)
 
+      // The track transform is applied by a scroll handler through
+      // requestAnimationFrame, so under parallel-worker load it can lag the
+      // scroll by several seconds. Match the 15s allowance the suite already
+      // grants other heavy waits (e.g. 3D canvas mounts) instead of the 5s
+      // poll default.
       await expect
-        .poll(async () => {
-          const transform = await page
-            .locator('.projects__track')
-            .evaluate((el) => getComputedStyle(el).transform)
-          // matrix(1, 0, 0, 1, tx, ty) -> tx
-          const tx = Number(transform.match(/matrix\([^)]*\)/)?.[0].split(',')[4] ?? 0)
-          return tx
-        })
+        .poll(
+          async () => {
+            const transform = await page
+              .locator('.projects__track')
+              .evaluate((el) => getComputedStyle(el).transform)
+            // matrix(1, 0, 0, 1, tx, ty) -> tx
+            const tx = Number(transform.match(/matrix\([^)]*\)/)?.[0].split(',')[4] ?? 0)
+            return tx
+          },
+          { timeout: 15_000 },
+        )
         .toBeLessThan(-250)
     })
   }

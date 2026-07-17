@@ -18,7 +18,13 @@ export default defineConfig({
   // Fail the build on CI if test.only was left in the source.
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // Each test page is heavy: up to three WebGL contexts (desk scene, device,
+  // bookshelf) plus a ~10 MB Draco GLB decode. The Playwright default of
+  // cores/2 workers oversubscribes the GPU/CPU and starves renderers, which
+  // shows up as spurious 30s timeouts in setup, teardown, and actionability
+  // (visible-and-stable) waits under load. Cap local parallelism to keep the
+  // suite deterministic; CI stays at 1.
+  workers: process.env.CI ? 1 : 4,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['html', { open: 'never' }], ['list']],
 
   use: {
