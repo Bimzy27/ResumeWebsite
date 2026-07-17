@@ -1,8 +1,13 @@
 import { test, expect } from '@playwright/test'
+import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `device-section` and `bookshelf-section` capability specs.
 // Desktop project only (the mobile fallback behaviour is asserted in
 // mobile.spec.ts under the mobile-chromium project).
+
+// The whole file is gated on the temporary hide flag: while the sections do
+// not render, every spec here would fail on a missing #device/#bookshelf.
+test.skip(!SHOW_DEVICE_BOOKSHELF, 'device/bookshelf temporarily hidden (src/featureFlags.ts)')
 
 test.describe('Device section', () => {
   test('renders below the projects section with the full spec sheet', async ({ page }) => {

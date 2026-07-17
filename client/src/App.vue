@@ -9,6 +9,7 @@ import DeviceSection from './components/DeviceSection.vue'
 import BookshelfSection from './components/BookshelfSection.vue'
 import ContactSection from './components/ContactSection.vue'
 import AppFooter from './components/AppFooter.vue'
+import { SHOW_DEVICE_BOOKSHELF } from './featureFlags'
 </script>
 
 <template>
@@ -19,7 +20,10 @@ import AppFooter from './components/AppFooter.vue'
     <TechStackSection />
     <TimelineSection />
     <ProjectsSection />
-    <div class="device-bookshelf">
+    <div
+      v-if="SHOW_DEVICE_BOOKSHELF"
+      class="device-bookshelf"
+    >
       <DeviceSection />
       <BookshelfSection />
     </div>

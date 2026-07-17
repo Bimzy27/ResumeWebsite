@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `site-navigation` capability spec.
 test.describe('Site navigation', () => {
@@ -24,8 +25,14 @@ test.describe('Site navigation', () => {
     await expect(nav.getByRole('link', { name: 'Skills' })).toHaveAttribute('href', '#skills')
     await expect(nav.getByRole('link', { name: 'Experience' })).toHaveAttribute('href', '#experience')
     await expect(nav.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '#projects')
-    await expect(nav.getByRole('link', { name: 'Device' })).toHaveAttribute('href', '#device')
-    await expect(nav.getByRole('link', { name: 'Bookshelf' })).toHaveAttribute('href', '#bookshelf')
+    if (SHOW_DEVICE_BOOKSHELF) {
+      await expect(nav.getByRole('link', { name: 'Device' })).toHaveAttribute('href', '#device')
+      await expect(nav.getByRole('link', { name: 'Bookshelf' })).toHaveAttribute('href', '#bookshelf')
+    } else {
+      // Hidden sections must not leave dead nav links behind.
+      await expect(nav.getByRole('link', { name: 'Device' })).toHaveCount(0)
+      await expect(nav.getByRole('link', { name: 'Bookshelf' })).toHaveCount(0)
+    }
     await expect(nav.getByRole('link', { name: 'Contact' })).toHaveAttribute('href', '#contact')
   })
 

@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import { SHOW_DEVICE_BOOKSHELF } from '../featureFlags'
+
 const links = [
   { id: 'top', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'device', label: 'Device' },
-  { id: 'bookshelf', label: 'Bookshelf' },
+  ...(SHOW_DEVICE_BOOKSHELF
+    ? [
+        { id: 'device', label: 'Device' },
+        { id: 'bookshelf', label: 'Bookshelf' },
+      ]
+    : []),
   { id: 'contact', label: 'Contact' },
 ]
 

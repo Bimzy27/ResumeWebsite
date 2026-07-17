@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
+import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `mobile-experience` capability spec. Runs only under the
 // mobile-chromium project (Pixel 7 emulation at 360x740, see
@@ -65,7 +66,9 @@ test.describe('Mobile experience', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     const viewportWidth = page.viewportSize()!.width
-    for (const label of ['About', 'Skills', 'Experience', 'Projects', 'Device', 'Bookshelf', 'Contact']) {
+    const labels = ['About', 'Skills', 'Experience', 'Projects', 'Contact']
+    if (SHOW_DEVICE_BOOKSHELF) labels.splice(4, 0, 'Device', 'Bookshelf')
+    for (const label of labels) {
       const link = page.locator('.header__nav').getByRole('link', { name: label })
       await expect(link).toBeVisible()
       const box = await link.boundingBox()
@@ -100,6 +103,7 @@ test.describe('Mobile experience', () => {
   })
 
   test('device and bookshelf sections fall back to non-3D layouts', async ({ page }) => {
+    test.skip(!SHOW_DEVICE_BOOKSHELF, 'device/bookshelf temporarily hidden (src/featureFlags.ts)')
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
     // Readiness first: the device spec sheet stands alone and stays
