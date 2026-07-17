@@ -9,6 +9,7 @@ See `README.md` for the full architecture and the OpenSpec workflow.
   If you find yourself on `master`, switch to `develop` before changing anything.
 - Never commit, merge, or push to `master` directly.
   Changes reach `master` only through a release pull request from `develop` that a human reviews and merges.
+  GitHub enforces this with the `protect-master` branch ruleset: direct pushes, force pushes, and branch deletion on `master` are rejected for everyone, admins included.
 - Delivery shapes in this repo: /commit pushes finished work to `develop`; /release cuts a production release via the project release skill in `.claude/skills/release/`.
 - If a hotfix ever lands on `master`, merge `master` back into `develop` immediately so the branches do not drift.
 
