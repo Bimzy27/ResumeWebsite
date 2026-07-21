@@ -5,4 +5,4 @@
 // Temporarily hides the Device and Bookshelf sections (the page row and the
 // header nav links). Components, data, and e2e specs stay in the tree; the
 // specs skip themselves while this is false.
-export const SHOW_DEVICE_BOOKSHELF = false
+export const SHOW_DEVICE_BOOKSHELF = true
