@@ -139,22 +139,21 @@ function scrollToTop(event: MouseEvent) {
   white-space: nowrap;
 }
 
-/* Fills the rest of the row after the logo and spaces its two groups apart
-   the same way the outer .header__inner spaces the logo from everything
-   else: nav sits right after the logo, then the social buttons get pushed
-   all the way to the row's far right edge, mirroring the logo's flush-left
-   position instead of just trailing the nav links by a fixed gap. */
+/* Fills the rest of the row after the logo. The nav's auto side margins
+   (below) consume all the free space here evenly on both sides, which both
+   centers the nav in the gap between the logo and the social buttons AND
+   pushes the social buttons flush against the row's right edge - no
+   justify-content needed, the auto margins already account for it. */
 .header__right {
   display: flex;
   flex: 1;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
 }
 
 .header__nav {
   display: flex;
   gap: 28px;
+  margin: 0 auto;
 }
 
 .header__nav a {
@@ -250,6 +249,10 @@ function scrollToTop(event: MouseEvent) {
   }
 
   .header__nav {
+    /* Cancels the desktop rule's auto side margins: those center the nav
+       and shrink it to its content width, but this stacked mobile layout
+       wants it stretched full-width with the links spread edge to edge. */
+    margin: 0;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 0;

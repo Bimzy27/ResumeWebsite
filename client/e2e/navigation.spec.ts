@@ -66,6 +66,13 @@ test.describe('Site navigation', () => {
     const leftInset = logoBox!.x - containerBox!.x
     const rightInset = containerBox!.x + containerBox!.width - (socialBox!.x + socialBox!.width)
     expect(Math.abs(rightInset - leftInset)).toBeLessThanOrEqual(1)
+
+    // Centered in the gap between the logo and the social buttons, not
+    // hugging the logo: the space before the nav should roughly match the
+    // space after it.
+    const gapBeforeNav = navBox!.x - (logoBox!.x + logoBox!.width)
+    const gapAfterNav = socialBox!.x - (navBox!.x + navBox!.width)
+    expect(Math.abs(gapAfterNav - gapBeforeNav)).toBeLessThanOrEqual(1)
   })
 
   test('clicking the logo returns to the true top of the page', async ({ page }) => {
