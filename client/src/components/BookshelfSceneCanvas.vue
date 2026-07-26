@@ -30,10 +30,14 @@ void BookCarousel
   >
     <!-- Pulled in close so the carousel reads as nearby rather than a
          distant diorama, with just enough headroom for the hover pop
-         (see BookCarousel.vue) not to clip the frame. -->
+         (see BookCarousel.vue) not to clip the frame. Kept low and only
+         gently tilted down: the ring/shelf is a wide flat disc, and a
+         steeper downward tilt sends its far rim toward a horizon line high
+         in the frame, leaving the top of the canvas empty and crowding
+         everything into the bottom. -->
     <TresPerspectiveCamera
-      :position="[0, 0.9, 2.85]"
-      :fov="40"
+      :position="[0, 0.4, 2.1]"
+      :fov="38"
       :look-at="[0, 0, 0]"
     />
     <TresAmbientLight :intensity="0.9" />
