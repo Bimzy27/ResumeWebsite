@@ -142,7 +142,7 @@ function scrollToTop(event: MouseEvent) {
 .header__right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 40px;
 }
 
 .header__nav {
@@ -172,20 +172,21 @@ function scrollToTop(event: MouseEvent) {
 }
 
 /* Same button style as the Contact section's social links (see
-   ContactSection.vue's .icon-btn) - duplicated here since Vue's scoped
-   styles don't share across components. */
+   ContactSection.vue's .icon-btn), scaled down since these sit in the
+   72px-tall header rather than the Contact section's dedicated row -
+   duplicated here since Vue's scoped styles don't share across components. */
 .icon-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 42px;
-  padding: 0 16px;
-  border-radius: 12px;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
   border: 1px solid transparent;
   color: #fff;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   line-height: 1;
   text-decoration: none;
   transition:
@@ -195,8 +196,8 @@ function scrollToTop(event: MouseEvent) {
 }
 
 .icon-btn__icon {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   flex: 0 0 auto;
 }
 
