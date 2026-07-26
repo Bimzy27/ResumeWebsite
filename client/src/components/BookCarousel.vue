@@ -106,15 +106,16 @@ function openBook(book: Book) {
 
 // Reactive per-frame bindings instead of Tres template refs (see
 // DeviceModel.vue for the rationale).
+const REST_SPIN_SPEED = 0.15
 const rotationY = ref(0)
-const spinSpeed = ref(0.3)
+const spinSpeed = ref(REST_SPIN_SPEED)
 const scales = ref<number[]>(props.books.map(() => 1))
 
 const { onBeforeRender } = useLoop()
 
 onBeforeRender(({ delta }) => {
   // Ease the spin to a stop while a book is hovered, and back up after.
-  const targetSpeed = hoveredId.value ? 0 : 0.3
+  const targetSpeed = hoveredId.value ? 0 : REST_SPIN_SPEED
   spinSpeed.value += (targetSpeed - spinSpeed.value) * Math.min(1, delta * 6)
   rotationY.value = (rotationY.value + delta * spinSpeed.value) % (Math.PI * 2)
 
