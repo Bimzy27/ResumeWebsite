@@ -3,13 +3,19 @@ import { ref, onUnmounted } from 'vue'
 import { useLoop } from '@tresjs/core'
 import * as THREE from 'three'
 import type { Book } from '../types'
+import BookPedestal from './BookPedestal.vue'
 
-// Rotating 3D carousel of the books Branden has read, built from proxy
-// box-geometry books wearing their real Amazon cover art as the front-face
-// texture (see public/book-covers/ and data/books.ts).
-// PLACEHOLDER GEOMETRY: a real bookshelf model arrives in a follow-up task;
-// this proxy keeps the carousel, hover, and click-through behaviour working
-// until then. Clicking a book opens its Amazon purchase link.
+// Rotating 3D carousel of the books Branden has read: proxy box-geometry
+// books wearing their real Amazon cover art as the front-face texture (see
+// public/book-covers/ and data/books.ts), standing on a real pedestal model
+// (see BookPedestal.vue).
+// PLACEHOLDER GEOMETRY: the books themselves are still boxes; only the
+// pedestal is a real model so far. Clicking a book opens its Amazon
+// purchase link.
+
+// Reference BookPedestal explicitly so noUnusedLocals is satisfied.
+// (vue-tsc sometimes fails to detect template-only usage inside TresCanvas.)
+void BookPedestal
 
 const props = defineProps<{ books: Book[] }>()
 
@@ -83,9 +89,14 @@ const bookMeshes: BookMeshDef[] = props.books.map((book, index) => {
   }
 })
 
-// ── shelf disc (proxy for the future bookshelf model) ─────────────────────
-const shelfGeometry = new THREE.CylinderGeometry(RING_RADIUS + 0.22, RING_RADIUS + 0.22, 0.05, 48)
-const shelfMaterial = new THREE.MeshStandardMaterial({ color: '#8a5a3b', roughness: 0.8 })
+// ── pedestal the books stand on ───────────────────────────────────────────
+// Sizing/placement inputs for BookPedestal, which owns the model itself.
+// It sits OUTSIDE the spinning group in the template below: the cylinder
+// proxy it replaced was rotationally symmetric so spinning it was invisible,
+// but a wood-grained model visibly turns, and a still pedestal under a
+// turning carousel is the better read anyway.
+const PEDESTAL_DIAMETER = (RING_RADIUS + 0.22) * 2
+const BOOKS_BOTTOM_Y = -BOOK_SIZE[1] / 2
 
 // ── interaction + per-frame spin ──────────────────────────────────────────
 const hoveredId = ref<string | null>(null)
@@ -138,8 +149,6 @@ onBeforeRender(({ delta }) => {
 
 onUnmounted(() => {
   bookGeometry.dispose()
-  shelfGeometry.dispose()
-  shelfMaterial.dispose()
   pagesMat.dispose()
   for (const def of bookMeshes) {
     for (const mat of def.materials) {
@@ -166,12 +175,12 @@ onUnmounted(() => {
       @pointerenter="def.onEnter"
       @pointerleave="onLeave"
     />
-    <!-- Shelf top surface sits exactly at the books' bottom edge
-         (-BOOK_SIZE[1]/2 = -0.26): center at -0.26 - height/2. -->
-    <TresMesh
-      :geometry="shelfGeometry"
-      :material="shelfMaterial"
-      :position="[0, -0.285, 0]"
-    />
   </TresGroup>
+
+  <!-- Outside the group above so it stays still while the books turn, and
+       so this subtree is untouched by that group's per-frame re-render. -->
+  <BookPedestal
+    :diameter="PEDESTAL_DIAMETER"
+    :top-y="BOOKS_BOTTOM_Y"
+  />
 </template>
