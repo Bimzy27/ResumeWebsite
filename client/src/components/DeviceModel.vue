@@ -56,16 +56,23 @@ interface PartMeshDef {
 
 type PartMeshInit = Omit<PartMeshDef, 'onClick' | 'onEnter'>
 
+// Every individual part (procedural or loaded) sits at this opacity by
+// default so the whole build reads as faintly see-through, distinct from
+// the much more transparent outer glass case (0.12) - callers only need to
+// override for the case shell itself.
+const PART_OPACITY = 0.88
+
 function standardMat(color: string, opts: { transparent?: boolean; opacity?: number } = {}) {
-  const transparent = opts.transparent ?? false
+  const transparent = opts.transparent ?? true
   return new THREE.MeshStandardMaterial({
     color,
     roughness: 0.55,
     metalness: 0.25,
     transparent,
-    opacity: opts.opacity ?? 1,
-    // The glass case must not write depth, or it would occlude the internals
-    // it is supposed to reveal (draw-order dependent artifacts).
+    opacity: opts.opacity ?? PART_OPACITY,
+    // Transparent materials must not write depth, or draw order artifacts
+    // show up against the other transparent parts (the glass case, and now
+    // every other part sharing this same slight transparency).
     depthWrite: !transparent,
   })
 }
@@ -116,9 +123,18 @@ const partMeshInits: PartMeshInit[] = [
 
 const HIGHLIGHT = new THREE.Color('#7c3aed')
 
+// Common finishing pass for every individual part's material, procedural or
+// loaded: the hover/click glow (see the per-frame loop below) and the same
+// slight transparency as the rest of the build (loaded GLB materials come
+// in fully opaque from Blender - standardMat() already bakes this in for
+// procedural parts, so this is a no-op re-assignment for those, but it's
+// the one place both paths funnel through).
 function withHighlight(material: THREE.MeshStandardMaterial): THREE.MeshStandardMaterial {
   material.emissive = HIGHLIGHT.clone()
   material.emissiveIntensity = 0
+  material.transparent = true
+  material.opacity = PART_OPACITY
+  material.depthWrite = false
   return material
 }
 
