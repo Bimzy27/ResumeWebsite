@@ -204,6 +204,29 @@ export const fallbackRecommendations: RecommendationEntry[] = [
 
 export const fallbackProjects: Project[] = [
   {
+    id: 'agentic-project-tracker',
+    title: 'Agentic Project Tracker',
+    description:
+      'A desktop app that acts as mission control for managing multiple long-running AI-agent coding projects: delegate build tasks to Claude agents, supervise their runs, and keep git diffs, CI/CD pipeline health, and release analytics in one view.',
+    tags: ['Electron', 'React', 'TypeScript', 'AI Tooling'],
+    media: {
+      type: 'youtube',
+      videoId: 'aSZpd7_gmCs',
+    },
+    actions: [
+      {
+        label: 'Watch on YouTube',
+        url: 'https://www.youtube.com/watch?v=aSZpd7_gmCs',
+        variant: 'primary',
+      },
+      {
+        label: 'View source',
+        url: 'https://github.com/Bimzy27/AgenticProjectTracker',
+        variant: 'secondary',
+      },
+    ],
+  },
+  {
     id: 'ai-tool',
     title: 'AI tool for test discovery and execution',
     description:

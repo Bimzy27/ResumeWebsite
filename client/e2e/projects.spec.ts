@@ -6,9 +6,10 @@ test.describe('Projects showcase', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     const cards = page.locator('#projects article.project-card')
-    await expect(cards).toHaveCount(5)
+    await expect(cards).toHaveCount(6)
 
     for (const title of [
+      'Agentic Project Tracker',
       'AI tool for test discovery and execution',
       'This Portfolio Website',
       'Slime Slayer',
@@ -37,7 +38,7 @@ test.describe('Projects showcase', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
     // With reduced motion the section is not pinned, but every card is still present.
-    await expect(page.locator('#projects article.project-card')).toHaveCount(5)
+    await expect(page.locator('#projects article.project-card')).toHaveCount(6)
   })
 
   // Regression: the pinned scroll-linked slide must work at every desktop
@@ -54,7 +55,7 @@ test.describe('Projects showcase', () => {
       await page.goto('/', { waitUntil: 'domcontentloaded' })
 
       const projects = page.locator('#projects')
-      await expect(projects.locator('article.project-card')).toHaveCount(5)
+      await expect(projects.locator('article.project-card')).toHaveCount(6)
       await expect(projects).toHaveClass(/projects--pinned/)
 
       // Scroll to the section top, then further down the page: the card track
