@@ -261,7 +261,9 @@ function scrollToTop(event: MouseEvent) {
   }
 
   .header__social {
-    justify-content: center;
+    /* Right-aligned to match the desktop row's flush-right position,
+       instead of centered. */
+    justify-content: flex-end;
     flex-wrap: wrap;
     padding-bottom: 12px;
   }

@@ -77,6 +77,29 @@ test.describe('Mobile experience', () => {
     }
   })
 
+  test('header social buttons sit flush right, same as desktop', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+    const youtube = page.locator('.header__social').getByRole('link', { name: /youtube/i })
+    await expect(youtube).toBeVisible()
+
+    // .header__social itself stretches full-width (its parent is
+    // align-items: stretch), so measure the actual last button rather than
+    // the wrapping flex container - flex-end packs the buttons against its
+    // right edge, so the button's own right inset should match the logo's
+    // left inset, same symmetry as the desktop layout.
+    const logoBox = await page.locator('.header__logo').boundingBox()
+    const youtubeBox = await youtube.boundingBox()
+    const containerBox = await page.locator('.header__inner').boundingBox()
+    expect(logoBox).not.toBeNull()
+    expect(youtubeBox).not.toBeNull()
+    expect(containerBox).not.toBeNull()
+
+    const leftInset = logoBox!.x - containerBox!.x
+    const rightInset = containerBox!.x + containerBox!.width - (youtubeBox!.x + youtubeBox!.width)
+    expect(Math.abs(rightInset - leftInset)).toBeLessThanOrEqual(1)
+  })
+
   test('interactive elements meet the 44px touch target', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     await expect(page.locator('.hero__name')).toBeVisible()
