@@ -82,8 +82,11 @@ export interface Book {
   id: string
   title: string
   author: string
-  // Cover color for the proxy 3D book (hex string, e.g. '#7c3aed').
+  // Cover color for the proxy 3D book's spine/back and the 2D fallback list
+  // swatch (hex string, e.g. '#7c3aed').
   coverColor: string
+  // Real cover art for the 3D book's front face (see public/book-covers/).
+  coverImage: string
   // Purchase link: a direct Amazon product page carrying Branden's
   // Associates tag (see data/books.ts).
   amazonUrl: string

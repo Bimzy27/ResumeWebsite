@@ -5,7 +5,8 @@ import * as THREE from 'three'
 import type { Book } from '../types'
 
 // Rotating 3D carousel of the books Branden has read, built from proxy
-// box-geometry books with generated cover textures.
+// box-geometry books wearing their real Amazon cover art as the front-face
+// texture (see public/book-covers/ and data/books.ts).
 // PLACEHOLDER GEOMETRY: a real bookshelf model arrives in a follow-up task;
 // this proxy keeps the carousel, hover, and click-through behaviour working
 // until then. Clicking a book opens its Amazon purchase link.
@@ -19,61 +20,14 @@ const emit = defineEmits<{
 }>()
 
 // ── cover texture ─────────────────────────────────────────────────────────
-// Proxy covers are drawn onto a canvas: solid cover color, a lighter framing
-// band, then the wrapped title and the author. Text color flips between
-// near-white and near-black based on the cover's luminance.
-function textColorFor(hex: string): string {
-  const color = new THREE.Color(hex)
-  // Relative luminance approximation on the sRGB components.
-  const luminance = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b
-  return luminance > 0.5 ? '#1b1b2f' : '#f5f2ff'
-}
+// One shared loader for every cover; textures populate asynchronously but
+// the carousel is already animating every frame (spin/hover), so a cover
+// simply appears once its image lands rather than needing an explicit
+// re-render trigger.
+const textureLoader = new THREE.TextureLoader()
 
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const words = text.split(' ')
-  const lines: string[] = []
-  let line = ''
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word
-    if (ctx.measureText(candidate).width > maxWidth && line) {
-      lines.push(line)
-      line = word
-    } else {
-      line = candidate
-    }
-  }
-  if (line) lines.push(line)
-  return lines
-}
-
-function makeCoverTexture(book: Book): THREE.CanvasTexture {
-  const canvas = document.createElement('canvas')
-  canvas.width = 256
-  canvas.height = 384
-  const ctx = canvas.getContext('2d')!
-
-  ctx.fillStyle = book.coverColor
-  ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-  const ink = textColorFor(book.coverColor)
-  ctx.strokeStyle = ink
-  ctx.globalAlpha = 0.35
-  ctx.lineWidth = 4
-  ctx.strokeRect(14, 14, canvas.width - 28, canvas.height - 28)
-  ctx.globalAlpha = 1
-
-  ctx.fillStyle = ink
-  ctx.textAlign = 'center'
-  ctx.font = '700 30px "Space Grotesk", system-ui, sans-serif'
-  const lines = wrapText(ctx, book.title, canvas.width - 56)
-  const lineHeight = 36
-  const startY = 120 - ((lines.length - 1) * lineHeight) / 2
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, startY + i * lineHeight))
-
-  ctx.font = '500 20px "Inter", system-ui, sans-serif'
-  ctx.fillText(book.author, canvas.width / 2, canvas.height - 44)
-
-  const texture = new THREE.CanvasTexture(canvas)
+function loadCoverTexture(book: Book): THREE.Texture {
+  const texture = textureLoader.load(book.coverImage)
   texture.colorSpace = THREE.SRGBColorSpace
   texture.anisotropy = 4
   return texture
@@ -109,7 +63,7 @@ const pagesMat = new THREE.MeshStandardMaterial({ color: '#f5f0e6', roughness: 0
 const bookMeshes: BookMeshDef[] = props.books.map((book, index) => {
   const angle = (index / props.books.length) * Math.PI * 2
   const coverMat = new THREE.MeshStandardMaterial({
-    map: makeCoverTexture(book),
+    map: loadCoverTexture(book),
     roughness: 0.6,
   })
   const spineMat = new THREE.MeshStandardMaterial({
