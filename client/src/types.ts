@@ -74,6 +74,8 @@ export interface DevicePart {
   label: string
   // The actual spec line for this part.
   spec: string
+  // Amazon purchase link for this part, carrying Branden's Associates tag.
+  amazonUrl: string
 }
 
 export interface Book {

@@ -44,9 +44,31 @@ test.describe('Device section', () => {
 
     // Hovering a spec row marks it active (the same state drives the 3D
     // part's emissive highlight).
-    const cpuRow = page.locator('.device__spec').filter({ hasText: 'CPU' }).first()
+    const cpuRow = page.locator('.device__spec-link').filter({ hasText: 'CPU' }).first()
     await cpuRow.hover()
-    await expect(cpuRow).toHaveClass(/device__spec--active/)
+    await expect(cpuRow).toHaveClass(/device__spec-link--active/)
+  })
+
+  test('every part is reachable as an Amazon link opening in a new tab', async ({ page }) => {
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
+    const device = page.locator('#device')
+    await device.scrollIntoViewIfNeeded()
+
+    // Search results link rather than a direct product page: parts don't
+    // have a hand-verified ASIN the way the books do (see data/device.ts).
+    const links = device.locator('.device__spec-link')
+    const count = await links.count()
+    expect(count).toBe(8)
+
+    for (let i = 0; i < count; i++) {
+      const link = links.nth(i)
+      await expect(link).toHaveAttribute(
+        'href',
+        /^https:\/\/www\.amazon\.com\/s\?k=.+&tag=brandenimmerz-20$/,
+      )
+      await expect(link).toHaveAttribute('target', '_blank')
+      await expect(link).toHaveAttribute('rel', /noopener/)
+    }
   })
 })
 

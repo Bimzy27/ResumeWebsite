@@ -44,7 +44,7 @@ function togglePin(partId: string) {
       </h2>
       <p class="section-intro">
         My daily driver for development and gaming. Hover or tap a spec to see the part light up
-        in the build.
+        in the build, or click through to view it on Amazon.
       </p>
 
       <div class="device">
@@ -66,13 +66,21 @@ function togglePin(partId: string) {
             v-for="part in deviceParts"
             :key="part.id"
             class="device__spec"
-            :class="{ 'device__spec--active': activeId === part.id }"
-            @mouseenter="hoveredId = part.id"
-            @mouseleave="hoveredId = null"
-            @click="togglePin(part.id)"
           >
-            <span class="device__spec-label">{{ part.label }}</span>
-            <span class="device__spec-value">{{ part.spec }}</span>
+            <a
+              class="device__spec-link"
+              :class="{ 'device__spec-link--active': activeId === part.id }"
+              :href="part.amazonUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="`View ${part.label}: ${part.spec} on Amazon`"
+              @mouseenter="hoveredId = part.id"
+              @mouseleave="hoveredId = null"
+              @click="togglePin(part.id)"
+            >
+              <span class="device__spec-label">{{ part.label }}</span>
+              <span class="device__spec-value">{{ part.spec }}</span>
+            </a>
           </li>
         </ul>
       </div>
@@ -113,7 +121,7 @@ function togglePin(partId: string) {
   gap: 10px;
 }
 
-.device__spec {
+.device__spec-link {
   display: flex;
   align-items: baseline;
   gap: 16px;
@@ -121,6 +129,7 @@ function togglePin(partId: string) {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  text-decoration: none;
   cursor: pointer;
   transition:
     border-color 0.18s ease,
@@ -128,7 +137,9 @@ function togglePin(partId: string) {
     transform 0.18s ease;
 }
 
-.device__spec--active {
+.device__spec-link--active,
+.device__spec-link:hover,
+.device__spec-link:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
   transform: translateX(4px);
