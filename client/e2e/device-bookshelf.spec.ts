@@ -57,17 +57,24 @@ test.describe('Device section', () => {
     // Search results link rather than a direct product page: parts don't
     // have a hand-verified ASIN the way the books do (see data/device.ts).
     const links = device.locator('.device__spec-link')
-    const count = await links.count()
-    expect(count).toBe(8)
+    await expect(links).toHaveCount(8)
 
-    for (let i = 0; i < count; i++) {
-      const link = links.nth(i)
-      await expect(link).toHaveAttribute(
-        'href',
+    // One batched read rather than per-link auto-waiting assertions; see the
+    // bookshelf equivalent below for why this page needs it.
+    const attrs = await links.evaluateAll((nodes) =>
+      nodes.map((n) => ({
+        href: n.getAttribute('href'),
+        target: n.getAttribute('target'),
+        rel: n.getAttribute('rel'),
+      })),
+    )
+
+    for (const [i, attr] of attrs.entries()) {
+      expect(attr.href, `part ${i} href`).toMatch(
         /^https:\/\/www\.amazon\.com\/s\?k=.+&tag=brandenimmerz-20$/,
       )
-      await expect(link).toHaveAttribute('target', '_blank')
-      await expect(link).toHaveAttribute('rel', /noopener/)
+      expect(attr.target, `part ${i} target`).toBe('_blank')
+      expect(attr.rel, `part ${i} rel`).toMatch(/noopener/)
     }
   })
 
@@ -130,20 +137,31 @@ test.describe('Bookshelf section', () => {
     // tree (visually hidden) so books remain reachable without WebGL
     // pointer-picking; each entry is a real link to Amazon in a new tab.
     const links = page.locator('.bookshelf__list .bookshelf__book')
-    const count = await links.count()
-    expect(count).toBe(12)
+    await expect(links).toHaveCount(12)
 
-    for (let i = 0; i < count; i++) {
-      const link = links.nth(i)
+    // Read every link in ONE round-trip instead of asserting per-link. The
+    // 3D sections on this page keep the main thread busy while their models
+    // load, and 36 individually auto-waiting assertions spent most of the
+    // 30s budget queueing behind that work. The list is static (rendered
+    // from bundled data) and the count above already waited for it, so a
+    // single settled read checks exactly the same things without the churn.
+    const attrs = await links.evaluateAll((nodes) =>
+      nodes.map((n) => ({
+        href: n.getAttribute('href'),
+        target: n.getAttribute('target'),
+        rel: n.getAttribute('rel'),
+      })),
+    )
+
+    for (const [i, attr] of attrs.entries()) {
       // Direct product page (/dp/<ASIN>) carrying the Associates tag so
       // clicks earn referral commission. Amazon .com or .com.au (see
       // data/books.ts).
-      await expect(link).toHaveAttribute(
-        'href',
+      expect(attr.href, `book ${i} href`).toMatch(
         /^https:\/\/www\.amazon\.com(\.au)?\/dp\/[A-Z0-9]{10}\?tag=brandenimmerz-20$/i,
       )
-      await expect(link).toHaveAttribute('target', '_blank')
-      await expect(link).toHaveAttribute('rel', /noopener/)
+      expect(attr.target, `book ${i} target`).toBe('_blank')
+      expect(attr.rel, `book ${i} rel`).toMatch(/noopener/)
     }
   })
 })

@@ -83,6 +83,10 @@ test.describe('Mobile experience', () => {
     const youtube = page.locator('.header__social').getByRole('link', { name: /youtube/i })
     await expect(youtube).toBeVisible()
 
+    // Width-sensitive measurements against text set in the display webfont,
+    // so settle fonts first (see the desktop equivalent in navigation.spec).
+    await page.evaluate(() => document.fonts.ready)
+
     // .header__social itself stretches full-width (its parent is
     // align-items: stretch), so measure the actual last button rather than
     // the wrapping flex container - flex-end packs the buttons against its

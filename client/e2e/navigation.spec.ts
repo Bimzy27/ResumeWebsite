@@ -49,6 +49,11 @@ test.describe('Site navigation', () => {
     await expect(youtube).toHaveAttribute('rel', 'noopener')
     await expect(youtube).toHaveClass(/icon-btn--youtube/)
 
+    // The measurements below are all width-sensitive, and the logo and
+    // buttons are set in the display webfont - measuring before it swaps in
+    // reads fallback-font widths and shifts every gap. Settle fonts first.
+    await page.evaluate(() => document.fonts.ready)
+
     // Right corner of the header: to the right of both the logo and the nav.
     const logoBox = await page.locator('.header__logo').boundingBox()
     const navBox = await page.locator('.header__nav').boundingBox()
