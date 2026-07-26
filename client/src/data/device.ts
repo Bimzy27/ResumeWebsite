@@ -9,7 +9,7 @@ export const deviceParts: DevicePart[] = [
   { id: 'gpu', label: 'GPU', spec: 'ASUS Dual GeForce RTX 5060 Ti OC - 16GB GDDR7' },
   { id: 'ram', label: 'Memory', spec: 'Corsair Vengeance RGB 32GB (2x16GB) DDR5-6000 CL36' },
   { id: 'motherboard', label: 'Motherboard', spec: 'MSI Z890 Gaming Plus WiFi - ATX, LGA1851' },
-  { id: 'storage', label: 'Storage', spec: 'Crucial T705 2TB NVMe PCIe 5.0 - up to 14,500 MB/s' },
+  { id: 'storage', label: 'Storage', spec: 'Crucial T705 2TB NVMe PCIe 5.0 (up to 14,500 MB/s) + TeamGroup MP44 512GB NVMe secondary' },
   { id: 'cooling', label: 'Cooling', spec: 'Noctua NH-D9L dual-tower air cooler' },
   { id: 'psu', label: 'PSU', spec: 'MSI MAG A750GL PCIE5 - 750W 80+ Gold, fully modular' },
   { id: 'case', label: 'Case', spec: 'Phanteks XT Pro ATX mid-tower' },
