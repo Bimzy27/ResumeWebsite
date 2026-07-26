@@ -115,15 +115,16 @@ test.describe('Bookshelf section', () => {
     // pointer-picking; each entry is a real link to Amazon in a new tab.
     const links = page.locator('.bookshelf__list .bookshelf__book')
     const count = await links.count()
-    expect(count).toBeGreaterThanOrEqual(5)
+    expect(count).toBe(12)
 
     for (let i = 0; i < count; i++) {
       const link = links.nth(i)
       // Direct product page (/dp/<ASIN>) carrying the Associates tag so
-      // clicks earn referral commission.
+      // clicks earn referral commission. Amazon .com or .com.au (see
+      // data/books.ts).
       await expect(link).toHaveAttribute(
         'href',
-        /^https:\/\/www\.amazon\.com\/dp\/[A-Z0-9]{10}\?tag=brandenimmerz-20$/i,
+        /^https:\/\/www\.amazon\.com(\.au)?\/dp\/[A-Z0-9]{10}\?tag=brandenimmerz-20$/i,
       )
       await expect(link).toHaveAttribute('target', '_blank')
       await expect(link).toHaveAttribute('rel', /noopener/)

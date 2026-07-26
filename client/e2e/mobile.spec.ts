@@ -121,7 +121,7 @@ test.describe('Mobile experience', () => {
     await page.locator('#bookshelf').scrollIntoViewIfNeeded()
     const firstBook = page.locator('.bookshelf__book').first()
     await expect(firstBook).toBeVisible()
-    await expect(firstBook).toHaveAttribute('href', /amazon\.com\/dp\/.+\?tag=brandenimmerz-20/)
+    await expect(firstBook).toHaveAttribute('href', /amazon\.com(\.au)?\/dp\/.+\?tag=brandenimmerz-20/)
     await expect(page.locator('#bookshelf canvas')).toHaveCount(0)
   })
 
