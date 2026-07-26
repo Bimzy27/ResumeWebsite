@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import { SHOW_DEVICE_BOOKSHELF } from '../featureFlags'
-
 const links = [
   { id: 'top', label: 'About' },
   { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  ...(SHOW_DEVICE_BOOKSHELF
-    ? [
-        { id: 'device', label: 'Device' },
-        { id: 'bookshelf', label: 'Bookshelf' },
-      ]
-    : []),
   { id: 'contact', label: 'Contact' },
 ]
 
@@ -63,14 +55,60 @@ function scrollToTop(event: MouseEvent) {
         class="header__logo"
         @click="scrollToTop"
       >Branden Immerzeel</a>
-      <nav class="header__nav">
-        <a
-          v-for="link in links"
-          :key="link.id"
-          :href="`#${link.id}`"
-          @click="link.id === 'top' ? scrollToTop($event) : undefined"
-        >{{ link.label }}</a>
-      </nav>
+      <div class="header__right">
+        <nav class="header__nav">
+          <a
+            v-for="link in links"
+            :key="link.id"
+            :href="`#${link.id}`"
+            @click="link.id === 'top' ? scrollToTop($event) : undefined"
+          >{{ link.label }}</a>
+        </nav>
+
+        <div class="header__social">
+          <a
+            href="https://www.linkedin.com/in/branden-immerzeel/"
+            target="_blank"
+            rel="noopener"
+            class="icon-btn icon-btn--linkedin"
+            aria-label="LinkedIn profile"
+            title="LinkedIn"
+          >
+            <svg
+              class="icon-btn__icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill="currentColor"
+                d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"
+              />
+            </svg>
+            <span class="icon-btn__label">LinkedIn</span>
+          </a>
+
+          <a
+            href="https://www.youtube.com/@BimzyDev"
+            target="_blank"
+            rel="noopener"
+            class="icon-btn icon-btn--youtube"
+            aria-label="YouTube channel"
+            title="YouTube"
+          >
+            <svg
+              class="icon-btn__icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                fill="currentColor"
+                d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.08 0 12 0 12s0 3.92.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.92 24 12 24 12s0-3.92-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"
+              />
+            </svg>
+            <span class="icon-btn__label">YouTube</span>
+          </a>
+        </div>
+      </div>
     </div>
   </header>
 </template>
@@ -101,6 +139,12 @@ function scrollToTop(event: MouseEvent) {
   white-space: nowrap;
 }
 
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 .header__nav {
   display: flex;
   gap: 28px;
@@ -121,16 +165,78 @@ function scrollToTop(event: MouseEvent) {
   color: var(--color-primary);
 }
 
+.header__social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Same button style as the Contact section's social links (see
+   ContactSection.vue's .icon-btn) - duplicated here since Vue's scoped
+   styles don't share across components. */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform 0.16s ease,
+    filter 0.16s ease,
+    box-shadow 0.16s ease;
+}
+
+.icon-btn__icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.icon-btn--linkedin {
+  background: #0a66c2;
+  box-shadow: 0 6px 14px rgba(10, 102, 194, 0.28);
+}
+
+.icon-btn--youtube {
+  background: #ff0000;
+  box-shadow: 0 6px 14px rgba(255, 0, 0, 0.28);
+}
+
 /* tablet, see breakpoints in style.css. One row can't fit the logo plus all
-   five links below ~620px, so the header becomes two rows: logo on top, nav
-   spread across its own full-width row. The links' vertical padding gives
-   each a 44px-plus touch target. */
+   links and social buttons below ~620px, so the header stacks: logo on top,
+   nav on its own full-width row, then the social buttons on a row below
+   that. The links' vertical padding gives each a 44px-plus touch target. */
 @media (max-width: 768px) {
   .header__inner {
     height: auto;
     flex-direction: column;
     align-items: stretch;
     padding-top: 12px;
+  }
+
+  .header__right {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
   }
 
   .header__nav {
@@ -142,6 +248,16 @@ function scrollToTop(event: MouseEvent) {
   .header__nav a {
     font-size: 0.9rem;
     padding: 14px 4px;
+  }
+
+  .header__social {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 12px;
+  }
+
+  .icon-btn {
+    height: 44px;
   }
 
   /* Padded hit area for the logo link; the negative margin keeps the two

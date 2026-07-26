@@ -67,7 +67,6 @@ test.describe('Mobile experience', () => {
 
     const viewportWidth = page.viewportSize()!.width
     const labels = ['About', 'Skills', 'Experience', 'Projects', 'Contact']
-    if (SHOW_DEVICE_BOOKSHELF) labels.splice(4, 0, 'Device', 'Bookshelf')
     for (const label of labels) {
       const link = page.locator('.header__nav').getByRole('link', { name: label })
       await expect(link).toBeVisible()
