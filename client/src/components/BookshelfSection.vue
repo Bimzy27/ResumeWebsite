@@ -35,7 +35,7 @@ const hoveredBookId = ref<string | null>(null)
         Books I've read
       </h2>
       <p class="section-intro">
-        A shelf of the books that shaped how I think and build. Click one to view it on Amazon.
+        A shelf of the books that shaped how I think and build.
       </p>
 
       <div

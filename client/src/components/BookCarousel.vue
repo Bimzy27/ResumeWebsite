@@ -164,12 +164,15 @@ onBeforeRender(({ delta }) => {
   spinSpeed.value += (targetSpeed - spinSpeed.value) * Math.min(1, delta * 6)
   rotationY.value = (rotationY.value + delta * spinSpeed.value) % (Math.PI * 2)
 
-  // Hovered book grows slightly; everything eases back to rest.
+  // Hovered book pops up noticeably larger, snapping in fast and settling
+  // back out slower so it reads as a deliberate pop rather than a wobble.
   const next = scales.value.slice()
   let changed = false
   bookMeshes.forEach((def, i) => {
-    const target = def.book.id === hoveredId.value ? 1.14 : 1
-    const eased = next[i] + (target - next[i]) * Math.min(1, delta * 10)
+    const hovered = def.book.id === hoveredId.value
+    const target = hovered ? 1.45 : 1
+    const rate = hovered ? 22 : 9
+    const eased = next[i] + (target - next[i]) * Math.min(1, delta * rate)
     if (Math.abs(eased - next[i]) > 0.0001) {
       next[i] = eased
       changed = true
