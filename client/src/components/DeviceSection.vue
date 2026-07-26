@@ -3,12 +3,12 @@ import { ref, computed, defineAsyncComponent } from 'vue'
 import { deviceParts } from '../data/device'
 import { useSectionScene } from '../composables/useSectionScene'
 
-// Device section: a 3D proxy of Branden's PC above its spec sheet, filling
-// the left column of the shared device/bookshelf row (see App.vue).
-// Hovering a spec row highlights the matching part in the 3D model, and
-// hovering/clicking a part in the model highlights its spec row. On phones
-// (and without WebGL) the 3D canvas never mounts and the spec sheet stands
-// alone - same "scene" cutoff as the hero desk scene, see style.css.
+// Device section: a 3D proxy of Branden's PC beside its spec sheet, stacked
+// above the Bookshelf section (see App.vue). Hovering a spec row highlights
+// the matching part in the 3D model, and hovering/clicking a part in the
+// model highlights its spec row. On phones (and without WebGL) the 3D canvas
+// never mounts and the spec sheet stands alone above where the scene would
+// be - same "scene" cutoff as the hero desk scene, see style.css.
 
 // All Three.js/TresJS code lives in DeviceSceneCanvas.vue, loaded async only
 // once show3D holds - keeping the heavy 3D chunk off the critical path and
@@ -89,13 +89,23 @@ function togglePin(partId: string) {
 </template>
 
 <style scoped>
-/* The section occupies the left column of the shared device/bookshelf row
-   (see App.vue), so its own layout is a single column: scene above specs. */
+/* Scene above specs on phones/tablets (and once WebGL is unavailable, since
+   the scene never mounts there - see show3D). Above the scene cutoff the
+   specs move beside the model instead of under it. */
 .device {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   margin-top: 32px;
+}
+
+/* Matches the show3D breakpoint (see useSectionScene) so the two-column
+   layout only kicks in once the 3D model actually mounts beside it. */
+@media (min-width: 901px) {
+  .device {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+  }
 }
 
 .device__scene {

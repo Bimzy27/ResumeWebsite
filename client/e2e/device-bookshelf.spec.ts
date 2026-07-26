@@ -70,10 +70,26 @@ test.describe('Device section', () => {
       await expect(link).toHaveAttribute('rel', /noopener/)
     }
   })
+
+  test('places the spec sheet beside the 3D model on desktop', async ({ page }) => {
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
+    await page.locator('#device').scrollIntoViewIfNeeded()
+    await expect(page.locator('#device canvas')).toHaveCount(1, { timeout: 15000 })
+
+    const sceneBox = await page.locator('.device__scene').boundingBox()
+    const specsBox = await page.locator('.device__specs').boundingBox()
+    expect(sceneBox).not.toBeNull()
+    expect(specsBox).not.toBeNull()
+
+    // Same row: tops line up and the scene column ends where the specs
+    // column starts, with no vertical stacking between them.
+    expect(Math.abs(sceneBox!.y - specsBox!.y)).toBeLessThanOrEqual(1)
+    expect(sceneBox!.x + sceneBox!.width).toBeLessThanOrEqual(specsBox!.x + 1)
+  })
 })
 
-test.describe('Device and bookshelf row', () => {
-  test('the sections sit side by side on desktop: device left, bookshelf right', async ({ page }) => {
+test.describe('Device and bookshelf layout', () => {
+  test('the sections stack vertically: device above bookshelf', async ({ page }) => {
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
     const deviceBox = await page.locator('#device').boundingBox()
@@ -81,10 +97,10 @@ test.describe('Device and bookshelf row', () => {
     expect(deviceBox).not.toBeNull()
     expect(bookshelfBox).not.toBeNull()
 
-    // Same horizontal row: the tops line up (grid row) and the device column
-    // ends where the bookshelf column starts, with no vertical stacking.
-    expect(Math.abs(deviceBox!.y - bookshelfBox!.y)).toBeLessThanOrEqual(1)
-    expect(deviceBox!.x + deviceBox!.width).toBeLessThanOrEqual(bookshelfBox!.x + 1)
+    // Full-width stacked sections: bookshelf starts at or below where device
+    // ends, not beside it, and both span the same width.
+    expect(bookshelfBox!.y).toBeGreaterThanOrEqual(deviceBox!.y + deviceBox!.height - 1)
+    expect(Math.round(deviceBox!.width)).toBe(Math.round(bookshelfBox!.width))
   })
 })
 
