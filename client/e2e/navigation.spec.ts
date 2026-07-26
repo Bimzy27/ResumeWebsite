@@ -53,11 +53,19 @@ test.describe('Site navigation', () => {
     const logoBox = await page.locator('.header__logo').boundingBox()
     const navBox = await page.locator('.header__nav').boundingBox()
     const socialBox = await social.boundingBox()
+    const containerBox = await page.locator('.header__inner').boundingBox()
     expect(logoBox).not.toBeNull()
     expect(navBox).not.toBeNull()
     expect(socialBox).not.toBeNull()
+    expect(containerBox).not.toBeNull()
     expect(socialBox!.x).toBeGreaterThan(logoBox!.x)
     expect(socialBox!.x).toBeGreaterThanOrEqual(navBox!.x)
+
+    // Flush against the row's right edge, mirroring how the logo sits flush
+    // against the left edge - the gap on each side should roughly match.
+    const leftInset = logoBox!.x - containerBox!.x
+    const rightInset = containerBox!.x + containerBox!.width - (socialBox!.x + socialBox!.width)
+    expect(Math.abs(rightInset - leftInset)).toBeLessThanOrEqual(1)
   })
 
   test('clicking the logo returns to the true top of the page', async ({ page }) => {

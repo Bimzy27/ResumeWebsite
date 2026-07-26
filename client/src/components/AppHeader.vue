@@ -139,10 +139,17 @@ function scrollToTop(event: MouseEvent) {
   white-space: nowrap;
 }
 
+/* Fills the rest of the row after the logo and spaces its two groups apart
+   the same way the outer .header__inner spaces the logo from everything
+   else: nav sits right after the logo, then the social buttons get pushed
+   all the way to the row's far right edge, mirroring the logo's flush-left
+   position instead of just trailing the nav links by a fixed gap. */
 .header__right {
   display: flex;
+  flex: 1;
   align-items: center;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 .header__nav {
@@ -235,8 +242,10 @@ function scrollToTop(event: MouseEvent) {
   }
 
   .header__right {
+    flex: initial;
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
     gap: 4px;
   }
 
