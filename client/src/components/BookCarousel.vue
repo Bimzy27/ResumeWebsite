@@ -32,6 +32,10 @@ const emit = defineEmits<{
 // column the carousel renders in (see BookshelfSection.vue).
 const RING_RADIUS = 0.92
 const BOOK_HEIGHT = 0.52
+// Books are centred on their own origin, so scaling one up on hover grows it
+// downward as much as upward and buries its bottom edge in the pedestal.
+// Lifting by this much per unit of scale keeps the base planted instead.
+const BOOK_HALF_HEIGHT = BOOK_HEIGHT / 2
 
 // ── cover compositing ─────────────────────────────────────────────────────
 // The model ships deliberately blank: its baked texture is an atlas of flat
@@ -217,7 +221,9 @@ onMounted(async () => {
 // proxy it replaced was rotationally symmetric so spinning it was invisible,
 // but a wood-grained model visibly turns, and a still pedestal under a
 // turning carousel is the better read anyway.
-const PEDESTAL_DIAMETER = (RING_RADIUS + 0.22) * 2
+// Overhang past the ring the books stand on. Kept fairly tight so the
+// pedestal reads as a stand rather than dominating the frame.
+const PEDESTAL_DIAMETER = (RING_RADIUS + 0.1) * 2
 const BOOKS_BOTTOM_Y = -BOOK_HEIGHT / 2
 
 // ── interaction + per-frame spin ──────────────────────────────────────────
@@ -240,6 +246,10 @@ function openBook(book: Book) {
 // Reactive per-frame bindings instead of Tres template refs (see
 // DeviceModel.vue for the rationale).
 const REST_SPIN_SPEED = 0.15
+// How big a hovered book grows. Now that it grows upward from its base
+// instead of about its centre, this is bounded by the headroom above the
+// ring: much past this and the front book's top clips the canvas.
+const HOVER_SCALE = 1.32
 const rotationY = ref(0)
 const spinSpeed = ref(REST_SPIN_SPEED)
 const scales = ref<number[]>(props.books.map(() => 1))
@@ -258,7 +268,7 @@ onBeforeRender(({ delta }) => {
   let changed = false
   bookMeshes.value.forEach((def, i) => {
     const hovered = def.book.id === hoveredId.value
-    const target = hovered ? 1.45 : 1
+    const target = hovered ? HOVER_SCALE : 1
     const rate = hovered ? 22 : 9
     const eased = next[i] + (target - next[i]) * Math.min(1, delta * rate)
     if (Math.abs(eased - next[i]) > 0.0001) {
@@ -295,7 +305,11 @@ onUnmounted(() => {
       :key="def.book.id"
       :geometry="def.geometry"
       :material="def.material"
-      :position="def.position"
+      :position="[
+        def.position[0],
+        def.position[1] + (scales[index] - 1) * BOOK_HALF_HEIGHT,
+        def.position[2],
+      ]"
       :rotation="[0, def.rotationY, 0]"
       :scale="[scales[index], scales[index], scales[index]]"
       @click="def.onClick"

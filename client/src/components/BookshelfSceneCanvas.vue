@@ -36,9 +36,9 @@ void BookCarousel
          camera-tilt behaviour), which is what clears the books/shelf from
          clipping the bottom edge without changing the zoom level. -->
     <TresPerspectiveCamera
-      :position="[0, 0.4, 2.1]"
+      :position="[0, 0.4, 2.15]"
       :fov="38"
-      :look-at="[0, -0.38, 0]"
+      :look-at="[0, -0.26, 0]"
     />
     <TresAmbientLight :intensity="0.9" />
     <TresDirectionalLight
