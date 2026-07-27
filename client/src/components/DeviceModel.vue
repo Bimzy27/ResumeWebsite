@@ -37,6 +37,14 @@ interface PartMeshDef {
   partId: string
   geometry: THREE.BufferGeometry
   material: THREE.MeshStandardMaterial
+  // The material's colour at rest. The highlight brightens away from this
+  // and eases back to it, so it has to be captured before any brightening
+  // is applied (see the per-frame loop).
+  baseColor: THREE.Color
+  // Eased 0..1 highlight amount, stepped per frame. Kept on the def rather
+  // than read back off the material so the easing never compounds against
+  // its own output.
+  highlight: number
   position: [number, number, number]
   rotation?: [number, number, number]
   // 'none' excludes a mesh from pointer raycasting (@pmndrs/pointer-events).
@@ -54,7 +62,7 @@ interface PartMeshDef {
   onEnter: () => void
 }
 
-type PartMeshInit = Omit<PartMeshDef, 'onClick' | 'onEnter'>
+type PartMeshInit = Omit<PartMeshDef, 'onClick' | 'onEnter' | 'baseColor' | 'highlight'>
 
 // Every individual part (procedural or loaded) sits at this opacity by
 // default so the whole build reads as faintly see-through, distinct from
@@ -62,18 +70,22 @@ type PartMeshInit = Omit<PartMeshDef, 'onClick' | 'onEnter'>
 // override for the case shell itself.
 const PART_OPACITY = 0.88
 
-function standardMat(color: string, opts: { transparent?: boolean; opacity?: number } = {}) {
-  const transparent = opts.transparent ?? true
+function standardMat(
+  color: string,
+  opts: { opacity?: number; depthWrite?: boolean } = {},
+) {
   return new THREE.MeshStandardMaterial({
     color,
     roughness: 0.55,
     metalness: 0.25,
-    transparent,
+    transparent: true,
     opacity: opts.opacity ?? PART_OPACITY,
-    // Transparent materials must not write depth, or draw order artifacts
-    // show up against the other transparent parts (the glass case, and now
-    // every other part sharing this same slight transparency).
-    depthWrite: !transparent,
+    // Parts keep writing depth despite being transparent. Only the glass
+    // case opts out: it encloses everything, so writing depth would occlude
+    // the internals it exists to reveal. Turning it off for the parts too
+    // dropped all depth sorting between them and rendered the whole build
+    // as one flat translucent smear.
+    depthWrite: opts.depthWrite ?? true,
   })
 }
 
@@ -84,7 +96,7 @@ const partMeshInits: PartMeshInit[] = [
   {
     partId: 'case',
     geometry: new THREE.BoxGeometry(0.6, 1.2, 1.15),
-    material: standardMat('#a78bfa', { transparent: true, opacity: 0.12 }),
+    material: standardMat('#a78bfa', { opacity: 0.12, depthWrite: false }),
     position: [0, 0, 0],
     pointerEvents: 'none',
   },
@@ -121,20 +133,28 @@ const partMeshInits: PartMeshInit[] = [
   },
 ]
 
-const HIGHLIGHT = new THREE.Color('#7c3aed')
+// How much brighter a part's colour goes at full highlight.
+const HIGHLIGHT_GAIN = 1.9
 
 // Common finishing pass for every individual part's material, procedural or
-// loaded: the hover/click glow (see the per-frame loop below) and the same
-// slight transparency as the rest of the build (loaded GLB materials come
-// in fully opaque from Blender - standardMat() already bakes this in for
-// procedural parts, so this is a no-op re-assignment for those, but it's
-// the one place both paths funnel through).
-function withHighlight(material: THREE.MeshStandardMaterial): THREE.MeshStandardMaterial {
-  material.emissive = HIGHLIGHT.clone()
-  material.emissiveIntensity = 0
+// loaded: the same slight transparency as the rest of the build (loaded GLB
+// materials come in fully opaque from Blender - standardMat() already bakes
+// this in for procedural parts, so this is a no-op re-assignment for those,
+// but it's the one place both paths funnel through).
+//
+// Deliberately does NOT touch emissive. The highlight brightens the material
+// colour instead (see the per-frame loop), because emissive is unusable for
+// it here: three.js multiplies the emissive colour by the material's
+// emissiveMap, and the loaded parts all ship one. On parts whose baked map
+// is mostly black that multiplication swallowed the highlight completely -
+// hovering a spec row visibly lit nothing. Leaving emissive alone also keeps
+// the maps doing their real job, like the RGB fans' baked LED glow, which
+// overwriting it had switched off.
+function preparePartMaterial(material: THREE.MeshStandardMaterial): THREE.MeshStandardMaterial {
   material.transparent = true
   material.opacity = PART_OPACITY
-  material.depthWrite = false
+  // Depth writing stays on here for the same reason as standardMat above.
+  material.depthWrite = true
   return material
 }
 
@@ -149,7 +169,9 @@ function withHighlight(material: THREE.MeshStandardMaterial): THREE.MeshStandard
 const partMeshes = shallowRef<PartMeshDef[]>(
   partMeshInits.map((init) => ({
     ...init,
-    material: withHighlight(init.material),
+    material: preparePartMaterial(init.material),
+    baseColor: init.material.color.clone(),
+    highlight: 0,
     onClick: () => emit('select', init.partId),
     onEnter: () => emit('hover', init.partId),
   })),
@@ -271,7 +293,7 @@ async function loadPartModel(spec: LoadedPartSpec): Promise<void> {
   // but Mesh.material is typed as Material | Material[]; narrow before the
   // cast the same way DeskScene.vue does.
   const rawMaterial = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material
-  const material = withHighlight(rawMaterial as THREE.MeshStandardMaterial)
+  const material = preparePartMaterial(rawMaterial as THREE.MeshStandardMaterial)
 
   partMeshes.value = [
     ...partMeshes.value,
@@ -279,6 +301,8 @@ async function loadPartModel(spec: LoadedPartSpec): Promise<void> {
       partId: spec.partId,
       geometry,
       material,
+      baseColor: material.color.clone(),
+      highlight: 0,
       position: spec.position,
       rotation: spec.rotation,
       onClick: () => emit('select', spec.partId),
@@ -310,12 +334,16 @@ onBeforeRender(({ delta }) => {
   if (!props.activeId) {
     rotationY.value = (rotationY.value + delta * 0.35) % (Math.PI * 2)
   }
-  // Ease each part's glow toward its target so highlights fade in/out
-  // instead of popping.
+  // Ease each part's highlight toward its target so it fades in/out instead
+  // of popping, then drive the material colour from it. Brightening the
+  // colour (rather than the emissive) is what makes this show up on the
+  // loaded, textured parts too - see preparePartMaterial.
   for (const def of partMeshes.value) {
-    const target = def.partId === props.activeId ? 0.6 : 0
-    const current = def.material.emissiveIntensity
-    def.material.emissiveIntensity = current + (target - current) * Math.min(1, delta * 12)
+    const target = def.partId === props.activeId ? 1 : 0
+    def.highlight += (target - def.highlight) * Math.min(1, delta * 12)
+    def.material.color
+      .copy(def.baseColor)
+      .multiplyScalar(1 + (HIGHLIGHT_GAIN - 1) * def.highlight)
   }
 })
 
