@@ -38,7 +38,7 @@ void BookCarousel
     <TresPerspectiveCamera
       :position="[0, 0.4, 2.1]"
       :fov="38"
-      :look-at="[0, -0.22, 0]"
+      :look-at="[0, -0.38, 0]"
     />
     <TresAmbientLight :intensity="0.9" />
     <TresDirectionalLight
