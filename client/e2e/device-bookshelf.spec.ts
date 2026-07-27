@@ -49,6 +49,27 @@ test.describe('Device section', () => {
     await expect(cpuRow).toHaveClass(/device__spec-link--active/)
   })
 
+  test('clicking a spec link leaves nothing pinned', async ({ page }) => {
+    await page.goto('/#device', { waitUntil: 'domcontentloaded' })
+    await page.locator('#device').scrollIntoViewIfNeeded()
+
+    // Regression: the rows are Amazon links, but clicking one also used to
+    // pin that part. Pinning stops the model's rotation and holds the
+    // highlight, so following a link left the build frozen and still lit up
+    // when the visitor returned from the new tab.
+    const row = page.locator('.device__spec-link').filter({ hasText: 'CPU' }).first()
+    await row.evaluate((el) => {
+      // A real click so the app's handlers run, minus the navigation - the
+      // href points off-site and tests should not depend on the network.
+      el.addEventListener('click', (event) => event.preventDefault(), { once: true })
+      ;(el as HTMLElement).click()
+    })
+
+    // Move off the row so only a pin could still be holding it active.
+    await page.mouse.move(0, 0)
+    await expect(page.locator('.device__spec-link--active')).toHaveCount(0)
+  })
+
   test('every part is reachable as an Amazon link opening in a new tab', async ({ page }) => {
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
     const device = page.locator('#device')

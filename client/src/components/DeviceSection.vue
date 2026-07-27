@@ -18,8 +18,13 @@ const DeviceSceneCanvas = defineAsyncComponent(() => import('./DeviceSceneCanvas
 const sectionRef = ref<HTMLElement | null>(null)
 const { show3D } = useSectionScene(sectionRef)
 
-// Hover is transient; clicking a 3D part (or a spec row) pins the highlight
-// until something else is pinned or the same thing is clicked again.
+// Hover is transient; clicking a part in the 3D scene pins its highlight
+// until something else is pinned or the same part is clicked again.
+//
+// Only the 3D scene pins. The spec rows are Amazon links, so clicking one
+// navigates away - having it also pin left the model frozen (rotation stops
+// while anything is active) with the highlight stuck on, still that way when
+// the visitor came back from the new tab.
 const hoveredId = ref<string | null>(null)
 const pinnedId = ref<string | null>(null)
 
@@ -76,7 +81,6 @@ function togglePin(partId: string) {
               :aria-label="`View ${part.label}: ${part.spec} on Amazon`"
               @mouseenter="hoveredId = part.id"
               @mouseleave="hoveredId = null"
-              @click="togglePin(part.id)"
             >
               <span class="device__spec-label">{{ part.label }}</span>
               <span class="device__spec-value">{{ part.spec }}</span>
