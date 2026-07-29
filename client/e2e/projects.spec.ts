@@ -85,4 +85,53 @@ test.describe('Projects showcase', () => {
         .toBeLessThan(-250)
     })
   }
+
+  // Regression: while pinned, the rail's position is driven purely by the
+  // track's transform. It used to be `overflow: hidden`, which still makes it a
+  // scroll container the browser can scroll on its own (moving focus to an
+  // off-screen card, restoring scroll on reload, resizing up from the native
+  // row). Nothing ever undid that, so the rail stayed permanently offset and
+  // the first cards became unreachable. It must always rest flush left.
+  test('pinned rail stays flush left after focus moves to an off-screen card', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+    const projects = page.locator('#projects')
+    const cards = projects.locator('article.project-card')
+    await expect(cards).toHaveCount(6)
+    await expect(projects).toHaveClass(/projects--pinned/)
+
+    const viewport = page.locator('.projects__viewport')
+    // Rects are read inside the page rather than via boundingBox(), which
+    // scrolls the element into view and would itself move the pin.
+    const railGeometry = () =>
+      page.evaluate(() => {
+        const rail = document.querySelector('.projects__viewport')!.getBoundingClientRect()
+        const items = document.querySelectorAll('#projects article.project-card')
+        const first = items[0].getBoundingClientRect()
+        const last = items[items.length - 1].getBoundingClientRect()
+        return {
+          firstCardOffset: first.left - rail.left,
+          lastCardFullyVisible: last.left >= rail.left - 1 && last.right <= rail.right + 1,
+        }
+      })
+
+    // Focusing the last card must move the page, revealing the card, and must
+    // never scroll the rail container itself.
+    await cards.last().getByRole('link').first().focus()
+    await expect
+      .poll(async () => (await railGeometry()).lastCardFullyVisible, { timeout: 15_000 })
+      .toBe(true)
+    expect(await viewport.evaluate((el) => el.scrollLeft)).toBe(0)
+
+    // Back at the top of the section the rail is flush left again.
+    const projTop = await projects.evaluate((el) => el.getBoundingClientRect().top + window.scrollY)
+    await page.evaluate((y) => window.scrollTo(0, y), projTop)
+    await expect
+      .poll(async () => (await railGeometry()).firstCardOffset, { timeout: 15_000 })
+      .toBeCloseTo(0, 0)
+    expect(await viewport.evaluate((el) => el.scrollLeft)).toBe(0)
+  })
 })
