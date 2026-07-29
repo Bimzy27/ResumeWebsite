@@ -1,8 +1,9 @@
 // One-off manual verification (not part of the e2e suite): drives the REAL
 // production build served by `vite preview` and asserts the code-split
 // behaviour end to end:
-//   1. Desktop: the lazy three/tresjs chunk is fetched and the hero canvas,
-//      device canvas, and bookshelf canvas all mount.
+//   1. Desktop: the lazy three/tresjs chunk is fetched and the hero canvas
+//      mounts, along with the device/bookshelf canvases for whichever of those
+//      sections the build renders (see src/featureFlags.ts).
 //   2. Mobile viewport: the lazy chunk is never fetched and no canvas mounts.
 // Run with: node scripts/verify-code-split.mjs (expects preview on :4173)
 import { chromium } from '@playwright/test'
@@ -43,9 +44,17 @@ let failed = false
   trackChunks(page, js)
   await page.goto(BASE, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('.bg3d canvas', { timeout: 20000 })
-  await page.locator('#device').scrollIntoViewIfNeeded()
-  await page.waitForSelector('#device canvas', { timeout: 20000 })
-  await page.waitForSelector('#bookshelf canvas', { timeout: 20000 })
+  // The device and bookshelf sections are individually hideable, so assert
+  // only on the ones this build actually renders rather than hard-waiting on
+  // a canvas that will never appear.
+  const optionalSections = []
+  for (const id of ['#device', '#bookshelf']) {
+    if ((await page.locator(id).count()) > 0) optionalSections.push(id)
+  }
+  for (const id of optionalSections) {
+    await page.locator(id).scrollIntoViewIfNeeded()
+    await page.waitForSelector(`${id} canvas`, { timeout: 20000 })
+  }
   const heavy = js.filter((c) => c.size >= HEAVY_CHUNK_BYTES)
   const hero = js.filter((c) => c.name.startsWith('HeroSceneCanvas-'))
   console.log('desktop JS chunks fetched:', [...new Set(js.map((c) => c.name))].join(', '))
@@ -53,7 +62,10 @@ let failed = false
     console.error('FAIL: desktop did not fetch the lazy 3D chunks')
     failed = true
   } else {
-    console.log(`PASS: desktop mounted all 3 canvases via lazy chunks (3D bundle: ${heavy[0].name})`)
+    const total = 1 + optionalSections.length
+    console.log(
+      `PASS: desktop mounted all ${total} canvases via lazy chunks (3D bundle: ${heavy[0].name})`,
+    )
   }
   await page.close()
 }

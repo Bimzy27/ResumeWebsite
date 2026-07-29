@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
-import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
+import { SHOW_DEVICE, SHOW_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `mobile-experience` capability spec. Runs only under the
 // mobile-chromium project (Pixel 7 emulation at 360x740, see
@@ -128,18 +128,25 @@ test.describe('Mobile experience', () => {
     expect(undersized, `touch targets under 44px:\n${undersized.join('\n')}`).toEqual([])
   })
 
-  test('device and bookshelf sections fall back to non-3D layouts', async ({ page }) => {
-    test.skip(!SHOW_DEVICE_BOOKSHELF, 'device/bookshelf temporarily hidden (src/featureFlags.ts)')
+  // Split per section so each keeps its coverage while the other is hidden
+  // (see src/featureFlags.ts).
+  test('device section falls back to a non-3D layout', async ({ page }) => {
+    test.skip(!SHOW_DEVICE, 'device section temporarily hidden (src/featureFlags.ts)')
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
     // Readiness first: the device spec sheet stands alone and stays
     // readable. A visible spec row proves the section has mounted, so the
-    // canvas count-0 assertions cannot pass trivially on a blank page.
+    // canvas count-0 assertion cannot pass trivially on a blank page.
     await expect(page.locator('.device__spec').first()).toBeVisible()
 
     // The device-scoped WebGL canvas must not mount on phones (same
     // battery/data reasoning as the hero desk scene).
     await expect(page.locator('#device canvas')).toHaveCount(0)
+  })
+
+  test('bookshelf section falls back to a non-3D layout', async ({ page }) => {
+    test.skip(!SHOW_BOOKSHELF, 'bookshelf section temporarily hidden (src/featureFlags.ts)')
+    await page.goto('/#bookshelf', { waitUntil: 'domcontentloaded' })
 
     // The bookshelf renders as a visible grid of Amazon links, and its
     // canvas stays unmounted even once the section is in view (on desktop

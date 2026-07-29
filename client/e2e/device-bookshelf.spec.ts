@@ -1,15 +1,17 @@
 import { test, expect } from '@playwright/test'
-import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
+import { SHOW_DEVICE, SHOW_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `device-section` and `bookshelf-section` capability specs.
 // Desktop project only (the mobile fallback behaviour is asserted in
 // mobile.spec.ts under the mobile-chromium project).
-
-// The whole file is gated on the temporary hide flag: while the sections do
-// not render, every spec here would fail on a missing #device/#bookshelf.
-test.skip(!SHOW_DEVICE_BOOKSHELF, 'device/bookshelf temporarily hidden (src/featureFlags.ts)')
+//
+// Each group is gated on its section's own hide flag: while a section does not
+// render, its specs would fail on a missing #device/#bookshelf. The flags are
+// independent, so the bookshelf keeps its coverage while the device is hidden.
 
 test.describe('Device section', () => {
+  test.skip(!SHOW_DEVICE, 'device section temporarily hidden (src/featureFlags.ts)')
+
   test('renders below the projects section with the full spec sheet', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
 
@@ -117,6 +119,12 @@ test.describe('Device section', () => {
 })
 
 test.describe('Device and bookshelf layout', () => {
+  // Only meaningful when both sections are on the page.
+  test.skip(
+    !SHOW_DEVICE || !SHOW_BOOKSHELF,
+    'needs both sections visible (src/featureFlags.ts)',
+  )
+
   test('the sections stack vertically: device above bookshelf', async ({ page }) => {
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
@@ -133,7 +141,9 @@ test.describe('Device and bookshelf layout', () => {
 })
 
 test.describe('Bookshelf section', () => {
-  test('renders after the device section in the DOM with the 3D carousel', async ({ page }) => {
+  test.skip(!SHOW_BOOKSHELF, 'bookshelf section temporarily hidden (src/featureFlags.ts)')
+
+  test('renders after the preceding section in the DOM with the 3D carousel', async ({ page }) => {
     // See the device 3D test above for why this avoids 'networkidle'.
     await page.goto('/#bookshelf', { waitUntil: 'domcontentloaded' })
 
@@ -141,12 +151,15 @@ test.describe('Bookshelf section', () => {
     await expect(bookshelf).toBeAttached()
     await bookshelf.scrollIntoViewIfNeeded()
 
-    const order = await page.evaluate(() => {
-      const device = document.querySelector('#device')!
+    // Follows the device section when it is shown, and the projects section
+    // when it is not (see src/featureFlags.ts).
+    const precedingId = SHOW_DEVICE ? '#device' : '#projects'
+    const order = await page.evaluate((id) => {
+      const preceding = document.querySelector(id)!
       const bookshelf = document.querySelector('#bookshelf')!
-      return device.compareDocumentPosition(bookshelf) & Node.DOCUMENT_POSITION_FOLLOWING
-    })
-    expect(order, '#bookshelf follows #device in the DOM').toBeTruthy()
+      return preceding.compareDocumentPosition(bookshelf) & Node.DOCUMENT_POSITION_FOLLOWING
+    }, precedingId)
+    expect(order, `#bookshelf follows ${precedingId} in the DOM`).toBeTruthy()
 
     await expect(bookshelf.locator('canvas')).toHaveCount(1, { timeout: 15000 })
   })
