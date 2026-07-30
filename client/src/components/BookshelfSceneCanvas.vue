@@ -28,14 +28,17 @@ void BookCarousel
     :clear-alpha="0"
     :tone-mapping="NoToneMapping"
   >
-    <!-- Framed for the tall half-width column this scene lives in
-         (the canvas only mounts above 900px, where the row is always
-         two columns): pulled back and raised so the full ring fits the
-         narrow horizontal fov with the shelf sitting low in frame. -->
+    <!-- Pulled in close so the carousel reads as nearby rather than a
+         distant diorama, with just enough headroom for the hover pop
+         (see BookCarousel.vue) not to clip the frame. The look-at target
+         sits below the ring's actual center on purpose: aiming the camera
+         a bit further down shifts the whole scene up in frame (basic
+         camera-tilt behaviour), which is what clears the books/shelf from
+         clipping the bottom edge without changing the zoom level. -->
     <TresPerspectiveCamera
-      :position="[0, 1.2, 4.9]"
-      :fov="46"
-      :look-at="[0, 0, 0]"
+      :position="[0, 0.4, 2.15]"
+      :fov="38"
+      :look-at="[0, -0.26, 0]"
     />
     <TresAmbientLight :intensity="0.9" />
     <TresDirectionalLight

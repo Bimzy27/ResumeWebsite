@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
-import { SHOW_DEVICE_BOOKSHELF } from '../src/featureFlags'
+import { SHOW_DEVICE, SHOW_BOOKSHELF } from '../src/featureFlags'
 
 // Covers the `mobile-experience` capability spec. Runs only under the
 // mobile-chromium project (Pixel 7 emulation at 360x740, see
@@ -67,7 +67,6 @@ test.describe('Mobile experience', () => {
 
     const viewportWidth = page.viewportSize()!.width
     const labels = ['About', 'Skills', 'Experience', 'Projects', 'Contact']
-    if (SHOW_DEVICE_BOOKSHELF) labels.splice(4, 0, 'Device', 'Bookshelf')
     for (const label of labels) {
       const link = page.locator('.header__nav').getByRole('link', { name: label })
       await expect(link).toBeVisible()
@@ -76,6 +75,33 @@ test.describe('Mobile experience', () => {
       expect(box!.x, `${label} starts inside the viewport`).toBeGreaterThanOrEqual(0)
       expect(box!.x + box!.width, `${label} ends inside the viewport`).toBeLessThanOrEqual(viewportWidth)
     }
+  })
+
+  test('header social buttons sit flush right, same as desktop', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+
+    const youtube = page.locator('.header__social').getByRole('link', { name: /youtube/i })
+    await expect(youtube).toBeVisible()
+
+    // Width-sensitive measurements against text set in the display webfont,
+    // so settle fonts first (see the desktop equivalent in navigation.spec).
+    await page.evaluate(() => document.fonts.ready)
+
+    // .header__social itself stretches full-width (its parent is
+    // align-items: stretch), so measure the actual last button rather than
+    // the wrapping flex container - flex-end packs the buttons against its
+    // right edge, so the button's own right inset should match the logo's
+    // left inset, same symmetry as the desktop layout.
+    const logoBox = await page.locator('.header__logo').boundingBox()
+    const youtubeBox = await youtube.boundingBox()
+    const containerBox = await page.locator('.header__inner').boundingBox()
+    expect(logoBox).not.toBeNull()
+    expect(youtubeBox).not.toBeNull()
+    expect(containerBox).not.toBeNull()
+
+    const leftInset = logoBox!.x - containerBox!.x
+    const rightInset = containerBox!.x + containerBox!.width - (youtubeBox!.x + youtubeBox!.width)
+    expect(Math.abs(rightInset - leftInset)).toBeLessThanOrEqual(1)
   })
 
   test('interactive elements meet the 44px touch target', async ({ page }) => {
@@ -102,18 +128,25 @@ test.describe('Mobile experience', () => {
     expect(undersized, `touch targets under 44px:\n${undersized.join('\n')}`).toEqual([])
   })
 
-  test('device and bookshelf sections fall back to non-3D layouts', async ({ page }) => {
-    test.skip(!SHOW_DEVICE_BOOKSHELF, 'device/bookshelf temporarily hidden (src/featureFlags.ts)')
+  // Split per section so each keeps its coverage while the other is hidden
+  // (see src/featureFlags.ts).
+  test('device section falls back to a non-3D layout', async ({ page }) => {
+    test.skip(!SHOW_DEVICE, 'device section temporarily hidden (src/featureFlags.ts)')
     await page.goto('/#device', { waitUntil: 'domcontentloaded' })
 
     // Readiness first: the device spec sheet stands alone and stays
     // readable. A visible spec row proves the section has mounted, so the
-    // canvas count-0 assertions cannot pass trivially on a blank page.
+    // canvas count-0 assertion cannot pass trivially on a blank page.
     await expect(page.locator('.device__spec').first()).toBeVisible()
 
     // The device-scoped WebGL canvas must not mount on phones (same
     // battery/data reasoning as the hero desk scene).
     await expect(page.locator('#device canvas')).toHaveCount(0)
+  })
+
+  test('bookshelf section falls back to a non-3D layout', async ({ page }) => {
+    test.skip(!SHOW_BOOKSHELF, 'bookshelf section temporarily hidden (src/featureFlags.ts)')
+    await page.goto('/#bookshelf', { waitUntil: 'domcontentloaded' })
 
     // The bookshelf renders as a visible grid of Amazon links, and its
     // canvas stays unmounted even once the section is in view (on desktop
@@ -121,7 +154,7 @@ test.describe('Mobile experience', () => {
     await page.locator('#bookshelf').scrollIntoViewIfNeeded()
     const firstBook = page.locator('.bookshelf__book').first()
     await expect(firstBook).toBeVisible()
-    await expect(firstBook).toHaveAttribute('href', /amazon\.com\/dp\/.+\?tag=brandenimmerz-20/)
+    await expect(firstBook).toHaveAttribute('href', /amazon\.com(\.au)?\/dp\/.+\?tag=brandenimmerz-20/)
     await expect(page.locator('#bookshelf canvas')).toHaveCount(0)
   })
 

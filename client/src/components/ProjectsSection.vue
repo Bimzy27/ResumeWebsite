@@ -173,6 +173,44 @@ function onPointerUp(e: PointerEvent) {
   viewport.value.classList.remove('is-dragging')
 }
 
+// --- Keyboard focus while pinned -------------------------------------------
+// Tabbing through the cards must still reveal the one being focused. In the
+// native row the browser does that for us by scrolling the container; while
+// pinned the rail is `overflow: clip` and its position is a pure function of
+// page scroll, so we express the same movement as a page scroll instead. That
+// keeps the transform and the scroll position in agreement - the thing that
+// broke when the browser was allowed to scroll the container itself.
+function onFocusIn(e: FocusEvent) {
+  const vp = viewport.value
+  const tr = track.value
+  const el = e.target
+  if (!pinned.value || !vp || !tr || !root.value || !(el instanceof HTMLElement)) return
+  if (!tr.contains(el)) return
+
+  // Reveal the whole card, not just the focused control inside it.
+  let card: HTMLElement = el
+  while (card.parentElement && card.parentElement !== tr) card = card.parentElement
+
+  // Untranslated offset of the card from the track's start; both rects move
+  // together under the transform, so their difference is stable.
+  const trackRect = tr.getBoundingClientRect()
+  const vpRect = vp.getBoundingClientRect()
+  const cardRect = card.getBoundingClientRect()
+  const offsetLeft = cardRect.left - trackRect.left
+
+  // Translation range that keeps the card fully inside the viewport.
+  const min = offsetLeft + cardRect.width - vpRect.width
+  const max = offsetLeft
+  const target = Math.min(max, Math.max(min, translateX.value))
+  const clamped = Math.min(maxTranslate.value, Math.max(0, target))
+  if (Math.abs(clamped - translateX.value) < 1) return
+
+  // While pinned, translateX equals the distance scrolled past the section's
+  // top, so the page offset that produces `clamped` is just sectionTop + it.
+  const sectionTop = root.value.getBoundingClientRect().top + window.scrollY
+  window.scrollTo({ top: sectionTop + clamped })
+}
+
 onMounted(() => {
   reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
   smallScreen = window.matchMedia('(max-width: 768px)')
@@ -196,6 +234,7 @@ onMounted(() => {
     vp.addEventListener('pointermove', onPointerMove)
     vp.addEventListener('pointerup', onPointerUp)
     vp.addEventListener('pointercancel', onPointerUp)
+    vp.addEventListener('focusin', onFocusIn)
   }
 
   nextTick(measure)
@@ -216,6 +255,7 @@ onBeforeUnmount(() => {
     vp.removeEventListener('pointermove', onPointerMove)
     vp.removeEventListener('pointerup', onPointerUp)
     vp.removeEventListener('pointercancel', onPointerUp)
+    vp.removeEventListener('focusin', onFocusIn)
   }
   if (rafId) cancelAnimationFrame(rafId)
 })
@@ -315,10 +355,14 @@ onBeforeUnmount(() => {
 }
 
 /* Pinned: cards move via transform, so the viewport just clips, it doesn't
-   scroll. Horizontal overflow is hidden at the container edges; the vertical
-   padding above keeps hover shadows visible. */
+   scroll. `clip` rather than `hidden` matters here: `hidden` still makes the
+   box a scroll container that the browser may scroll programmatically (moving
+   focus to an off-screen card, restoring scroll on reload, resizing up from the
+   native row). Pinned mode only ever drives `transform`, so any such offset is
+   never undone and the rail stays permanently shifted off its left edge.
+   `clip` is not a scroll container, so the offset can't happen at all. */
 .projects--pinned .projects__viewport {
-  overflow: hidden;
+  overflow: clip;
 }
 
 /* Native fallback that overflows: cue that the row can be dragged/scrolled and

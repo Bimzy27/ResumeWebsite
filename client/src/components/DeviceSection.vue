@@ -3,12 +3,12 @@ import { ref, computed, defineAsyncComponent } from 'vue'
 import { deviceParts } from '../data/device'
 import { useSectionScene } from '../composables/useSectionScene'
 
-// Device section: a 3D proxy of Branden's PC above its spec sheet, filling
-// the left column of the shared device/bookshelf row (see App.vue).
-// Hovering a spec row highlights the matching part in the 3D model, and
-// hovering/clicking a part in the model highlights its spec row. On phones
-// (and without WebGL) the 3D canvas never mounts and the spec sheet stands
-// alone - same "scene" cutoff as the hero desk scene, see style.css.
+// Device section: a 3D proxy of Branden's PC beside its spec sheet, stacked
+// above the Bookshelf section (see App.vue). Hovering a spec row highlights
+// the matching part in the 3D model, and hovering/clicking a part in the
+// model highlights its spec row. On phones (and without WebGL) the 3D canvas
+// never mounts and the spec sheet stands alone above where the scene would
+// be - same "scene" cutoff as the hero desk scene, see style.css.
 
 // All Three.js/TresJS code lives in DeviceSceneCanvas.vue, loaded async only
 // once show3D holds - keeping the heavy 3D chunk off the critical path and
@@ -18,8 +18,13 @@ const DeviceSceneCanvas = defineAsyncComponent(() => import('./DeviceSceneCanvas
 const sectionRef = ref<HTMLElement | null>(null)
 const { show3D } = useSectionScene(sectionRef)
 
-// Hover is transient; clicking a 3D part (or a spec row) pins the highlight
-// until something else is pinned or the same thing is clicked again.
+// Hover is transient; clicking a part in the 3D scene pins its highlight
+// until something else is pinned or the same part is clicked again.
+//
+// Only the 3D scene pins. The spec rows are Amazon links, so clicking one
+// navigates away - having it also pin left the model frozen (rotation stops
+// while anything is active) with the highlight stuck on, still that way when
+// the visitor came back from the new tab.
 const hoveredId = ref<string | null>(null)
 const pinnedId = ref<string | null>(null)
 
@@ -44,7 +49,7 @@ function togglePin(partId: string) {
       </h2>
       <p class="section-intro">
         My daily driver for development and gaming. Hover or tap a spec to see the part light up
-        in the build.
+        in the build, or click through to view it on Amazon.
       </p>
 
       <div class="device">
@@ -66,13 +71,20 @@ function togglePin(partId: string) {
             v-for="part in deviceParts"
             :key="part.id"
             class="device__spec"
-            :class="{ 'device__spec--active': activeId === part.id }"
-            @mouseenter="hoveredId = part.id"
-            @mouseleave="hoveredId = null"
-            @click="togglePin(part.id)"
           >
-            <span class="device__spec-label">{{ part.label }}</span>
-            <span class="device__spec-value">{{ part.spec }}</span>
+            <a
+              class="device__spec-link"
+              :class="{ 'device__spec-link--active': activeId === part.id }"
+              :href="part.amazonUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="`View ${part.label}: ${part.spec} on Amazon`"
+              @mouseenter="hoveredId = part.id"
+              @mouseleave="hoveredId = null"
+            >
+              <span class="device__spec-label">{{ part.label }}</span>
+              <span class="device__spec-value">{{ part.spec }}</span>
+            </a>
           </li>
         </ul>
       </div>
@@ -81,13 +93,23 @@ function togglePin(partId: string) {
 </template>
 
 <style scoped>
-/* The section occupies the left column of the shared device/bookshelf row
-   (see App.vue), so its own layout is a single column: scene above specs. */
+/* Scene above specs on phones/tablets (and once WebGL is unavailable, since
+   the scene never mounts there - see show3D). Above the scene cutoff the
+   specs move beside the model instead of under it. */
 .device {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   margin-top: 32px;
+}
+
+/* Matches the show3D breakpoint (see useSectionScene) so the two-column
+   layout only kicks in once the 3D model actually mounts beside it. */
+@media (min-width: 901px) {
+  .device {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: start;
+  }
 }
 
 .device__scene {
@@ -113,7 +135,7 @@ function togglePin(partId: string) {
   gap: 10px;
 }
 
-.device__spec {
+.device__spec-link {
   display: flex;
   align-items: baseline;
   gap: 16px;
@@ -121,6 +143,7 @@ function togglePin(partId: string) {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  text-decoration: none;
   cursor: pointer;
   transition:
     border-color 0.18s ease,
@@ -128,7 +151,9 @@ function togglePin(partId: string) {
     transform 0.18s ease;
 }
 
-.device__spec--active {
+.device__spec-link--active,
+.device__spec-link:hover,
+.device__spec-link:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
   transform: translateX(4px);
